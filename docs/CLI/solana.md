@@ -57,6 +57,14 @@ sad practice lawn chief drive ...
 - keypair文件被加密存在存在"/Users/<你的用户名>/.config/solana/id.json"这个文件中
 - 这个keypair对应的助记词为：```sad practice lawn chief drive ...```
 - 对应的账户地址为：```CAA2QJN8KrkZgsiEbvtx2JV6iWpDLBnfeTj9ZXwnujKh```
+
+## 获取公钥
+
+```sh
+$ solana-keygen pubkey
+```
+
+
 ## 申请测试币
 ```sh
 $ solana airdrop 1
@@ -68,4 +76,22 @@ $ solana balance
 ## 转账
 ```sh
 $ solana transfer --allow-unfunded-recipient CAA2QJN8KrkZgsiEbvtx2JV6iWpDLBnfeTj9ZXwnujKh 0.01
+```
+
+## 确认交易
+```sh
+// Command
+$ solana confirm <TX_SIGNATURE>
+
+// Return
+"Confirmed" / "Not found" / "Transaction failed with error <ERR>"
+```
+
+## 部署程序
+```sh
+// Command
+$ solana program deploy <PATH>
+
+// Return
+<PROGRAM_ID>
 ```
