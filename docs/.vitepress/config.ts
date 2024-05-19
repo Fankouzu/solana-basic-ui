@@ -12,6 +12,8 @@ export default defineConfig({
       {
         text: "CLI命令行工具",
         items: [
+          { text: "connecting to a cluster",link: "/CLI/connecting-to-a-cluster.md" },
+          { text: "staking",link: "/CLI/staking.md" },
           { text: "使用 CLI 部署 Solana 程序",link: "/CLI/deploy-a-program.md" },
           { text: "Solana CLI 中的持久交易nonce",link: "/CLI/durable-nonce.md" },
           { text: "使用 Solana CLI 进行离线交易签名",link: "/CLI/offline-signing.md" },
