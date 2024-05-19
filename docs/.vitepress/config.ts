@@ -12,9 +12,10 @@ export default defineConfig({
       {
         text: "CLI命令行工具",
         items: [
-          { text: "Item A", link: "/item-1" },
-          { text: "Item B", link: "/item-2" },
-          { text: "Item C", link: "/item-3" },
+          { text: "使用 CLI 部署 Solana 程序",link: "/CLI/deploy-a-program.md" },
+          { text: "Solana CLI 中的持久交易nonce",link: "/CLI/durable-nonce.md" },
+          { text: "使用 Solana CLI 进行离线交易签名",link: "/CLI/offline-signing.md" },
+          { text: "使用 Solana CLI 进行链下消息签名",link: "/CLI/sign-offchain-message.md" },
         ],
       },
 
