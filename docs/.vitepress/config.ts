@@ -9,14 +9,14 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: "开始", link: "/start" },
-      // {
-      //   text: "Dropdown Menu",
-      //   items: [
-      //     { text: "Item A", link: "/item-1" },
-      //     { text: "Item B", link: "/item-2" },
-      //     { text: "Item C", link: "/item-3" },
-      //   ],
-      // },
+      {
+        text: "CLI命令行工具",
+        items: [
+          { text: "Item A", link: "/item-1" },
+          { text: "Item B", link: "/item-2" },
+          { text: "Item C", link: "/item-3" },
+        ],
+      },
 
       // ...
     ],
@@ -35,7 +35,8 @@ export default defineConfig({
           {
             text: "CLI命令行",
             items: [
-              { text: "创建Token", link: "/CLI/create-token" },
+              { text: "创建Token", link: "/CLI/solana" },
+              { text: "spl-token客户端", link: "/CLI/spl" },
             ],
           },
           {
