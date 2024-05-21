@@ -10,7 +10,8 @@ Solana 的开发可以分为两个主要部分：
 客户端和链端之间的“粘合剂”是 [Solana JSON RPC API](https://solana.com/docs/rpc)。客户端向 Solana 网络发送 RPC 请求，与链上程序进行交互。这与前端和后端之间的正常开发非常相似。与在 Solana 上工作的主要区别在于后端是一个全局无需许可的区块链。这意味着任何人都可以与您的链上程序进行交互，而无需颁发 API 密钥或任何其他形式的许可。
 
 ![客户如何使用Solana区块链](https://solana-developer-content.vercel.app/assets/docs/intro/developer_flow.png)
-客户如何使用Solana区块链
+
+<center>客户如何使用Solana区块链</center>
 
 Solana 开发与其他区块链略有不同，因为它具有高度可组合的链上程序。这意味着您可以在任何已经部署的程序之上进行构建，而且通常无需进行任何自定义链上程序开发即可完成。例如，如果要使用令牌，则可以使用已部署在网络上的[令牌程序](https://solana.com/docs/core/tokens)。客户端侧应用程序可按你自己选择的语言开发。
 有志于在Solana上构建的开发人员会发现开发技术栈与任何其他开发技术栈非常相似。主要区别在于，您将使用区块链，并且必须考虑用户如何在链上与您的应用程序进行交互，而不仅仅是在前端。在Solana上进行开发仍然有CI/CD、测试、调试工具、前端和后端，以及您在正常开发流程中涉及的任何内容。
@@ -85,6 +86,8 @@ Solana 开发与其他区块链略有不同，因为它具有高度可组合的�
 您现在已准备好开始在 Solana 上构建了！
 
 [在浏览器中部署您的第一个Solana程序](https://solana.com/developers/guides/getstarted/hello-world-in-your-browser)
+
 [设置本地开发环境](https://solana.com/developers/guides/getstarted/setup-local-development)
 [开始使用 Rust 在本地构建程序](https://solana.com/developers/guides/getstarted/local-rust-hello-world)
+
 [编写Solana程序概述](https://solana.com/docs/programs)
