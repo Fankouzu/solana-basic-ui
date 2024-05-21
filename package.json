@@ -9,6 +9,6 @@
   },
   "devDependencies": {
     "surge": "^0.23.1",
-    "vitepress": "latest"
+    "vitepress": "^1.2.2"
   }
 }
