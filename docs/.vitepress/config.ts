@@ -37,10 +37,10 @@ function sidebarCLI(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [
         {
-          text: "connecting to a cluster",
+          text: "使用 Solana CLI 连接到集群",
           link: "/connecting-to-a-cluster",
         },
-        { text: "staking", link: "/staking" },
+        { text: "使用 Solana CLI 质押 SOL", link: "/staking" },
         { text: "使用 CLI 部署 Solana 程序", link: "/deploy-a-program" },
         { text: "Solana CLI 中的持久交易nonce", link: "/durable-nonce" },
         {
@@ -50,6 +50,14 @@ function sidebarCLI(): DefaultTheme.SidebarItem[] {
         {
           text: "使用 Solana CLI 进行链下消息签名",
           link: "/sign-offchain-message",
+        },
+        {
+          text: "使用本地集群进行开发",
+          link: "/test-validator",
+        },
+        {
+          text: "使用 Solana CLI 发送和接收代币",
+          link: "/transfer-tokens",
         },
       ],
     },
