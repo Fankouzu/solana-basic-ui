@@ -12,6 +12,11 @@ function nav(): DefaultTheme.NavItem[] {
       link: "/CLI/connecting-to-a-cluster",
       activeMatch: "/CLI/",
     },
+    {
+      text: "SPL Token",
+      link: "/SPL-Token/index",
+      activeMatch: "/SPL/",
+    },
   ];
 }
 
@@ -63,6 +68,19 @@ function sidebarCLI(): DefaultTheme.SidebarItem[] {
     },
   ];
 }
+
+function sidebarSPL(): DefaultTheme.SidebarItem[] {
+  return [
+    {
+      text: "SPL Token",
+      collapsed: false,
+      items: [
+        { text: "概述", link: "/index" },
+        { text: "Token程序", link: "/token" },
+      ],
+    },
+  ];
+}
 // refer https://vitepress.dev/reference/site-config for details
 export default defineConfig({
   lang: "zh-CN",
@@ -78,6 +96,7 @@ export default defineConfig({
         items: sidebarIntroduction(),
       },
       "/CLI/": { base: "/CLI/", items: sidebarCLI() },
+      "/SPL-Token/": { base: "/SPL-Token/", items: sidebarSPL() },
     },
   },
 });
