@@ -84,8 +84,8 @@ function sidebarSPL(): DefaultTheme.SidebarItem[] {
 // refer https://vitepress.dev/reference/site-config for details
 export default defineConfig({
   lang: "zh-CN",
-  title: "Solana开发入门",
-  description: "由崔棉大师@MasterCui为您带来的Solana开发入门教学.",
+  title: "Solana中文大全",
+  description: "由崔棉大师@MasterCui和捕鲸船社区小伙伴共建的Solana学习社区.",
 
   themeConfig: {
     nav: nav(),
@@ -98,6 +98,9 @@ export default defineConfig({
       "/CLI/": { base: "/CLI/", items: sidebarCLI() },
       "/SPL-Token/": { base: "/SPL-Token/", items: sidebarSPL() },
     },
+    footer: {
+      message: "本教程招募共建者,联系<a href='https://x.com/@MasterCui'>崔棉大师</a>",
+    },
     docFooter: {
       prev: "上一页",
       next: "下一页",
@@ -106,7 +109,8 @@ export default defineConfig({
       label: "页面导航",
     },
     editLink: {
-      pattern: "https://github.com/Fankouzu/solana-basic-ui/edit/main/docs/:path",
+      pattern:
+        "https://github.com/Fankouzu/solana-basic-ui/edit/main/docs/:path",
       text: "在 GitHub 上编辑此页面",
     },
     lastUpdated: {

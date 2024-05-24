@@ -2,9 +2,9 @@
 layout: home
 
 hero:
-  name: Solana开发入门
-  text: 由崔棉大师@MasterCui为您带来的Solana开发入门教学.
-  tagline: solana,web3,blockchain,bitcoin,ethereum
+  name: Solana中文大全
+  text: 最全面的中文Solana开发教学.
+  tagline: 由崔棉大师@MasterCui和捕鲸船社区小伙伴共建的Solana学习社区
   actions:
     - theme: alt
       text: View on GitHub
