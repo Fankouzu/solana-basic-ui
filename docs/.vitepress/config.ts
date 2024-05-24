@@ -98,5 +98,23 @@ export default defineConfig({
       "/CLI/": { base: "/CLI/", items: sidebarCLI() },
       "/SPL-Token/": { base: "/SPL-Token/", items: sidebarSPL() },
     },
+    docFooter: {
+      prev: "上一页",
+      next: "下一页",
+    },
+    outline: {
+      label: "页面导航",
+    },
+    editLink: {
+      pattern: "https://github.com/Fankouzu/solana-basic-ui/edit/main/docs/:path",
+      text: "在 GitHub 上编辑此页面",
+    },
+    lastUpdated: {
+      text: "最后更新于",
+      formatOptions: {
+        dateStyle: "short",
+        timeStyle: "medium",
+      },
+    },
   },
 });
