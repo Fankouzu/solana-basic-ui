@@ -10,7 +10,6 @@ Before diving into how Solana transaction confirmation and expiration works, let
 - 交易的生命周期
 - 什么是区块哈希
 - 简要了解历史证明（PoH）及其与区块哈希的关系
-- 
 
 ## 什么是交易？
 
