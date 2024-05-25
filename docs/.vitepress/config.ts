@@ -25,6 +25,7 @@ function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
         { text: "租金经济", link: "/rent" },
         { text: "钱包指南", link: "/wallets" },
         { text: "开发入门", link: "/dev" },
+        { text: "账户模型", link: "/accounts" },
       ],
     },
   ];
