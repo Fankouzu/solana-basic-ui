@@ -43,6 +43,13 @@ function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
         { text: "状态压缩", link: "/state-compression" },
       ],
     },
+    {
+      text: "Solana客户端",
+      collapsed: false,
+      items: [
+        { text: "Rust", link: "/rust" },
+      ],
+    },
   ];
 }
 
