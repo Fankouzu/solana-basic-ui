@@ -109,7 +109,7 @@ for (let i = 0; i < lookupTableAccount.state.addresses.length; i++) {
 
 
 
-## 如何在事务中使用地址查找表
+## 如何在交易中使用地址查找表
 
 创建查找表并将所需地址存储在链上（通过扩展查找表）后，您可以创建 v0 交易以利用链上查找功能。
 
@@ -152,6 +152,10 @@ console.log(
 >
 > 注意：将 VersionedTransaction 发送到集群时，必须在调用 sendAndConfirmTransaction 方法之前对其进行签名。如果您传递签名者数组（就像旧交易一样），该方法将触发错误！
 
+## 更多资源
+
+- 阅读 [提案](https://docs.solanalabs.com/proposals/versioned-transactions)  了解地址查找表和版本化事务
+- [使用地址查找表的 Rust 程序示例](https://github.com/TeamRaccoons/address-lookup-table-multi-swap)
 
 
 ## 地址查找表的应用

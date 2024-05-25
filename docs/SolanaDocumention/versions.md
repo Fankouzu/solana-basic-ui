@@ -25,6 +25,33 @@ Solana 运行时支持两种事务版本：
 
 ## 如何设置最大支持版本
 
+您可以使用 @solana/web3.js 库和直接向 RPC 端点发送 JSON 格式的请求来设置 maxSupportedTransactionVersion。
+
+
+### 使用 web3.js
+
+Using the [`@solana/web3.js`](https://solana-labs.github.io/solana-web3.js/)
+library, you can retrieve the most recent block or get a specific transaction:
+
+```js
+// connect to the `devnet` cluster and get the current `slot`
+const connection = new web3.Connection(web3.clusterApiUrl("devnet"));
+const slot = await connection.getSlot();
+
+// get the latest block (allowing for v0 transactions)
+const block = await connection.getBlock(slot, {
+  maxSupportedTransactionVersion: 0,
+});
+
+// get a specific transaction (allowing for v0 transactions)
+const getTx = await connection.getTransaction(
+  "3jpoANiFeVGisWRY5UP648xRXs3iQasCHABPWRWnoEjeA93nc79WrnGgpgazjq4K9m8g2NJoyKoWBV1Kx5VmtwHQ",
+  {
+    maxSupportedTransactionVersion: 0,
+  },
+);
+```
+### JSON requests to the RPC
 使用标准 JSON 格式的 POST 请求，您可以在检索特定块时设置 maxSupportedTransactionVersion：
 
 ```bash
@@ -121,4 +148,10 @@ let blockhash = await connection
    console.log(`https://explorer.solana.com/tx/${txId}?cluster=devnet`);
    ```
 
-   
+## 更多资源
+
+- 使用 [地址查找表的版本化事务](./lookup-tables.md)
+- 在solana浏览器查看 [ v0 交易的示例](https://explorer.solana.com/tx/h9WQsqSUYhFvrbJWKFPaXximJpLf6Z568NW1j6PBn3f7GPzQXe9PYMYbmWSUFHwgnUmycDNbEX9cr6WjUWkUFKx/?cluster=devnet)
+
+- 阅读已接受的版本化交易和地址查找表 [提案](https://docs.solanalabs.com/proposals/versioned-transactions)
+
