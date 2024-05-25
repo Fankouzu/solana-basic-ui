@@ -26,6 +26,7 @@ function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
       text: "Solana介绍",
       collapsed: false,
       items: [
+        { text: "概述", link: "overview" },
         { text: "租金经济", link: "rent" },
         { text: "钱包指南", link: "wallets" },
         { text: "开发入门", link: "dev" },
@@ -46,7 +47,7 @@ function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
       text: "Solana客户端",
       collapsed: false,
       items: [
-        { text: "Rust", link: "/rust" },
+        { text: "Rust", link: "rust" },
       ],
     },
   ];
