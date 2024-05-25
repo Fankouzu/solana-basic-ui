@@ -1,48 +1,37 @@
 # Solana 账户模型
 On Solana, all data is stored in what are referred to as "accounts”. The way data is organized on Solana resembles a key-value store, where each entry in the database is called an "account".
-在 Solana 上，所有数据都存储在所谓的“帐户”中。Solana 上的数据组织方式类似于键值存储，其中数据库中的每个条目都称为“帐户”。
+在 Solana 上，所有数据都存储在所谓的“帐户”中。Solana 上的数据组织方式类似于[键值存储](https://en.wikipedia.org/wiki/Key%E2%80%93value_database)，其中数据库中的每个条目都称为“帐户”。
 
-Accounts
-Accounts 帐户
+![Accounts](https://solana-developer-content.vercel.app/assets/docs/core/accounts/accounts.svg)
+<center>Accounts</center>
 
-Key Points # 要点#
-Accounts can store up to 10MB of data, which can consist of either executable program code or program state.
-帐户最多可以存储 10MB 的数据，这些数据可以由可执行程序代码或程序状态组成。
+## 要点
+帐户最多可以存储10MB的数据，这些数据主要包含由可执行程序代码或程序状态。
 
-Accounts require a rent deposit in SOL, proportional to the amount of data stored, which is fully refundable when the account is closed.
-帐户需要以 SOL 为单位的租金押金，与存储的数据量成正比，该押金在帐户关闭时可全额退还。
+帐户需要以SOL为单位的租赁押金，与存储的数据量成正比，该押金在帐户关闭时可全额退还。
 
-Every account has a program "owner". Only the program that owns an account can modify it data or deduct its lamport balance. However, anyone can increase the balance.
-每个帐户都有一个程序“所有者”。只有拥有帐户的程序才能修改其数据或扣除其 lamport 余额。但是，任何人都可以增加余额。
+每个帐户都有一个程序“所有者”。只有帐户所有者的程序才能修改其数据或扣除其lamport余额。但是，任何人都可以增加余额。
 
-Programs (smart contracts) are stateless accounts that store executable code.
 程序（智能合约）是存储可执行代码的无状态帐户。
 
-Data accounts are created by programs to store and manage program state.
 数据帐户由程序创建，用于存储和管理程序状态。
 
-Native programs are built-in programs included with the Solana runtime.
-本机程序是 Solana 运行时附带的内置程序。
+本机程序是Solana运行时附带的内置程序。
 
-Sysvar accounts are special accounts that store network cluster state.
-Sysvar 帐户是存储网络群集状态的特殊帐户。
+Sysvar帐户是存储网络群集状态的特殊帐户。
 
-Account # 帐户#
-Each account is identifiable by its unique address, represented as 32 bytes in the format of an Ed25519 PublicKey. You can think of the address as the unique identifier for the account.
-每个帐户都可以通过其唯一地址进行识别，以 Ed25519 的格式表示为 32 个字节 PublicKey 。您可以将地址视为帐户的唯一标识符。
-
-Account Address
-Account Address 账户地址
+## 帐户
+每个帐户都可以通过其唯一地址进行识别，地址以[Ed25519算法](https://ed25519.cr.yp.to/)生成32个字节的公钥来表示。您可以将地址视为帐户的唯一标识符。
+![](https://solana-developer-content.vercel.app/assets/docs/core/accounts/accounts.svg)
+<center>账户地址 </center>
 
 This relationship between the account and its address can be thought of as a key-value pair, where the address serves as the key to locate the corresponding on-chain data of the account.
-账户与其地址之间的这种关系可以看作是键值对，其中地址作为定位账户相应链上数据的密钥。
+账户与其地址之间的这种关系可以看作是键值对，其中地址用于定位账户相应链上数据。
 
-AccountInfo # 账户信息#
-Accounts have a max size of 10MB (10 Mega Bytes) and the data stored on every account on Solana has the following structure known as the AccountInfo.
-帐户的最大大小为 10MB（10 兆字节），存储在 Solana 上每个帐户上的数据具有以下结构，称为 AccountInfo。
-
-AccountInfo
-AccountInfo 账户信息
+### 账户信息
+帐户的最大大小为[10MB（10兆字节）](https://github.com/solana-labs/solana/blob/27eff8408b7223bb3c4ab70523f8a8dca3ca6645/sdk/program/src/system_instruction.rs#L85)，存储在 Solana 上每个帐户上的数据具有以下结构，称为[AccountInfo](https://github.com/solana-labs/solana/blob/27eff8408b7223bb3c4ab70523f8a8dca3ca6645/sdk/program/src/account_info.rs#L19)。
+![AccountInfo](https://solana-developer-content.vercel.app/assets/docs/core/accounts/accountinfo.svg)
+<center>账户信息</center>
 
 The AccountInfo for each account includes the following fields:
 AccountInfo 对于每个帐户都包含以下字段：
