@@ -11,7 +11,7 @@ Before diving into how Solana transaction confirmation and expiration works, let
 - 什么是区块哈希
 - 简要了解历史证明（PoH）及其与区块哈希的关系
 
-## 什么是交易？
+### 什么是交易？
 
 交易由两个部分组成：消息和签名列表。交易消息是神奇发生的地方，从高层次来看，它由三个组成部分组成：
 
@@ -21,7 +21,7 @@ Before diving into how Solana transaction confirmation and expiration works, let
 
 
 
-## 事务生命周期复习
+### 事务生命周期复习
 
 以下是交易生命周期的高级视图。本文将涉及除步骤 1 和 4 之外的所有内容。
 
@@ -35,11 +35,11 @@ Before diving into how Solana transaction confirmation and expiration works, let
 
 
 
-## 什么是区块哈希？ 
+### 什么是区块哈希？ 
 
 “区块哈希”是指“插槽”的最后一个历史证明（PoH）哈希（如下所述）。由于 Solana 使用 PoH 作为可信时钟，因此交易的最近区块哈希可以被视为时间戳。
 
-## 历史证明复习
+### 历史证明复习
 
 Solana 的历史证明机制使用很长的递归 SHA-256 哈希链来构建可信时钟。
 
@@ -76,7 +76,7 @@ PoH 可以用作可信时钟，因为每个哈希必须按顺序生成。每个�
 5. 但是等等：在实际处理交易之前，验证器完成了下一个块的创建并将其添加到 BlockhashQueue 中。然后验证器开始为下一个时隙生成块（验证器为 4 个连续时隙生成块）
 6. 验证器再次检查同一笔交易，发现它现在有 152 个区块哈希值旧，并拒绝它，因为它太旧了:(
 
-### 为什么交易会过期？ 
+## 为什么交易会过期？ 
 
 实际上，这样做有一个很好的理由，它是为了帮助验证者避免处理同一笔交易两次。
 

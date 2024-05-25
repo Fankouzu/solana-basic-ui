@@ -82,7 +82,7 @@ RPC节点通过sendTransaction接收到交易后，会将交易转换为UDP数�
 
 虽然 RPC 节点会尝试重新广播事务，但它们采用的算法是通用的，并且通常不适合特定应用程序的需求。为了应对网络拥塞，应用程序开发人员应该定制自己的重播逻辑。
 
-## 深入了解 sendTransaction
+### 深入了解 sendTransaction
 
 当涉及到提交事务时，sendTransaction RPC 方法是开发人员可用的主要工具。 sendTransaction 只负责将事务从客户端中继到 RPC 节点。如果节点收到交易，sendTransaction 将返回可用于跟踪交易的交易 id。成功的响应并不表明事务是否将由集群处理或完成。
 
@@ -95,7 +95,7 @@ RPC节点通过sendTransaction接收到交易后，会将交易转换为UDP数�
   - (optional) `encoding`: `string` - Encoding used for the transaction data. Either "base58" (slow), or "base64". (default: "base58").（可选）编码：字符串 - 用于交易数据的编码。 “base58”（慢）或“base64”。 （默认值：“base58”）。
   - (optional) `maxRetries`: `usize` -  RPC 节点重试向领导者发送事务的最大次数。如果未提供此参数，RPC 节点将重试交易，直到交易完成或区块哈希过期。
 
-### 返回值:
+**返回值:**
 
 - `transaction id`: `string` -  嵌入交易中的第一个交易签名，作为 base-58 编码的字符串。此事务 ID 可以与 getSignatureStatuses 一起使用来轮询状态更新。
 
@@ -170,7 +170,7 @@ const sleep = async (ms: number) => {
 
 
 
-## 跳过预检的成本
+### 跳过预检的成本
 
 默认情况下，sendTransaction 将在提交交易之前执行三项预检检查。具体来说，sendTransaction 将：
 
@@ -180,7 +180,7 @@ const sleep = async (ms: number) => {
 
 如果这三个预检检查中的任何一个失败，sendTransaction 将在提交交易之前引发错误。预检检查通常是丢失事务和允许客户端优雅地处理错误之间的区别。为了确保解决这些常见错误，建议开发人员将skipPreflight 设置为false。
 
-## 何时重新签署交易
+### 何时重新签署交易
 
 尽管尝试了重播，但有时可能会要求客户端重新签署交易。在重新签署任何交易之前，确保初始交易的区块哈希已过期非常重要。如果初始区块哈希仍然有效，则两笔交易都有可能被网络接受。对于最终用户来说，这看起来就像他们无意中发送了同一笔交易两次。
 
