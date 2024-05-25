@@ -37,7 +37,8 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [
         { text: "账户模型", link: "accounts" },
-        { text: "交易与指令", link: "transactions" }
+        { text: "交易与指令", link: "transactions" },
+        { text: "程序", link: "programs" }
       ],
     },
     {
