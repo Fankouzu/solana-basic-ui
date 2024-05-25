@@ -12,6 +12,11 @@ function nav(): DefaultTheme.NavItem[] {
       link: "/CLI/connecting-to-a-cluster",
       activeMatch: "/CLI/",
     },
+    {
+      text: "SPL Token",
+      link: "/SPL-Token/index",
+      activeMatch: "/SPL/",
+    },
   ];
 }
 
@@ -21,11 +26,20 @@ function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
       text: "Solana介绍",
       collapsed: false,
       items: [
-        { text: "概述", link: "/overview" },
-        { text: "租金经济", link: "/rent" },
-        { text: "钱包指南", link: "/wallets" },
-        { text: "开发入门", link: "/dev" },
-        { text: "账户模型", link: "/accounts" },
+        { text: "租金经济", link: "rent" },
+        { text: "钱包指南", link: "wallets" },
+        { text: "开发入门", link: "dev" },
+      ],
+    },
+    {
+      text: "高级概念",
+      collapsed: false,
+      items: [
+        { text: "版本化交易", link: "versions" },
+        { text: "地址查找表", link: "lookup-tables" },
+        { text: "交易确认及过期", link: "confirmation" },
+        { text: "重试交易", link: "retry" },
+        { text: "状态压缩", link: "state-compression" },
       ],
     },
   ];
@@ -39,27 +53,40 @@ function sidebarCLI(): DefaultTheme.SidebarItem[] {
       items: [
         {
           text: "使用 Solana CLI 连接到集群",
-          link: "/connecting-to-a-cluster",
+          link: "connecting-to-a-cluster",
         },
-        { text: "使用 Solana CLI 质押 SOL", link: "/staking" },
-        { text: "使用 CLI 部署 Solana 程序", link: "/deploy-a-program" },
-        { text: "Solana CLI 中的持久交易nonce", link: "/durable-nonce" },
+        { text: "使用 Solana CLI 质押 SOL", link: "staking" },
+        { text: "使用 CLI 部署 Solana 程序", link: "deploy-a-program" },
+        { text: "Solana CLI 中的持久交易nonce", link: "durable-nonce" },
         {
           text: "使用 Solana CLI 进行离线交易签名",
-          link: "/offline-signing",
+          link: "offline-signing",
         },
         {
           text: "使用 Solana CLI 进行链下消息签名",
-          link: "/sign-offchain-message",
+          link: "sign-offchain-message",
         },
         {
           text: "使用本地集群进行开发",
-          link: "/test-validator",
+          link: "test-validator",
         },
         {
           text: "使用 Solana CLI 发送和接收代币",
-          link: "/transfer-tokens",
+          link: "transfer-tokens",
         },
+      ],
+    },
+  ];
+}
+
+function sidebarSPL(): DefaultTheme.SidebarItem[] {
+  return [
+    {
+      text: "SPL Token",
+      collapsed: false,
+      items: [
+        { text: "概述", link: "index" },
+        { text: "Token程序", link: "token" },
       ],
     },
   ];
@@ -67,8 +94,8 @@ function sidebarCLI(): DefaultTheme.SidebarItem[] {
 // refer https://vitepress.dev/reference/site-config for details
 export default defineConfig({
   lang: "zh-CN",
-  title: "Solana开发入门",
-  description: "由崔棉大师@MasterCui为您带来的Solana开发入门教学.",
+  title: "Solana中文大全",
+  description: "由崔棉大师@MasterCui和捕鲸船社区小伙伴共建的Solana学习社区.",
 
   themeConfig: {
     nav: nav(),
@@ -79,6 +106,30 @@ export default defineConfig({
         items: sidebarIntroduction(),
       },
       "/CLI/": { base: "/CLI/", items: sidebarCLI() },
+      "/SPL-Token/": { base: "/SPL-Token/", items: sidebarSPL() },
+    },
+    footer: {
+      message:
+        "本教程招募共建者,联系<a href='https://x.com/@MasterCui'>崔棉大师</a>",
+    },
+    docFooter: {
+      prev: "上一页",
+      next: "下一页",
+    },
+    outline: {
+      label: "页面导航",
+    },
+    editLink: {
+      pattern:
+        "https://github.com/Fankouzu/solana-basic-ui/edit/main/docs/:path",
+      text: "在 GitHub 上编辑此页面",
+    },
+    lastUpdated: {
+      text: "最后更新于",
+      formatOptions: {
+        dateStyle: "short",
+        timeStyle: "medium",
+      },
     },
   },
 });
