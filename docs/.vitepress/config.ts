@@ -3,27 +3,27 @@ import { defineConfig, type DefaultTheme } from "vitepress";
 function nav(): DefaultTheme.NavItem[] {
   return [
     {
-      text: "Solana介绍",
-      link: "/Introduction/overview",
-      activeMatch: "/Introduction/",
+      text: "Solana中文文档",
+      link: "/SolanaDocumention/overview",
+      activeMatch: "/SolanaDocumention/",
     },
     {
-      text: "CLI命令行工具",
-      link: "/CLI/connecting-to-a-cluster",
-      activeMatch: "/CLI/",
+      text: "Solana验证者文档",
+      link: "/SolanaValidatorDocumentation/connecting-to-a-cluster",
+      activeMatch: "/SolanaValidatorDocumentation/",
     },
     {
-      text: "SPL Token",
-      link: "/SPL-Token/index",
-      activeMatch: "/SPL/",
+      text: "Solana程序库",
+      link: "/SolanaProgramLibrary/index",
+      activeMatch: "/SolanaProgramLibrary/",
     },
   ];
 }
 
-function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
+function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: "Solana介绍",
+      text: "Solana中文文档",
       collapsed: false,
       items: [
         { text: "概述", link: "overview" },
@@ -60,10 +60,10 @@ function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
   ];
 }
 
-function sidebarCLI(): DefaultTheme.SidebarItem[] {
+function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: "CLI命令行工具",
+      text: "Solana验证者文档",
       collapsed: false,
       items: [
         {
@@ -94,10 +94,10 @@ function sidebarCLI(): DefaultTheme.SidebarItem[] {
   ];
 }
 
-function sidebarSPL(): DefaultTheme.SidebarItem[] {
+function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: "SPL Token",
+      text: "Solana程序库",
       collapsed: false,
       items: [
         { text: "概述", link: "index" },
@@ -116,12 +116,12 @@ export default defineConfig({
     nav: nav(),
 
     sidebar: {
-      "/Introduction/": {
-        base: "/Introduction/",
-        items: sidebarIntroduction(),
+      "/SolanaDocumention/": {
+        base: "/SolanaDocumention/",
+        items: sidebarSolanaDocumention(),
       },
-      "/CLI/": { base: "/CLI/", items: sidebarCLI() },
-      "/SPL-Token/": { base: "/SPL-Token/", items: sidebarSPL() },
+      "/SolanaValidatorDocumentation/": { base: "/SolanaValidatorDocumentation/", items: sidebarSolanaValidatorDocumentation() },
+      "/SolanaProgramLibrary/": { base: "/SolanaProgramLibrary/", items: sidebarSolanaProgramLibrary() },
     },
     footer: {
       message:
