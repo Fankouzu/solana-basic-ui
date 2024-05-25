@@ -4,7 +4,7 @@
 
 ## 交易简要背景
 
-Before diving into how Solana transaction confirmation and expiration works, let's briefly set the base understanding of a few things:在深入了解 Solana 交易确认和到期的工作原理之前，我们先简要了解以下几件事：
+在深入了解 Solana 交易确认和到期的工作原理之前，我们先简要了解以下几件事：
 
 - 什么是交易
 - 交易的生命周期

@@ -30,8 +30,7 @@ Solana 运行时支持两种事务版本：
 
 ### 使用 web3.js
 
-Using the [`@solana/web3.js`](https://solana-labs.github.io/solana-web3.js/)
-library, you can retrieve the most recent block or get a specific transaction:
+使用 [`@solana/web3.js`](https://solana-labs.github.io/solana-web3.js/) 库, 您可以检索最近的块或获取特定的交易：
 
 ```js
 // connect to the `devnet` cluster and get the current `slot`
