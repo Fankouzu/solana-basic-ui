@@ -32,6 +32,17 @@ function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
         { text: "开发入门", link: "/dev" },
       ],
     },
+    {
+      text: "高级概念",
+      collapsed: false,
+      items: [
+        { text: "版本化交易", link: "/versions" },
+        { text: "地址查找表", link: "/lookup-tables" },
+        { text: "交易确认及过期", link: "/confirmation" },
+        { text: "重试交易", link: "/retry" },
+        { text: "状态压缩", link: "/state-compression" },
+      ],
+    },
   ];
 }
 
@@ -99,7 +110,8 @@ export default defineConfig({
       "/SPL-Token/": { base: "/SPL-Token/", items: sidebarSPL() },
     },
     footer: {
-      message: "本教程招募共建者,联系<a href='https://x.com/@MasterCui'>崔棉大师</a>",
+      message:
+        "本教程招募共建者,联系<a href='https://x.com/@MasterCui'>崔棉大师</a>",
     },
     docFooter: {
       prev: "上一页",

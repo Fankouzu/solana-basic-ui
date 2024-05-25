@@ -4,16 +4,16 @@
 
 该智能合约程序为同质化代币（Fungible Tokens）和非同质化代币（Non-Fungible Tokens）定义了一个通用实现。
 
-### 背景
+## 背景
 Solana 的编程模型和本文档中使用的 Solana 术语定义可在以下链接找到：
 
 - [https://docs.solana.com/apps](https://docs.solana.com/apps)
 - [https://docs.solana.com/terminology](https://docs.solana.com/terminology)
 
-### 源代码
+## 源代码
 token 程序的源代码可在 [GitHub](https://github.com/solana-labs/solana-program-library)  上找到。
 
-### 接口
+## 接口
 token 程序（Token Program）使用 Rust 编写，并可在 [crates.io](https://crates.io/) 和 [docs.rs](https://docs.rs/) 上找到。
 
 token 程序支持自动生成的 C 语言绑定。
@@ -22,13 +22,13 @@ token 程序提供 JavaScript 绑定，可实现将 token 智能合约加载到�
 
 有关钱包地址到代币账户映射和资金管理的约定，请参见 [SPL 关联代币账户程序](https://spl.solana.com/associated-token-account)。
 
-### 状态
+## 状态
 SPL token 程序被视为已完成，目前没有计划添加新功能。可能会进行更改以修复重要或破坏性错误。
 
 相关教程
 ---------------------------------------------------------------------
 
-### 设置
+## 设置
 
 `spl-token` 命令行工具可用于操作 SPL 代币。一旦您安装了 [Rust](https://rustup.rs/)，运行以下命令即可安装：
 
@@ -38,10 +38,10 @@ $ cargo install spl-token-cli
 
 运行 `spl-token --help` 获取可用命令的完整描述。
 
-#### 配置  
+### 配置  
 spl-token 与 solana 命令行工具共享相同的配置文件。
 
-#### 查看当前配置文件
+### 查看当前配置文件
 
 ```
 $ solana config get
@@ -53,7 +53,7 @@ Keypair Path: ${HOME}/.config/solana/id.json
 ```
 
 
-#### 集群 RPC URL
+### 集群 RPC URL
 
 查看 [Solana clusters](https://docs.solana.com/clusters) 获取关于 solana 特定集群 RPC URL 的详细信息。  
 
@@ -63,7 +63,7 @@ Keypair Path: ${HOME}/.config/solana/id.json
 $ solana config set --url https://api.devnet.solana.com
 ```
 
-#### 默认密钥对
+### 默认密钥对
 
 如果您还没有密钥对的话，查看[Keypair conventions](https://docs.solana.com/cli/conventions#keypair-conventions) 以获取有关如何设置密钥对的信息。
 
@@ -81,7 +81,7 @@ $ solana config set --keypair usb://ledger/
 ```
 
 
-#### 空投 SOL
+### 空投 SOL
 
 创建代币和账户需要使用 SOL 来支付账户租金押金和交易费用。如果您加入的集群提供水龙头服务，您可以获取少量 SOL 进行测试：
 
@@ -89,7 +89,7 @@ $ solana config set --keypair usb://ledger/
 $ solana airdrop 1
 ```
 
-### 示例: 创建同质化代币
+## 示例: 创建同质化代币
 
 
 ```
