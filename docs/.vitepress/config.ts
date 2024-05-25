@@ -33,6 +33,13 @@ function sidebarIntroduction(): DefaultTheme.SidebarItem[] {
       ],
     },
     {
+      text: "核心概念",
+      collapsed: false,
+      items: [
+        { text: "账户模型", link: "accounts" },
+      ],
+    },
+    {
       text: "高级概念",
       collapsed: false,
       items: [
