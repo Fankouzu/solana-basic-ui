@@ -49,7 +49,7 @@ $ cargo install spl-token-cli
 #### 配置    
 spl-token 与 solana 命令行工具共享相同的配置文件。
 
-#### 查看当前配置文件
+### 查看当前配置文件
 
 ```
 $ solana config get
@@ -61,7 +61,7 @@ Keypair Path: ${HOME}/.config/solana/id.json
 ```
 
 
-#### 集群 RPC URL
+### 集群 RPC URL
 
 查看 [Solana clusters](https://docs.solana.com/clusters) 获取关于 solana 特定集群 RPC URL 的详细信息。  
 
@@ -71,7 +71,7 @@ Keypair Path: ${HOME}/.config/solana/id.json
 $ solana config set --url https://api.devnet.solana.com
 ```
 
-#### 默认密钥对
+### 默认密钥对
 
 如果您还没有密钥对的话，查看[Keypair conventions](https://docs.solana.com/cli/conventions#keypair-conventions) 以获取有关如何设置密钥对的信息。
 
@@ -89,7 +89,7 @@ $ solana config set --keypair usb://ledger/
 ```
 
 
-#### 空投 SOL
+### 空投 SOL
 
 创建代币和账户需要使用 SOL 来支付账户租金押金和交易费用。如果您加入的集群提供水龙头服务，您可以获取少量 SOL 进行测试：
 
@@ -97,7 +97,7 @@ $ solana config set --keypair usb://ledger/
 $ solana airdrop 1
 ```
 
-### 示例: 创建同质化代币
+## 示例: 创建同质化代币
 
 
 ```
