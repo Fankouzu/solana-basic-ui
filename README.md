@@ -2,6 +2,9 @@
 
 <a href="https://github.com/Fankouzu/solana-basic-ui/stargazers"><img src="https://img.shields.io/github/stars/Fankouzu/solana-basic-ui" alt="Stars Badge"/></a>
 <a href="https://github.com/Fankouzu/solana-basic-ui/network/members"><img src="https://img.shields.io/github/forks/Fankouzu/solana-basic-ui" alt="Forks Badge"/></a>
+<a href="https://github.com/Fankouzu/solana-basic-ui/pulls"><img src="https://img.shields.io/github/issues-pr/Fankouzu/solana-basic-ui" alt="Pull Requests Badge"/></a>
+<a href="https://github.com/Fankouzu/solana-basic-ui/issues"><img src="https://img.shields.io/github/issues/Fankouzu/solana-basic-ui" alt="Issues Badge"/></a>
+<a href="https://github.com/Fankouzu/solana-basic-ui/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Fankouzu/solana-basic-ui?color=2b9348"></a>
 
 此仓库的代码会部署在 [solana-basic.surge.sh](https://solana-basic.surge.sh/) 域名下，后面会挑选一个更合适的顶级域名。
 
