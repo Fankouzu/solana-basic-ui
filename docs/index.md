@@ -27,6 +27,11 @@ features:
     link: /SolanaProgramLibrary/index
 ---
 
+---------
+
+# 贡献者
+[![贡献者](https://contrib.rocks/image?repo=fankouzu/solana-basic-ui "contributors")](https://github.com/fankouzu/solana-basic-ui/graphs/contributors)
+
 <style>
 :root {
   --vp-home-hero-name-color: transparent;

@@ -35,3 +35,7 @@ npm install
 ```
 npm run docs:dev
 ```
+## 贡献者
+<a href="https://github.com/fankouzu/solana-basic-ui/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=fankouzu/solana-basic-ui" />
+</a>
