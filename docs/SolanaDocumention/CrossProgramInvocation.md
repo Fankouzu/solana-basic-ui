@@ -2,7 +2,7 @@
 
 跨程序调用（CPI）是指一个程序调用另一个程序的指令。此机制允许Solana程序的可组合性。
 
-![调用示意图](D:\新建文件夹 (2)\图翻译\跨程序调用图1.png)
+![调用示意图](D:\新建文件夹 (2)\solana-basic-ui\docs\SolanaDocumention\CPI1.png)
 
 <div align="center"> <p>跨程序调用</p> </div>
 
