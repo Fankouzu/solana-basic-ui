@@ -57,6 +57,27 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "Rust", link: "rust" },
       ],
     },
+    {
+      text: "Solana 经济",
+      collapsed: false,
+      link: "economics/index" ,
+      items: [
+        { text: "通胀", 
+        link: "economics/inflation/inflation-schedule",
+        collapsed: true ,
+          items: [
+            { text: "通胀计划", link: "economics/inflation/inflation-schedule" },
+            { text: "通胀术语", link: "economics/inflation/terminology" },
+          ]
+        },
+        { text: "质押", 
+        link: "economics/staking/index" ,
+        collapsed: true,
+        items: [
+          { text: "质押账户", link: "economics/staking/stake-accounts" },
+        ]},
+      ],
+    }
   ];
 }
 
