@@ -1,0 +1,35 @@
+# 使用CLI的Solana钱包
+
+Solana支持多种类型的钱包，这些钱包可以直接用于与Solana命令行工具交互。
+
+要使用命令行钱包，您密续首先[安装Solana CLI工具](https://docs.solanalabs.com/cli/install)。
+
+## 文件系统钱包 [#](https://docs.solanalabs.com/cli/wallets/#file-system-wallet)
+
+*文件系统钱包*， 也被称为FS钱包，是在您计算机文件系统中的一个目录。每个在该目录中的文件都持有一对密钥对。
+
+### 文件系统钱包安全性 [#](https://docs.solanalabs.com/cli/wallets/#file-system-wallet-security)
+
+文件系统钱包是最方便但是安全性最低的一种钱包形式。它的便捷性来自于其密钥对只保存在一个简单的文件中。您可以根据需要生成任意数量的密钥，并通过复制文件轻松地进行备份。其不安全的原因在于密钥对文件是**未加密**的。如果您是计算机的唯一用户，并且确保您的计算机中没有恶意软件，对于小额加密货币而言，FS钱包会是一个不错的解决方案。然而，如果您的计算机中有恶意软件并连接到互联网，该恶意软件可能会上传您的密钥并盗走您的代币。同样，由于密钥对作为文件储存在您的计算机上，拥有物理访问权限的熟练黑客可能可以访问到它们。使用加密硬盘（如MacOS上的FileVault),可以最小化这种风险。
+
+详情请参考[文件系统钱包](https://docs.solanalabs.com/cli/wallets/file-system)。
+
+## 纸质钱包 [#](https://docs.solanalabs.com/cli/wallets/#paper-wallet)
+
+*纸质钱包*是指将助记词种子写在纸上的集合。助记词是一系列单词（通常是12个或24个），可以根据需要重新生成密钥对。
+
+### 纸质钱包安全性 [#](https://docs.solanalabs.com/cli/wallets/#paper-wallet-security)
+
+就便利性和安全性而言，纸质钱包位于FS钱包对面的谱系端。它使用起来非常不方便，但提供了极佳的安全性。当纸质钱包与[离线签名](https://docs.solanalabs.com/cli/examples/offline-signing)结合使用时，这种高安全性会进一步提升。
+
+详情请参考[纸质钱包](https://docs.solanalabs.com/cli/wallets/paper)
+
+## 硬件钱包 [#](https://docs.solanalabs.com/cli/wallets/#hardware-wallet)
+
+硬件钱包是小型便携化设备，用于储存密钥对并提供签署交易的接口。
+
+### 硬件钱包安全性 [#](https://docs.solanalabs.com/cli/wallets/#hardware-wallet-security)
+
+硬件钱包，例如[Ledger硬件钱包](https://www.ledger.com/)，为加密货币提供了安全与便捷的绝佳平衡。它高效地实现了离线签名过程，同时几乎保留了所有文件系统钱包的所有便利性。
+
+详情请参考[硬件钱包](https://docs.solanalabs.com/cli/wallets/hardware/)
