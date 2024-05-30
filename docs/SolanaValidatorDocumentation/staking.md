@@ -1,144 +1,33 @@
-# 使用 Solana CLI 质押 SOL
-
-接收到 SOL 后，你可以考虑将其用于委托给验证者。Stake 是我们在 stake 账户中称为的代币。Solana 通过委托给验证者的 stake 数量来权衡验证者的投票权，从而使这些验证者在确定区块链中下一个有效交易块时具有更多的影响力。Solana 然后定期生成新的 SOL 以奖励委托者和验证者。你委托的 stake 越多，就可以获得更多的奖励。
-
-## 创建质押账户
-
-
-如果您想委托质押, 您需要两步操作: 
-
-1. 您需要将一些token转入stake账户。 
-2. 要创建stake帐户，您将需要密钥对, 公钥将作为stake账户的地址。 这里不需要密码或加密；创建完之后, 这个密钥对就会被丢弃.
-
-#### 第一步: 生成密钥对
-```
-solana-keygen new --no-passphrase -o stake-account.json
-```
-
-输出公钥(stake账户地址):
-
-```
-pubkey: GKvqsuNcnwWqPzzuhLmGi4rzzh55FhJtGizkhHaEJqiV
-```
-
-复制公钥并妥善保管。后面要用. 
-
-#### 第二步: 创建一个stake账户,并转入代币：
-
-```
-solana create-stake-account --from <KEYPAIR> stake-account.json <AMOUNT> \
-    --stake-authority <KEYPAIR> --withdraw-authority <KEYPAIR> \
-    --fee-payer <KEYPAIR>
-```
-
-`KEYPAIR`: 你的密钥对
-
-`AMOUNT`: 转移的代币数量
-
-`stake-account.json`: 你的stake账户的公钥文件路径
-
-现在可以删除 `stake-account.json` 文件了。要授权其他操作，您可以使用 --stake-authority 或 --withdraw-authority 密钥对，而不是 `stake-account.json`。
-
-使用 solana stake-account 命令查看新的权益账户：
-
-```
-solana stake-account <STAKE_ACCOUNT_ADDRESS>
-```
-
-输出将类似于以下内容：
-
-```
-Total Stake: 5000 SOL
-Stake account is undelegated
-Stake Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F
-Withdraw Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F
-```
-
-## 设置质押和取款权限
-
-
-质押和取款权限可以在创建账户时通过 --stake-authority 和 --withdraw-authority 选项来设置，或者后面通过 solana stake-authorize 命令来设置。
-
-例如，要设置一个新的质押权限，运行:
-
-```
-solana stake-authorize <STAKE_ACCOUNT_ADDRESS> \
-    --stake-authority <KEYPAIR> --new-stake-authority <PUBKEY> \
-    --fee-payer <KEYPAIR>
-```
-
-`KEYPAIR`: stake账户的权限所有者
-
-`STAKE_ACCOUNT_ADDRESS`: stake账户地址
-
-`PUBKEY`: 新的权限所有者
-
-这里做了一个质押的权限的移交. 
-
-
-## 委托质押
-
-要将您的质押委托给验证人，您需要知道它的投票账户地址。通过使用`solana validators`命令查询群集以获取所有验证人及其投票账户列表来找到它：
-
-```
-solana validators
-```
-
-每行的第一列包含验证人的身份，第二列是投票账户地址。
-
-选择一个验证人
-
-运行以下命令, 把你的质押委托给验证人: 
-
-```
-solana delegate-stake --stake-authority <KEYPAIR> <STAKE_ACCOUNT_ADDRESS> <VOTE_ACCOUNT_ADDRESS> \
-    --fee-payer <KEYPAIR>
-```
-
-`VOTE_ACCOUNT_ADDRESS`: 验证人地址
-
-`KEYPAIR`: 你的密钥对
-
-`STAKE_ACCOUNT_ADDRESS`: 你的stake账户
-
-委托后，使用solana stake-account观察stake账户的变化：
-
-```
-solana stake-account <STAKE_ACCOUNT_ADDRESS>
-```
-
-您将在输出中看到新的字段"代币委托"和"代币委托账户地址"。 输出将类似于这样：
-```
-Total Stake: 5000 SOL
-Credits Observed: 147462
-Delegated Stake: 4999.99771712 SOL
-Delegated Vote Account Address: CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1
-Stake activates starting from epoch: 42
-Stake Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F
-Withdraw Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F
-```
-
-
-## 取消委托
-
-您可以使用 solana deactivate-stake 取消委托：
-
-```
-solana deactivate-stake --stake-authority <KEYPAIR> <STAKE_ACCOUNT_ADDRESS> \
-    --fee-payer <KEYPAIR>
-```
-
-请注意，刚刚委托的权益账户有冷却期, 不能马上取消委托. 
-
-## 取出质押
-
-```
-solana withdraw-stake --withdraw-authority <KEYPAIR> <STAKE_ACCOUNT_ADDRESS> <RECIPIENT_ADDRESS> <AMOUNT> \
-    --fee-payer <KEYPAIR>
-```
-
-`RECIPIENT_ADDRESS`: 取出到哪个地址
-
-`KEYPAIR`: 你的密钥对
-
-`STAKE_ACCOUNT_ADDRESS`: 现在的stake账户
+<div class="theme-doc-markdown markdown"><header><h1>使用 Solana CLI 质押 SOL</h1></header><p>收到SOL后，您可以考虑通过将质押委托给验证者节点来使用它。
+  质押就是我们所说的质押账户中的代币。Solana 根据委托给他们的质押量来衡量验证者节点的投票，这让这些节点在确定区块链中下一个有效的交易块时拥有更大的影响力。
+  然后，Solana 会定期生成新的 SOL 来奖励质押者和验证者节点。您委托的质押越多，您获得的奖励就越多。
+</p><div class="theme-admonition theme-admonition-info alert alert--info admonition_LlT9"><div class="admonitionHeading_tbUL"><span class="admonitionIcon_kALy"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg></span>更多信息:</div><div class="admonitionContent_S0QG"><p>
+ 要了解有关质押的概述，请首先阅读 
+<a href="https://solana.com/staking" target="_blank" rel="noopener noreferrer">质押和通胀常见问题解答</a>.</p></div></div>
+  <h2 class="anchor anchorWithStickyNavbar_LWe7" id="create-a-stake-account">创建一个质押账户<a class="hash-link" href="#create-a-stake-account" title="Direct link to heading">​</a></h2>
+  <p>要委托质押，您需要将一些代币转入质押账户。
+要创建账户，您需要一个密钥对。 其公钥将用作
+<a href="https://solana.com/docs/economics/staking/stake-accounts#account-address" target="_blank" rel="noopener noreferrer">质押账户地址</a>.
+这里不需要密码或加密；创建质押账户后，此密钥对将被丢弃。
+</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex">
+<pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana-keygen new --no-passphrase -o stake-account.json
+</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+  <p>输出将在文本后包含公钥 <code>pubkey:</code>.</p><div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">pubkey: GKvqsuNcnwWqPzzuhLmGi4rzzh55FhJtGizkhHaEJqiV</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+  <p>复制公钥并将其保存以备不时之需。当您下次想要对质押账户执行操作时，您将需要它。</p><p>现在，创建一个质押账户：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana create-stake-account --from </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> stake-account.json </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">AMOUNT</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --stake-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> --withdraw-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --fee-payer </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p><code>&lt;AMOUNT&gt;</code> 代币从 &quot;from&quot; 处的账户转移<code>&lt;KEYPAIR&gt;</code> 到stake-account.json公钥处的新质押账户</p><p>现在可以暂时丢弃 stake-account.json 文件。要授权其他操作，您将使用 <code>--stake-authority</code> 或者 <code>--withdraw-authority</code> 密钥对,
+而不是 stake-account.json.</p><p>使用以下命令查看新的质押账户 <code>solana stake-account</code> :</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana stake-account </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STAKE_ACCOUNT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p>输出将类似于此：</p><div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">Total Stake: 5000 SOL</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Stake account is undelegated</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Stake Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Withdraw Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><h3 class="anchor anchorWithStickyNavbar_LWe7" id="set-stake-and-withdraw-authorities">设置质押和提取权限<a class="hash-link" href="#set-stake-and-withdraw-authorities" title="Direct link to heading">​</a></h3><p><a href="https://solana.com/docs/economics/staking/stake-accounts#understanding-account-authorities" target="_blank" rel="noopener noreferrer">质押和提取权限</a>
+可以在创建账户时通过 <code>--stake-authority</code> 和
+<code>--withdraw-authority</code> 选项设置, 也可以在创建账户后使用 <code>solana stake-authorize</code> 命令设置 
+。例如，要设置新的质押权限，请运行：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana stake-authorize </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STAKE_ACCOUNT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --stake-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> --new-stake-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">PUBKEY</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --fee-payer </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p>这将使用现有的质押权限密钥对 <code>&lt;KEYPAIR&gt;</code> 来授权一个新的质押权限公钥 <code>&lt;PUBKEY&gt;</code> 给质押账户 <code>&lt;STAKE_ACCOUNT_ADDRESS&gt;</code>.</p><h3 class="anchor anchorWithStickyNavbar_LWe7" id="advanced-derive-stake-account-addresses">高级: 派生质押账户地址<a class="hash-link" href="#advanced-derive-stake-account-addresses" title="Direct link to heading">​</a></h3><p>
+当你委托质押时，你将质押账户中的所有代币委托给单个节点。要委托给多个节点，你需要多个质押账户。为每个账户创建一个新的密钥对并管理这些地址可能会很繁琐。幸运的是，你可以使用 <code>--seed</code> 选项派生质押地址：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana create-stake-account --from </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STAKE_ACCOUNT_KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> --seed </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STRING</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">AMOUNT</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --stake-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">PUBKEY</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> --withdraw-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">PUBKEY</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> --fee-payer </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p><code>&lt;STRING&gt;</code> 是一个任意字符串，长度最多为32字节，通常是一个数字，用于表示这是第几个派生账户。第一个账户可能是 &quot;0&quot;,
+然后是 &quot;1&quot;, 依此类推。<code>&lt;STAKE_ACCOUNT_KEYPAIR&gt;</code> 的公钥作为基础地址。该命令从基础地址和种子字符串派生出一个新地址。要查看命令将派生出哪个质押地址，可以使用
+<code>solana create-address-with-seed</code>:</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana create-address-with-seed --from </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">PUBKEY</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">SEED_STRING</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> STAKE</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p><code>&lt;PUBKEY&gt;</code> 是传递给 <code>solana create-stake-account</code>的<code>&lt;STAKE_ACCOUNT_KEYPAIR&gt;</code> 的公钥。</p><p> 该命令将输出一个派生地址，该地址可以用作质押操作中的
+<code>&lt;STAKE_ACCOUNT_ADDRESS&gt;</code> 参数。</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="delegate-stake">委托质押<a class="hash-link" href="#delegate-stake" title="Direct link to heading">​</a></h2><p>要将您的权益委托给验证者，您需要其投票账户地址。可以通过使用 <code>solana validators</code> 命令查询集群中所有验证者及其投票账户的列表来找到该地址：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana validators</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p>每行的第一列包含验证者的身份信息，第二列是投票账户地址。选择一个验证者并在
+<code>solana delegate-stake</code>命令中使用其投票账户地址：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana delegate-stake --stake-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STAKE_ACCOUNT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">VOTE_ACCOUNT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --fee-payer </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p>该授权密钥对 <code>&lt;KEYPAIR&gt;</code>  授权对地址为 <code>&lt;STAKE_ACCOUNT_ADDRESS&gt;</code>的账户进行操作。该权益被委托给地址为 <code>&lt;VOTE_ACCOUNT_ADDRESS&gt;</code>的投票账户。</p><p>在委托质押后，使用 <code>solana stake-account</code> 命令观察权益账户的变化：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana stake-account </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STAKE_ACCOUNT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p>在输出中，你会看到新的字段 &quot;Delegated Stake&quot; 和 &quot;Delegated Vote Account Address&quot;
+。输出将类似于以下内容：</p><div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">Total Stake: 5000 SOL</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Credits Observed: 147462</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Delegated Stake: 4999.99771712 SOL</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Delegated Vote Account Address: CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Stake activates starting from epoch: 42</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Stake Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F</span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">Withdraw Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><h2 class="anchor anchorWithStickyNavbar_LWe7" id="deactivate-stake">撤销质押<a class="hash-link" href="#deactivate-stake" title="Direct link to heading">​</a></h2><p>一旦委托了质押，你可以使用 <code>solana deactivate-stake</code>
+命令来取消委托质押：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana deactivate-stake --stake-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STAKE_ACCOUNT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --fee-payer </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p>质押授权密钥对 <code>&lt;KEYPAIR&gt;</code> 授权对地址为
+  <code>&lt;STAKE_ACCOUNT_ADDRESS&gt;</code>的账户进行操作。</p><p>请注意，质押需要经过一段时间才能解除 &quot;冷却期&quot;。 在冷却期间尝试委托质押将失败。</p><h2 class="anchor anchorWithStickyNavbar_LWe7" id="withdraw-stake">取回质押<a class="hash-link" href="#withdraw-stake" title="Direct link to heading">​</a></h2><p>使用<code>solana withdraw-stake</code> 命令从质押账户中转移代币：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana withdraw-stake --withdraw-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STAKE_ACCOUNT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">RECIPIENT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">AMOUNT</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --fee-payer </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p><code>&lt;STAKE_ACCOUNT_ADDRESS&gt;</code> 是现有的质押账户, 
+<code>&lt;KEYPAIR&gt;</code> 是质押权限, <code>&lt;AMOUNT&gt;</code>是要转移到 <code>&lt;RECIPIENT_ADDRESS&gt;</code>的代币数量。</p>
+  <h2 class="anchor anchorWithStickyNavbar_LWe7" id="split-stake">拆分质押<a class="hash-link" href="#split-stake" title="Direct link to heading">​</a></h2><p>在你现有的质押不符合取回条件时，你可能希望将质押委托给其他验证者节点。这可能是因为它当前正在质押、冷却或锁定。要将代币从现有的质押账户转移到新的账户，可以使用 <code>solana split-stake</code> 命令：</p><div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#bfc7d5;--prism-background-color:#292d3e"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#bfc7d5"><span class="token plain">solana split-stake --stake-authority </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">STAKE_ACCOUNT_ADDRESS</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">NEW_STAKE_ACCOUNT_KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">AMOUNT</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><span class="token plain"> </span><span class="token punctuation" style="color:rgb(199, 146, 234)">\</span><span class="token plain"></span><br></span><span class="token-line" style="color:#bfc7d5"><span class="token plain">    --fee-payer </span><span class="token operator" style="color:rgb(137, 221, 255)">&lt;</span><span class="token plain">KEYPAIR</span><span class="token operator" style="color:rgb(137, 221, 255)">&gt;</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg class="copyButtonIcon_y97N" viewBox="0 0 24 24"><path d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg class="copyButtonSuccessIcon_LjdS" viewBox="0 0 24 24"><path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div><p><code>&lt;STAKE_ACCOUNT_ADDRESS&gt;</code> 是现有的质押账户, 
+<code>&lt;KEYPAIR&gt;</code>  是质押授权的密钥对, <code>&lt;NEW_STAKE_ACCOUNT_KEYPAIR&gt;</code> 是新账户的密钥对,  <code>&lt;AMOUNT&gt;</code> 是要转移到新账户的代币数量。</p><p>要将质押账户拆分为衍生账户地址, 请使用 <code>--seed</code>
+选项。 有关详细信息，请参阅
+<a href="#advanced-derive-stake-account-addresses">派生质押账户地址</a>。</p></div></article>
