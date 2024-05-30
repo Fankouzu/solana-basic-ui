@@ -60,6 +60,17 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "Rust", link: "rust" },
       ],
     },
+    {
+      text: "经济",
+      collapsed: false,
+      items: [
+        { 
+          text: "质押",
+          collapsed: false,
+          items: [{text: "质押编程", link: "stake-programming"}]
+        },
+      ],
+    },
   ];
 }
 
