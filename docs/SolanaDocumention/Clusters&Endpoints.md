@@ -47,9 +47,9 @@ Solana Labs团队为每个集群操作一个公共RPC端点。每个公共端点
 
 - `https://api.devnet.solana.com` - 单个Solana Labs团队托管的API节点；有速率限制
 
-#### **Solana命令行配置示例**
+#### `Solana`命令行配置示例
 
-要使用Solana CLI连接到开发网集群：
+要使用Solana CLI连接到`开发网`集群：
 
 ```shell
 solana config set --url https://api.devnet.solana.com
@@ -71,15 +71,14 @@ solana config set --url https://api.devnet.solana.com
 - 测试网可能会进行账本重置
 - 测试网包含一个用于应用测试空投的代币水龙头
 - 测试网通常运行比开发网和主网更为新的软件发布分支
-
 - 测试网中用于节点之间进行信息传递的入口点：`entrypoint.testnet.solana.com:8001`
 
 ### 测试网端点
 
 - `https://api.testnet.solana.com` - 单个Solana Labs团队托管的API节点；有速率限制
 
-#### **Solana命令行配置示例**
-要使用Solana CLI连接到Testnet集群：
+#### `Solana`命令行配置示例
+要使用Solana CLI连接到`测试网`集群：
 
 ```shell
 solana config set --url https://api.testnet.solana.com
@@ -95,19 +94,15 @@ solana config set --url https://api.testnet.solana.com
 
 ## 主网 beta版
 
-
-
 一个为Solana用户、开发者、验证节点和代币持有者提供的无许可、持久的集群。
-
 - 主网 beta版上发行的代币是**真实**的SOL
-
 - 主网 beta版中用于节点之间进行信息传递的入口点：`entrypoint.mainnet-beta.solana.com:8001`
 
 ### 主网 beta版端点
 `https://api.mainnet-beta.solana.com` - Solana Labs托管的API节点集群，由负载均衡器支持；有速率限制
 
-##### **Solana命令行配置示例**
-要使用Solana CLI连接到主网 beta版集群：
+##### `Solana`命令行配置示例
+要使用Solana CLI连接到`主网beta版`集群：
 
 ```shell
 solana config set --url https://api.mainnet-beta.solana.com
