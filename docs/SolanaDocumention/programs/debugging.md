@@ -4,8 +4,8 @@ Solana 程序在链上运行，因此在野外调试它们可能很具挑战性�
 
 ## 运行单元测试
 
-- [使用 Rust 测试](lang-rust.md#如何测试)
-- [使用 C 测试](lang-c.md#如何测试)
+- [使用 Rust 测试](https://solana.com/zh/docs/programs/lang-rust#how-to-test)
+- [使用 C 测试](https://solana.com/zh/docs/programs/lang-c#how-to-test)
 
 ## 日志记录
 
@@ -13,8 +13,8 @@ Solana 程序在链上运行，因此在野外调试它们可能很具挑战性�
 
 有关如何从程序中记录日志的信息，请参阅语言特定的文档：
 
-- [从 Rust 程序记录日志](lang-rust.md#日志记录)
-- [从 C 程序记录日志](lang-c.md#日志记录)
+- [从 Rust 程序记录日志](https://solana.com/zh/docs/programs/lang-rust#logging)
+- [从 C 程序记录日志](https://solana.com/zh/docs/programs/lang-c#logging)
 
 当运行本地集群时，日志将写入 stdout，只要它们通过 `RUST_LOG` 日志掩码启用。从程序开发的角度来看，集中关注运行时和程序日志，而不是整个集群的日志。要集中关注程序特定的信息，建议使用以下日志掩码：
 
@@ -33,13 +33,13 @@ export RUST_LOG=solana_runtime::system_instruction_processor=trace,solana_runtim
 - SBF 加载器可能无法解析程序，这不应该发生，因为加载器已经 _finalized_ 程序的账户数据。
   - `InstructionError::InvalidAccountData` 将作为事务错误的一部分返回。
 - SBF 加载器可能无法设置程序的执行环境
-  - `InstructionError::Custom(0x0b9f_0001)` 将作为事务错误的一部分返回。“0x0b9f_0001” 是 `VirtualMachineCreationFailed` 的十六进制表示[1]。
+  - `InstructionError::Custom(0x0b9f_0001)` 将作为事务错误的一部分返回。“0x0b9f_0001” 是 [`VirtualMachineCreationFailed`](https://github.com/solana-labs/solana/blob/bc7133d7526a041d1aaee807b80922baa89b6f90/programs/bpf_loader/src/lib.rs#L44) 的十六进制表示。
 - SBF 加载器可能在程序执行期间检测到致命错误（例如恐慌、内存违规、系统调用错误等）
-  - `InstructionError::Custom(0x0b9f_0002)` 将作为事务错误的一部分返回。“0x0b9f_0002” 是 `VirtualMachineFailedToRunProgram` 的十六进制表示[1]。
+  - `InstructionError::Custom(0x0b9f_0002)` 将作为事务错误的一部分返回。“0x0b9f_0002” 是 [`VirtualMachineFailedToRunProgram`](https://github.com/solana-labs/solana/blob/bc7133d7526a041d1aaee807b80922baa89b6f90/programs/bpf_loader/src/lib.rs#L46) 的十六进制表示。
 - 程序本身可能返回错误
-  - `InstructionError::Custom(<用户定义的值>)` 将返回。用户定义的值不得与任何内置的运行时程序错误冲突[1]。程序通常使用枚举类型来定义错误代码，从零开始，以便它们不会冲突。
+  - `InstructionError::Custom(<用户定义的值>)` 将返回。用户定义的值不得与任何内置的[运行时程序错误冲突](https://github.com/solana-labs/solana/blob/bc7133d7526a041d1aaee807b80922baa89b6f90/sdk/program/src/program_error.rs#L87)。程序通常使用枚举类型来定义错误代码，从零开始，以便它们不会冲突。
 
-在 `VirtualMachineFailedToRunProgram` 错误的情况下，关于失败的具体信息将写入[程序的执行日志](#日志记录)中。
+在 `VirtualMachineFailedToRunProgram` 错误的情况下，关于失败的具体信息将写入[程序的执行日志](https://solana.com/zh/docs/programs/debugging#logging)中。
 
 例如，涉及堆栈的访问违规将看起来像这样：
 
@@ -51,23 +51,23 @@ SBF program 4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofM failed: out of bounds me
 
 程序可以记录它在执行之前将被允许的剩余计算单元数。程序可以使用这些日志来包装它们想要配置的操作。
 
-- [从 Rust 程序记录剩余计算单元](lang-rust.md#计算预算)
-- [从 C 程序记录剩余计算单元](lang-c.md#计算预算)
+- [从 Rust 程序记录剩余计算单元](https://solana.com/zh/docs/programs/lang-rust#compute-budget)
+- [从 C 程序记录剩余计算单元](https://solana.com/zh/docs/programs/lang-c#compute-budget)
 
-有关计算预算的更多信息，请参阅[计算预算](/docs/core/fees.md#计算预算)。
+有关计算预算的更多信息，请参阅[计算预算](https://solana.com/zh/docs/core/fees#compute-budget)。
 
 ## ELF 转储
 
 SBF 共享对象的内部可以被转储到文本文件，以获取更多关于程序组成和运行时行为的信息。
 
-- [创建 Rust 程序的转储文件](lang-rust.md#elf-转储)
-- [创建 C 程序的转储文件](lang-c.md#elf-转储)
+- [创建 Rust 程序的转储文件](https://solana.com/zh/docs/programs/lang-rust#elf-dump)
+- [创建 C 程序的转储文件](https://solana.com/zh/docs/programs/lang-c#elf-dump)
 
 ## 指令跟踪
 
 在执行期间，运行时 SBF 解释器可以被配置为记录每个执行的 SBF 指令的跟踪消息。这对于 things like pin-pointing runtime context leading up to a memory access violation非常有帮助。
 
-跟踪日志与[ELF 转储](#elf-转储)一起，可以提供很多信息（尽管跟踪产生了很多信息）。
+跟踪日志与[ELF 转储](https://solana.com/zh/docs/programs/debugging#elf-dump)一起，可以提供很多信息（尽管跟踪产生了很多信息）。
 
 要在本地集群中启用 SBF 解释器跟踪消息，请在 `RUST_LOG` 中将 `solana_rbpf` 级别设置为 `trace`。例如：
 
