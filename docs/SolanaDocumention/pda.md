@@ -16,9 +16,9 @@
 以 PDA 作为链上地址的账户必须通过用于派生地址的程序显式创建。
 你可以将派生 PDA 视为在地图上查找地址。仅仅有一个地址并不意味着在那个位置构建任何内容。
 
-> 本节将介绍派生PDA的详细信息。
-> 有关程序如何使用PDA进行签名的详细信息将在[跨程序调用(CPIs)](https://solana.com/docs/core/cpi)一节中讨论，
-> 因为它需要这两个概念的上下文。
+::: tip INFO
+本节将介绍派生PDA的详细信息。 有关程序如何使用PDA进行签名的详细信息将在[跨程序调用(CPIs)](https://solana.com/docs/core/cpi)一节中讨论， 因为它需要这两个概念的上下文。
+:::
 
 ## 要点
 
@@ -135,8 +135,9 @@ Bump: 254
 的增量种子(Bump seed)是派生有效 PDA 的可选种子(Optional seeds)和程序ID(Program ID)
 的给定组合的第一个值（介于 255-0 之间）。
 
-> 第一个有效的增量种子(Bump seed)种子称为“规范bump”(canonical bump)。
-> 为了程序安全，建议在使用PDA时仅使用规范bump。
+::: tip INFO
+第一个有效的增量种子(Bump seed)种子称为“规范bump”(canonical bump)。为了程序安全，建议在使用PDA时仅使用规范bump。
+:::
 
 ### CreateProgramAddress
 
@@ -197,9 +198,7 @@ for (let bump = 255; bump >= 0; bump--) {
 }
 ```
 
-在
-[Solana Playground](https://beta.solpg.io/66032009cffcf4b13384cff2) and you
-上运行该示例，您应该会看到以下输出：
+在[Solana Playground](https://beta.solpg.io/66032009cffcf4b13384cff2) 上运行该示例，您应该会看到以下输出：
 
 ```
 bump 255: Error: Invalid seeds, address must fall off the curve
@@ -220,10 +219,9 @@ bump 250: Error: Invalid seeds, address must fall off the curve
 具有不同值的增量种子仍然可以派生有效的 PDA。
 
 
-<Callout type="warning">
-在构建 Solana 程序时，建议包括安全检查，以验证传递给程序的 PDA 是否使用规范Bump派生。
-如果不这样做，可能会引入漏洞，从而允许向程序提供非预期帐户。
-</Callout>
+::: tip DANGER
+在构建 Solana 程序时，建议包括安全检查，以验证传递给程序的 PDA 是否使用规范Bump派生。如果不这样做，可能会引入漏洞，从而允许向程序提供非预期帐户。
+:::
 
 ## 创建PDA帐户
 
