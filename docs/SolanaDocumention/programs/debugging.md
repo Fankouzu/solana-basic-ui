@@ -44,7 +44,7 @@ export RUST_LOG=solana_runtime::system_instruction_processor=trace,solana_runtim
 例如，涉及堆栈的访问违规将看起来像这样：
 
 ```text
-SBF 程序 4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofM failed: out of bounds memory store (insn #615), addr 0x200001e38/8
+SBF program 4uQeVj5tqViQh7yWWGStvkEG1Zmhx6uasJtWCJziofM failed: out of bounds memory store (insn #615), addr 0x200001e38/8
 ```
 
 ## 监控计算预算消耗
