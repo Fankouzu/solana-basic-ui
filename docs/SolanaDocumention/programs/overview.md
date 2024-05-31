@@ -1,15 +1,13 @@
-### Solana链上程序开发概述
+# Solana链上程序开发概述
 
 开发者可以编写并部署自己的程序到Solana区块链。这个过程可以大致总结为几个关键步骤。
 
-<Callout title="Hello World: 开始Solana开发">
-
+::: info Hello World: 开始Solana开发
 要快速开始Solana开发并构建你的第一个Rust程序，可以参考以下详细的快速入门指南：
 
 - [仅使用浏览器构建并部署你的第一个Solana程序](/content/guides/getstarted/hello-world-in-your-browser.md)。无需安装。
 - [设置本地环境](/content/guides/getstarted/setup-local-development.md)并使用本地测试验证器。
-
-</Callout>
+:::
 
 ## 链上程序开发生命周期
 
@@ -29,7 +27,9 @@
 
 编写Solana程序通常使用Rust语言。这些Rust程序实际上与创建传统的[Rust库](https://doc.rust-lang.org/rust-by-example/crates/lib.html)相同。
 
-> 你可以在下方阅读更多关于其他[支持语言](#支持的语言)的信息。
+::: info INFO
+你可以在下方阅读更多关于其他[支持语言](#支持的语言)的信息。
+:::
 
 ### 3. 编译程序
 
