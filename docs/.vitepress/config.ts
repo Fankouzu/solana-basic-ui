@@ -4,7 +4,7 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     {
       text: "Solana中文文档",
-      link: "/SolanaDocumention/intro/overview",
+      link: "/SolanaDocumention/index",
       activeMatch: "/SolanaDocumention/",
     },
     {
@@ -23,7 +23,15 @@ function nav(): DefaultTheme.NavItem[] {
 function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
   return [
     {
-      text: "Solana中文文档",
+      text: "Solana文档",
+      link: "index",
+      collapsed: false,
+      items: [
+        { text: "术语", link: "terminology" },
+      ],
+    },
+    {
+      text: "简介",
       collapsed: false,
       items: [
         { text: "概述", link: "intro/overview" },
