@@ -5,8 +5,8 @@
 ::: info Hello World: 开始Solana开发
 要快速开始Solana开发并构建你的第一个Rust程序，可以参考以下详细的快速入门指南：
 
-- [仅使用浏览器构建并部署你的第一个Solana程序](/content/guides/getstarted/hello-world-in-your-browser.md)。无需安装。
-- [设置本地环境](/content/guides/getstarted/setup-local-development.md)并使用本地测试验证器。
+- [仅使用浏览器构建并部署你的第一个Solana程序](https://solana.com/zh/developers/guides/getstarted/hello-world-in-your-browser)。无需安装。
+- [设置本地环境]([/content/guides/getstarted/setup-local-development.md](https://solana.com/zh/developers/guides/getstarted/setup-local-development))并使用本地测试验证器。
 :::
 
 ## 链上程序开发生命周期
@@ -28,16 +28,16 @@
 编写Solana程序通常使用Rust语言。这些Rust程序实际上与创建传统的[Rust库](https://doc.rust-lang.org/rust-by-example/crates/lib.html)相同。
 
 ::: info INFO
-你可以在下方阅读更多关于其他[支持语言](#支持的语言)的信息。
+你可以在下方阅读更多关于其他[支持语言](https://solana.com/zh/docs/programs/overview#support-languages)的信息。
 :::
 
 ### 3. 编译程序
 
-当程序编写完成后，必须将其编译为[Berkley Packet Filter](faq.md#berkeley-packet-filter-bpf)字节码，然后部署到区块链。
+当程序编写完成后，必须将其编译为[Berkley Packet Filter](https://solana.com/zh/docs/programs/faq#berkeley-packet-filter-bpf)字节码，然后部署到区块链。
 
 ### 4. 生成程序的公共地址
 
-使用[Solana CLI](https://docs.solanalabs.com/cli/install)，开发者将为新程序生成一个新的唯一[密钥对](/docs/terminology.md#keypair)。这个密钥对的公共地址（又称[Pubkey](/docs/terminology.md#public-key-pubkey)）将在链上用作程序的公共地址（又称[`programId`](/docs/terminology.md#program-id)）。
+使用[Solana CLI](https://docs.solanalabs.com/cli/install)，开发者将为新程序生成一个新的唯一[密钥对](https://solana.com/zh/docs/terminology#keypair)。这个密钥对的公共地址（又称[Pubkey](https://solana.com/zh/docs/terminology#public-key-pubkey)）将在链上用作程序的公共地址（又称[`programId`](https://solana.com/zh/docs/terminology#program-id)）。
 
 ### 5. 部署程序
 
@@ -47,7 +47,7 @@
 
 ## 支持的语言
 
-Solana程序通常使用[Rust语言](lang-rust.md)编写，但也支持[C/C++](lang-c.md)。
+Solana程序通常使用[Rust语言](https://solana.com/zh/docs/programs/lang-rust)编写，但也支持[C/C++](https://solana.com/zh/docs/programs/lang-c)。
 
 社区也有通过各种努力使得可以用其他语言来编写链上程序，包括：
 
@@ -55,14 +55,14 @@ Solana程序通常使用[Rust语言](lang-rust.md)编写，但也支持[C/C++](l
 
 ## 示例程序
 
-你也可以探索[程序示例](examples.md)，查看链上程序的示例。
+你也可以探索[程序示例](https://solana.com/zh/docs/programs/examples)，查看链上程序的示例。
 
 ## 限制
 
 随着对Solana链上程序开发的深入理解，我们需要知晓链上程序的一些重要限制。
 
-阅读更多详细信息请访问[Solana的局限性](limitations.md)页面。
+阅读更多详细信息请访问[Solana的局限性](https://solana.com/zh/docs/programs/limitations)页面。
 
 ## 常见问题
 
-浏览其他开发者关于编写/理解Solana程序的[常见问题](faq.md)。
+浏览其他开发者关于编写/理解Solana程序的[常见问题](https://solana.com/zh/docs/programs/faq)。
