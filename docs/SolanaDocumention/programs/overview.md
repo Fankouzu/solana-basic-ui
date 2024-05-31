@@ -6,7 +6,7 @@
 要快速开始Solana开发并构建你的第一个Rust程序，可以参考以下详细的快速入门指南：
 
 - [仅使用浏览器构建并部署你的第一个Solana程序](https://solana.com/zh/developers/guides/getstarted/hello-world-in-your-browser)。无需安装。
-- [设置本地环境]([/content/guides/getstarted/setup-local-development.md](https://solana.com/zh/developers/guides/getstarted/setup-local-development))并使用本地测试验证器。
+- [设置本地环境](https://solana.com/zh/developers/guides/getstarted/setup-local-development)并使用本地测试验证器。
 :::
 
 ## 链上程序开发生命周期
