@@ -1,4 +1,4 @@
-# Extension Guide
+# 扩展指南
 
 Token-2022程序通过扩展模型为代币铸造和代币账户提供了额外的功能。
 
@@ -14,16 +14,74 @@ Token-2022程序通过扩展模型为代币铸造和代币账户提供了额外�
 
 ## 扩展
 
-Token 程序允许所有者关闭代币账户，但无法关闭铸币账户。在 Token-2022 程序中，可以通过在初始化铸币功能前初始化 `MintCloseAuthority` 扩展来关闭铸币功能。
-
 ### 关闭铸币权限
+
+Token 程序允许所有者关闭代币账户，但无法关闭铸币账户。在 Token-2022 程序中，可以通过在初始化铸币功能前初始化 `MintCloseAuthority` 扩展来关闭铸币功能。
 
 #### 示例：初始化铸币并具备铸币关闭权限
 
-```
+```shell
 $ spl-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb create-token --enable-close
 
 Creating token C47NXhUTVEisCfX7s16KrxYyimnui7HpUXZecE2TmLdB under program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
+```
+
+```js
+import {
+    closeAccount,
+    createInitializeMintInstruction,
+    createInitializeMintCloseAuthorityInstruction,
+    getMintLen,
+    ExtensionType,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+
+(async () => {
+    const payer = Keypair.generate();
+
+    const mintKeypair = Keypair.generate();
+    const mint = mintKeypair.publicKey;
+    const mintAuthority = Keypair.generate();
+    const freezeAuthority = Keypair.generate();
+    const closeAuthority = Keypair.generate();
+
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const extensions = [ExtensionType.MintCloseAuthority];
+    const mintLen = getMintLen(extensions);
+    const lamports = await connection.getMinimumBalanceForRentExemption(mintLen);
+
+    const transaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: mint,
+            space: mintLen,
+            lamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeMintCloseAuthorityInstruction(mint, closeAuthority.publicKey, TOKEN_2022_PROGRAM_ID),
+        createInitializeMintInstruction(
+            mint,
+            9,
+            mintAuthority.publicKey,
+            freezeAuthority.publicKey,
+            TOKEN_2022_PROGRAM_ID
+        )
+    );
+    await sendAndConfirmTransaction(connection, transaction, [payer, mintKeypair], undefined);
+})();
 ```
 
 #### 示例：停止铸币
@@ -32,10 +90,14 @@ Creating token C47NXhUTVEisCfX7s16KrxYyimnui7HpUXZecE2TmLdB under program Tokenz
 
 **注意**：铸币的供应量必须为 0。
 
-```
+```shell
 $ spl-token close-mint C47NXhUTVEisCfX7s16KrxYyimnui7HpUXZecE2TmLdB   
 
 Signature: 5nidwS9fJGJGdmaQjcwvNGVtk2ba5Zyu9ZLubjUKSsaAyzLUYvB6LK5RfUA767veBr45x7R1WW9N7WkYZ3Rqsb5B
+```
+
+```js
+await closeAccount(connection, payer, mint, payer.publicKey, closeAuthority, [], undefined, TOKEN_2022_PROGRAM_ID);
 ```
 
 ### 转账费用
@@ -57,7 +119,7 @@ Signature: 5nidwS9fJGJGdmaQjcwvNGVtk2ba5Zyu9ZLubjUKSsaAyzLUYvB6LK5RfUA767veBr45x
 
 让我们铸币一个代币，设置50个基点的转账费用和5000代币的最大费用。
 
-```
+```shell
 $ spl-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb create-token --transfer-fee 50 5000
 
 Creating token Dg3i18BN7vzsbAZDnDv3H8nQQjSaPUTqhwX41J7NZb5H under program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
@@ -68,42 +130,157 @@ Decimals:  9
 Signature: 39okFGqW23wQZ1HqH2tdJvtFP5aYgpfbmNktCZpV5XKTpKuA9xJmvBmrBwcLdfAT632VEC4y4dJJfDoeAvMWRPYP
 ```
 
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+
+import {
+    ExtensionType,
+    createInitializeMintInstruction,
+    mintTo,
+    createAccount,
+    getMintLen,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+import {
+    createInitializeTransferFeeConfigInstruction,
+    harvestWithheldTokensToMint,
+    transferCheckedWithFee,
+    withdrawWithheldTokensFromAccounts,
+    withdrawWithheldTokensFromMint,
+} from '@solana/spl-token';
+
+(async () => {
+    const payer = Keypair.generate();
+
+    const mintAuthority = Keypair.generate();
+    const mintKeypair = Keypair.generate();
+    const mint = mintKeypair.publicKey;
+    const transferFeeConfigAuthority = Keypair.generate();
+    const withdrawWithheldAuthority = Keypair.generate();
+
+    const extensions = [ExtensionType.TransferFeeConfig];
+
+    const mintLen = getMintLen(extensions);
+    const decimals = 9;
+    const feeBasisPoints = 50;
+    const maxFee = BigInt(5_000);
+
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintLamports = await connection.getMinimumBalanceForRentExemption(mintLen);
+    const mintTransaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: mint,
+            space: mintLen,
+            lamports: mintLamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeTransferFeeConfigInstruction(
+            mint,
+            transferFeeConfigAuthority.publicKey,
+            withdrawWithheldAuthority.publicKey,
+            feeBasisPoints,
+            maxFee,
+            TOKEN_2022_PROGRAM_ID
+        ),
+        createInitializeMintInstruction(mint, decimals, mintAuthority.publicKey, null, TOKEN_2022_PROGRAM_ID)
+    );
+    await sendAndConfirmTransaction(connection, mintTransaction, [payer, mintKeypair], undefined);
+})();
+```
+
 #### 示例：带费用检查的代币转账
 
 作为扩展的一部分，引入了一个新的 `transfer_checked_with_fee` 指令，该指令接受预期的费用。只有当费用计算正确时，转账才会成功，以避免在转账过程中出现任何意外。
 
-```
+```shell
 $ spl-token create-account Dg3i18BN7vzsbAZDnDv3H8nQQjSaPUTqhwX41J7NZb5H
-
 Creating account 7UKuG4W68hW9eGrDms6BenRf8DCEHKGN49xewtWyB5cx
 
 Signature: 6h591BMuguh9TtSdQPRPcPy97mLqJiybeaxGVZzD8mvPEsYypjZ2jjKgHzji5FGh8CJE3NAzqrqGxfyMdnbWrs7
-```
-```
 $ solana-keygen new -o destination.json
 $ spl-token create-account Dg3i18BN7vzsbAZDnDv3H8nQQjSaPUTqhwX41J7NZb5H destination.json
-
 Creating account 5wY8fiMZG5wGbQmtzKgqqEEp4vsCMJZ53RXEagUUWhEr
 
 Signature: 2SyA17AJRWLH2j7svgxgW7nouUGioeWoRDWjz2Wq8j1eisThezSvqgN4NbHfj9uWmDh2XRp56ttZtHV1SxaUC7ys
-```
-```
 $ spl-token mint Dg3i18BN7vzsbAZDnDv3H8nQQjSaPUTqhwX41J7NZb5H 1000000000
-
 Minting 1000000000 tokens
   Token: Dg3i18BN7vzsbAZDnDv3H8nQQjSaPUTqhwX41J7NZb5H
   Recipient: 7UKuG4W68hW9eGrDms6BenRf8DCEHKGN49xewtWyB5cx
 
 Signature: 5MFJGpLaWe3yLLU8X4ax3KofeqPVzdxJsa3ScjChJJHJawKsRx4og9eaFkWn3CPF7JXaxdj5v4LdAW56LiNTuP6s
-```
-```
 $ spl-token transfer --expected-fee 0.000005 Dg3i18BN7vzsbAZDnDv3H8nQQjSaPUTqhwX41J7NZb5H 1000000 destination.json
-
 Transfer 1000000 tokens
   Sender: 7UKuG4W68hW9eGrDms6BenRf8DCEHKGN49xewtWyB5cx
   Recipient: 5wY8fiMZG5wGbQmtzKgqqEEp4vsCMJZ53RXEagUUWhEr
 
 Signature: 3hc3CCiETiuCArJ6yZ76ScyfMeK1rw8CTfZ3aDGnYoEMeoqXfSNAtnM3ATFjm7UihthzEkEWzeUfWL4qqqB4ofgv
+```
+
+```js
+    const mintAmount = BigInt(1_000_000_000);
+    const owner = Keypair.generate();
+    const sourceAccount = await createAccount(
+        connection,
+        payer,
+        mint,
+        owner.publicKey,
+        undefined,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+    await mintTo(
+        connection,
+        payer,
+        mint,
+        sourceAccount,
+        mintAuthority,
+        mintAmount,
+        [],
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+
+    const accountKeypair = Keypair.generate();
+    const destinationAccount = await createAccount(
+        connection,
+        payer,
+        mint,
+        owner.publicKey,
+        accountKeypair,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+
+    const transferAmount = BigInt(1_000_000);
+    const fee = (transferAmount * BigInt(feeBasisPoints)) / BigInt(10_000);
+    await transferCheckedWithFee(
+        connection,
+        payer,
+        sourceAccount,
+        mint,
+        destinationAccount,
+        owner,
+        transferAmount,
+        decimals,
+        fee,
+        [],
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
 ```
 
 #### 示例：查找有保留代币的账户
@@ -112,6 +289,31 @@ Signature: 3hc3CCiETiuCArJ6yZ76ScyfMeK1rw8CTfZ3aDGnYoEMeoqXfSNAtnM3ATFjm7UihthzE
 
 然而，在执行这些操作之前，他们必须通过迭代铸币的所有账户来找出哪些账户有保留的代币。
 
+```shell
+CLI 支持即将推出！
+```
+
+```js
+    const allAccounts = await connection.getProgramAccounts(TOKEN_2022_PROGRAM_ID, {
+        commitment: 'confirmed',
+        filters: [
+            {
+                memcmp: {
+                    offset: 0,
+                    bytes: mint.toString(),
+                },
+            },
+        ],
+    });
+    const accountsToWithdrawFrom = [];
+    for (const accountInfo of allAccounts) {
+        const account = unpackAccount(accountInfo.account, accountInfo.pubkey, TOKEN_2022_PROGRAM_ID);
+        const transferFeeAmount = getTransferFeeAmount(account);
+        if (transferFeeAmount !== null && transferFeeAmount.withheldAmount > BigInt(0)) {
+            accountsToWithdrawFrom.push(accountInfo.pubkey);
+        }
+    }
+```
 
 #### 示例：从账户中提取保留的代币
 
@@ -121,6 +323,20 @@ Signature: 3hc3CCiETiuCArJ6yZ76ScyfMeK1rw8CTfZ3aDGnYoEMeoqXfSNAtnM3ATFjm7UihthzE
 $ spl-token withdraw-withheld-tokens 7UKuG4W68hW9eGrDms6BenRf8DCEHKGN49xewtWyB5cx 5wY8fiMZG5wGbQmtzKgqqEEp4vsCMJZ53RXEagUUWhEr
 
 Signature: 2NfjbEnRQC7kXkf86stb6u7eUtaQTGDebo8ktCdz4gP4wCD93xtx75rSJxJDQVePNAa8NqtVLjUm19ZBDRVaYurt
+```
+
+```js
+    await withdrawWithheldTokensFromAccounts(
+        connection,
+        payer,
+        mint,
+        destinationAccount,
+        withdrawWithheldAuthority,
+        [],
+        [destinationAccount],
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
 ```
 
 **注意**：由接收账户汇集转账费用的设计旨在最大化交易的并行处理。否则，一个配置的费用接收账户在并行转账中会被写锁定，从而降低协议的吞吐量。
@@ -142,6 +358,10 @@ Signature: KAKXryAdGSVFqpQhrwrvP6NCAQwLQp2Sj1WiAqCHxxwJsvRLKx4JzWgN9zYUaJNmfrZnQ
 Signature: 2i5KGekFFtwzkX2W71cxPvQsGEH21qmZ3ieNQz7Mz2qGqp2pyzMNZhSVRfxJxQuAxnKQoZKjAb62FBx2gxaq25Le
 ```
 
+```js
+    await harvestWithheldTokensToMint(connection, payer, mint, [destinationAccount], undefined, TOKEN_2022_PROGRAM_ID);
+```
+
 #### 示例：从铸币账户提取保留的代币
 
 当用户将保留的代币转移到铸币账户后，提取权限可选择将这些代币从铸币账户转移到任何其他账户。
@@ -152,6 +372,19 @@ $ spl-token withdraw-withheld-tokens --include-mint 7UKuG4W68hW9eGrDms6BenRf8DCE
 Signature: 5KzdgcKgi3rLaBRfDbG5pxZwyKppyVjAA8TUCjTMfb1vMYv7CLQWaxgFz81jz4reUaF7oP67Gdqoc91Ted6qr1Hb
 ```
 
+```js
+    await withdrawWithheldTokensFromMint(
+        connection,
+        payer,
+        mint,
+        destinationAccount,
+        withdrawWithheldAuthority,
+        [],
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+```
+
 ### 默认账户状态
 
 代币铸造者可能希望限制谁可以使用他们的代币。针对这个问题，存在许多过于强制的解决方案，其中大多数包括在开始时通过一个中心化服务。然而，即使通过中心化服务，任何人也可能创建一个新的代币账户并转移代币。
@@ -160,26 +393,21 @@ Signature: 5KzdgcKgi3rLaBRfDbG5pxZwyKppyVjAA8TUCjTMfb1vMYv7CLQWaxgFz81jz4reUaF7o
 
 #### 示例: 铸造具有冻结账户的代币
 
-```
+```shell
 $ spl-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb create-token --enable-freeze --default-account-state frozen
-
 Creating token 8Sqz2zV8TFTnkLtnCdqRkjJsre3GKRwHcZd3juE5jJHf under program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
 
 Address:  8Sqz2zV8TFTnkLtnCdqRkjJsre3GKRwHcZd3juE5jJHf
 Decimals:  9
 
 Signature: 5wfYvovguPEbyv2uSWxGt9JcpTWgyuP4hY3wutjS32Ahnoni4qd7gf6sLre855WvT6xLHwrvV7J8bVmXymNU2qUz
-```
-```
-$ spl-token create-account 8Sqz2zV8TFTnkLtnCdqRkjJsre3GKRwHcZd3juE5jJHf
 
+$ spl-token create-account 8Sqz2zV8TFTnkLtnCdqRkjJsre3GKRwHcZd3juE5jJHf
 Creating account 6XpKagP1N3K1XnzStufpV5YZ6DksEkQWgLNG9kPpLyvv
 
 Signature: 2awxWdQMgv89ew34sEyG361vshB2wPXHHfva5iJ43dWr18f2Pr6awoXfsqYPpyS2eSbH6jhfVY9EUck8iJ4wCSN6
-```
-```
-$ spl-token display 6XpKagP1N3K1XnzStufpV5YZ6DksEkQWgLNG9kPpLyvv
 
+$ spl-token display 6XpKagP1N3K1XnzStufpV5YZ6DksEkQWgLNG9kPpLyvv
 SPL Token Account
   Address: 6XpKagP1N3K1XnzStufpV5YZ6DksEkQWgLNG9kPpLyvv
   Program: TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
@@ -194,6 +422,67 @@ Extensions:
   Immutable owner
 ```
 
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+import {
+    AccountState,
+    createInitializeMintInstruction,
+    createInitializeDefaultAccountStateInstruction,
+    getMintLen,
+    updateDefaultAccountState,
+    ExtensionType,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+(async () => {
+    const payer = Keypair.generate();
+
+    const mintAuthority = Keypair.generate();
+    const freezeAuthority = Keypair.generate();
+    const mintKeypair = Keypair.generate();
+    const mint = mintKeypair.publicKey;
+
+    const extensions = [ExtensionType.DefaultAccountState];
+    const mintLen = getMintLen(extensions);
+    const decimals = 9;
+
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const defaultState = AccountState.Frozen;
+
+    const lamports = await connection.getMinimumBalanceForRentExemption(mintLen);
+    const transaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: mint,
+            space: mintLen,
+            lamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeDefaultAccountStateInstruction(mint, defaultState, TOKEN_2022_PROGRAM_ID),
+        createInitializeMintInstruction(
+            mint,
+            decimals,
+            mintAuthority.publicKey,
+            freezeAuthority.publicKey,
+            TOKEN_2022_PROGRAM_ID
+        )
+    );
+    await sendAndConfirmTransaction(connection, transaction, [payer, mintKeypair], undefined);
+})();
+```
+
 #### 示例：更新默认状态
 
 随着时间的推移，如果代币铸造者决定放宽这一限制，可以签署一个 `update_default_account_state` 指令，使所有账户默认处于未冻结状态。
@@ -202,6 +491,19 @@ Extensions:
 $ spl-token update-default-account-state 8Sqz2zV8TFTnkLtnCdqRkjJsre3GKRwHcZd3juE5jJHf initialized
 
 Signature: 3Mm2JCPrf6SrAe9awV3QzYvHiYmatiGWTmrQ7YnmzJSqyNCf75rLNMyH7jU26uZwX7q3MmBEBj1A36o5sGk9Vakb
+```
+
+```js
+    await updateDefaultAccountState(
+        connection,
+        payer,
+        mint,
+        AccountState.Initialized,
+        freezeAuthority,
+        [],
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
 ```
 
 ### 不可变拥有者
@@ -216,21 +518,78 @@ Signature: 3Mm2JCPrf6SrAe9awV3QzYvHiYmatiGWTmrQ7YnmzJSqyNCf75rLNMyH7jU26uZwX7q3M
 
 ```
 $ spl-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb create-token
-
 Creating token CZxztd7SEZWxg6B9PH5xa7QwKpMCpWBJiTLftw1o3qyV under program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
 
 Address:  CZxztd7SEZWxg6B9PH5xa7QwKpMCpWBJiTLftw1o3qyV
 Decimals:  9
 
 Signature: 4fT19YaE3zAscj71n213K22M3wDSXgwSn39RBCVtiCTxMX7pZhAoHywP2QMKqWpZMB5vT7diQ8QaFp3abHztpyPC
-```
-```
 $ solana-keygen new -o account.json
 $ spl-token create-account CZxztd7SEZWxg6B9PH5xa7QwKpMCpWBJiTLftw1o3qyV account.json --immutable
-
 Creating account EV2xsZto1TRqehewwWHUUQm68X6C6MepBSkbfZcVdShy
 
 Signature: 5NqXiE3LPFnufnZhcwKPoZt7DaPR7qwfhmRr9W9ykhNM7rnu6MDdx7n5eTpEisiaSET2R4fZW7a91Ai6pCuskXF8
+```
+
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+import {
+    createAccount,
+    createMint,
+    createInitializeImmutableOwnerInstruction,
+    createInitializeAccountInstruction,
+    getAccountLen,
+    ExtensionType,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+(async () => {
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const payer = Keypair.generate();
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintAuthority = Keypair.generate();
+    const decimals = 9;
+    const mint = await createMint(
+        connection,
+        payer,
+        mintAuthority.publicKey,
+        mintAuthority.publicKey,
+        decimals,
+        undefined,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+
+    const accountLen = getAccountLen([ExtensionType.ImmutableOwner]);
+    const lamports = await connection.getMinimumBalanceForRentExemption(accountLen);
+
+    const owner = Keypair.generate();
+    const accountKeypair = Keypair.generate();
+    const account = accountKeypair.publicKey;
+    const transaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: account,
+            space: accountLen,
+            lamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeImmutableOwnerInstruction(account, TOKEN_2022_PROGRAM_ID),
+        createInitializeAccountInstruction(account, mint, owner.publicKey, TOKEN_2022_PROGRAM_ID)
+    );
+    await sendAndConfirmTransaction(connection, transaction, [payer, accountKeypair], undefined);
+})();
 ```
 
 #### 示例：创建具有不可变所有权的关联代币账户
@@ -243,6 +602,18 @@ $ spl-token create-account CZxztd7SEZWxg6B9PH5xa7QwKpMCpWBJiTLftw1o3qyV
 Creating account 4nvfLgYMERdNbbf1pADUSp44XukAyjeWWXCMkM1gMqC4
 
 Signature: w4TRYDdCpTfmQh96E4UNgFFeiAHphWNaeYrJTu6bGyuPMokJrKFR33Ntj3iNQ5QQuFqom2CaYkhXiX9sBpWEW23
+```
+
+```js
+    const associatedAccount = await createAccount(
+        connection,
+        payer,
+        mint,
+        owner.publicKey,
+        undefined,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
 ```
 
 如果提供了 `--immutable` 参数，那么CLI会告诉我们指定它是不必要的：
@@ -275,6 +646,54 @@ Decimals:  9
 Signature: 2QtCBwCo2J9hf2Prd2t4CBBUxEXQCBSSD5gkNc59AwhxsKgRp92czNAvwWDxjeXGFCWSuNmzAcD19cEpqubovDDv
 ```
 
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+import {
+    createInitializeNonTransferableMintInstruction,
+    createInitializeMintInstruction,
+    getMintLen,
+    ExtensionType,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+(async () => {
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const payer = Keypair.generate();
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintAuthority = Keypair.generate();
+    const decimals = 9;
+
+    const mintKeypair = Keypair.generate();
+    const mint = mintKeypair.publicKey;
+    const mintLen = getMintLen([ExtensionType.NonTransferable]);
+    const lamports = await connection.getMinimumBalanceForRentExemption(mintLen);
+
+    const transaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: mint,
+            space: mintLen,
+            lamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeNonTransferableMintInstruction(mint, TOKEN_2022_PROGRAM_ID),
+        createInitializeMintInstruction(mint, decimals, mintAuthority.publicKey, null, TOKEN_2022_PROGRAM_ID)
+    );
+    await sendAndConfirmTransaction(connection, transaction, [payer, mintKeypair], undefined);
+})();
+```
+
 ### 转账时附加备忘录
 
 传统银行系统通常要求所有转账都必须附加备忘录。Token-2022 程序包含了一个扩展来满足这一需求。
@@ -285,28 +704,88 @@ Signature: 2QtCBwCo2J9hf2Prd2t4CBBUxEXQCBSSD5gkNc59AwhxsKgRp92czNAvwWDxjeXGFCWSu
 
 #### 示例: 创建附加备忘录的转账交易
 
-```
+```shell
 $ spl-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb create-token
-
 Creating token EbPBt3XkCb9trcV4c8fidhrvoeURbDbW87Acustzyi8N under program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
 
 Address:  EbPBt3XkCb9trcV4c8fidhrvoeURbDbW87Acustzyi8N
 Decimals:  9
 
 Signature: 2mCoV3ujSUArgZMyayiYtLZp2QzpqKx3NXnv9W8DpinY39rBU2yGmYLfp2tZ9uZqVbfJ6Mf3SqDHexdCcFcDAEvc
-```
-```
 $ spl-token create-account EbPBt3XkCb9trcV4c8fidhrvoeURbDbW87Acustzyi8N
-
 Creating account 4Uzz67txwYbfYpF8r5UGEMYJwhPAYQ5eFUY89KTYc2bL
 
 Signature: 57wZHDaQtSzszDkusrnozZNj5PemQhpqHMEFLWFKpqASCErcDuBuYuEky5g3evHtkjMrKgh1s3aEap1L8y5UhW5W
-```
-
-```
 $ spl-token enable-required-transfer-memos 4Uzz67txwYbfYpF8r5UGEMYJwhPAYQ5eFUY89KTYc2bL
-
 Signature: 5MnWtrhMK32zkbacDMwBNft48VAUpr4EoRM87hkT9AFYvPgPEU7V7ERV6gdfb3kASri4wnUnr13hNKuYJ66pD8Fs
+```
+
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+import { createMemoInstruction } from '@solana/spl-memo';
+import {
+    createAssociatedTokenAccount,
+    createMint,
+    createEnableRequiredMemoTransfersInstruction,
+    createInitializeAccountInstruction,
+    createTransferInstruction,
+    disableRequiredMemoTransfers,
+    enableRequiredMemoTransfers,
+    getAccountLen,
+    mintTo,
+    ExtensionType,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+(async () => {
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const payer = Keypair.generate();
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintAuthority = Keypair.generate();
+    const decimals = 9;
+    const mint = await createMint(
+        connection,
+        payer,
+        mintAuthority.publicKey,
+        mintAuthority.publicKey,
+        decimals,
+        undefined,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+
+    const accountLen = getAccountLen([ExtensionType.MemoTransfer]);
+    const lamports = await connection.getMinimumBalanceForRentExemption(accountLen);
+
+    const owner = Keypair.generate();
+    const destinationKeypair = Keypair.generate();
+    const destination = destinationKeypair.publicKey;
+    const transaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: destination,
+            space: accountLen,
+            lamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeAccountInstruction(destination, mint, owner.publicKey, TOKEN_2022_PROGRAM_ID),
+        createEnableRequiredMemoTransfersInstruction(destination, owner.publicKey, [], TOKEN_2022_PROGRAM_ID)
+    );
+
+    await sendAndConfirmTransaction(connection, transaction, [payer, owner, destinationKeypair], undefined);
+
+})();
 ```
 
 #### 示例：启用或禁用必须附加备忘录的转账
@@ -315,13 +794,16 @@ Signature: 5MnWtrhMK32zkbacDMwBNft48VAUpr4EoRM87hkT9AFYvPgPEU7V7ERV6gdfb3kASri4w
 
 ```
 $ spl-token disable-required-transfer-memos 4Uzz67txwYbfYpF8r5UGEMYJwhPAYQ5eFUY89KTYc2bL
-
 Signature: 5a9X8JrWzwZqb3iMonfUfSZbisQ57aEmW5cFntWGYRv2UZx8ACkMineBEQRHwLMzYHeyFDEHMXu8zqAMv5tm4u1g
-```
-```
-$ spl-token enable-required-transfer-memos 4Uzz67txwYbfYpF8r5UGEMYJwhPAYQ5eFUY89KTYc2bL
 
+$ spl-token enable-required-transfer-memos 4Uzz67txwYbfYpF8r5UGEMYJwhPAYQ5eFUY89KTYc2bL
 Signature: 5MnWtrhMK32zkbacDMwBNft48VAUpr4EoRM87hkT9AFYvPgPEU7V7ERV6gdfb3kASri4wnUnr13hNKuYJ66pD8Fs
+```
+
+```js
+    await disableRequiredMemoTransfers(connection, payer, destination, owner, [], undefined, TOKEN_2022_PROGRAM_ID);
+
+    await enableRequiredMemoTransfers(connection, payer, destination, owner, [], undefined, TOKEN_2022_PROGRAM_ID);
 ```
 
 #### 示例：带备忘录的转账
@@ -332,6 +814,24 @@ Signature: 5MnWtrhMK32zkbacDMwBNft48VAUpr4EoRM87hkT9AFYvPgPEU7V7ERV6gdfb3kASri4w
 $ spl-token transfer EbPBt3XkCb9trcV4c8fidhrvoeURbDbW87Acustzyi8N 10 4Uzz67txwYbfYpF8r5UGEMYJwhPAYQ5eFUY89KTYc2bL --with-memo "memo text"
 
 Signature: 5a9X8JrWzwZqb3iMonfUfSZbisQ57aEmW5cFntWGYRv2UZx8ACkMineBEQRHwLMzYHeyFDEHMXu8zqAMv5tm4u1g
+```
+
+```js
+    const sourceTokenAccount = await createAssociatedTokenAccount(
+        connection,
+        payer,
+        mint,
+        payer.publicKey,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+    await mintTo(connection, payer, mint, sourceTokenAccount, mintAuthority, 100, [], undefined, TOKEN_2022_PROGRAM_ID);
+
+    const transferTransaction = new Transaction().add(
+        createMemoInstruction('Hello, memo-transfer!', [payer.publicKey]),
+        createTransferInstruction(sourceTokenAccount, destination, payer.publicKey, 100, [], TOKEN_2022_PROGRAM_ID)
+    );
+    await sendAndConfirmTransaction(connection, transferTransaction, [payer], undefined);
 ```
 
 ### 账户空间重新分配
@@ -348,15 +848,76 @@ CLI 会自动进行重新分配，因此如果您在一个空间不足的账户�
 
 ```
 $ spl-token create-account EbPBt3XkCb9trcV4c8fidhrvoeURbDbW87Acustzyi8N
-
 Creating account 4Uzz67txwYbfYpF8r5UGEMYJwhPAYQ5eFUY89KTYc2bL
 
 Signature: 57wZHDaQtSzszDkusrnozZNj5PemQhpqHMEFLWFKpqASCErcDuBuYuEky5g3evHtkjMrKgh1s3aEap1L8y5UhW5W
-```
-```
 $ spl-token enable-required-transfer-memos 4Uzz67txwYbfYpF8r5UGEMYJwhPAYQ5eFUY89KTYc2bL
-
 Signature: 5MnWtrhMK32zkbacDMwBNft48VAUpr4EoRM87hkT9AFYvPgPEU7V7ERV6gdfb3kASri4wnUnr13hNKuYJ66pD8Fs
+```
+
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+import {
+    createAccount,
+    createMint,
+    createEnableRequiredMemoTransfersInstruction,
+    createReallocateInstruction,
+    ExtensionType,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+(async () => {
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const payer = Keypair.generate();
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintAuthority = Keypair.generate();
+    const decimals = 9;
+    const mint = await createMint(
+        connection,
+        payer,
+        mintAuthority.publicKey,
+        mintAuthority.publicKey,
+        decimals,
+        undefined,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+
+    const owner = Keypair.generate();
+    const account = await createAccount(
+        connection,
+        payer,
+        mint,
+        owner.publicKey,
+        undefined,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+
+    const extensions = [ExtensionType.MemoTransfer];
+    const transaction = new Transaction().add(
+        createReallocateInstruction(
+            account,
+            payer.publicKey,
+            extensions,
+            owner.publicKey,
+            undefined,
+            TOKEN_2022_PROGRAM_ID
+        ),
+        createEnableRequiredMemoTransfersInstruction(account, owner.publicKey, [], TOKEN_2022_PROGRAM_ID)
+    );
+    await sendAndConfirmTransaction(connection, transaction, [payer, owner], undefined);
+})();
 ```
 
 ### 利息增值代币
@@ -384,6 +945,38 @@ Decimals:  9
 Signature: 5dSW5QUacEsaKYb3MwYp4ycqq4jpNJ1rpLhS5rotoe3CWv9XhhjrncUFpk14R1fRamS1xprziC3NkpbYno4c8JxD
 ```
 
+```js
+import { clusterApiUrl, Connection, Keypair, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { createInterestBearingMint, updateRateInterestBearingMint, TOKEN_2022_PROGRAM_ID } from '@solana/spl-token';
+
+(async () => {
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const payer = Keypair.generate();
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintAuthority = Keypair.generate();
+    const freezeAuthority = Keypair.generate();
+    const rateAuthority = Keypair.generate();
+    const mintKeypair = Keypair.generate();
+    const rate = 10;
+    const decimals = 9;
+    const mint = await createInterestBearingMint(
+        connection,
+        payer,
+        mintAuthority.publicKey,
+        freezeAuthority.publicKey,
+        rateAuthority.publicKey,
+        rate,
+        decimals,
+        mintKeypair,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+})();
+```
+
 #### 示例：更新利率
 
 利率管理者可以随时更新铸造代币的利率。
@@ -394,6 +987,20 @@ $ spl-token set-interest-rate 7N4HggYEJAtCLJdnHGCtFqfxcB5rhQCsQTze3ftYstVj 50
 Setting Interest Rate for 7N4HggYEJAtCLJdnHGCtFqfxcB5rhQCsQTze3ftYstVj to 50 bps
 
 Signature: 5DQs6hzkfGq3uotESuVwF7MGeMawwfQcm1e9RHaUeVySDV6xpUzYhzdb6ygqJfsEZqewgiDR5KuxaGzkdTMcDrTn
+```
+
+```js
+    const updateRate = 50;
+    await updateRateInterestBearingMint(
+        connection,
+        payer,
+        mint,
+        rateAuthority,
+        updateRate,
+        [],
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
 ```
 
 ### 永久委托
@@ -421,7 +1028,6 @@ Signature: 439yVq2WfUEegAPv5BAkFampBPo696UbZ58RAYCzvUcbcBcxhfThpt1pcdKmiQrurHj65
 
 CLI 默认将永久委托设置为代币铸造者权限，但您可以使用 `authorize` 命令进行更改。
 
-
 ```
 $ spl-token authorize 7LUgoQCqhk3VMPhpAnmS1zdCFW4C6cupxgbqWrTwydGx permanent-delegate GFMniFoE5X4F87L9jzjHaW4MTkXyX1AYHNfhFencgamg
 
@@ -430,6 +1036,61 @@ Current permanent delegate: 4SnSuUtJGKvk2GYpBwmEsWG53zTurVM8yXGsoiZQyMJn
 New permanent delegate: GFMniFoE5X4F87L9jzjHaW4MTkXyX1AYHNfhFencgamg
 
 Signature: 2ABDrR6meXk4rrAwd2LsHaTsnM5BuTC9RbiZmgBxgzze8ZM2yxuYp8iyg8viHgVaKRbXGzjKsFjF5RR9Kkzn4Prj
+```
+
+
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+
+import {
+    ExtensionType,
+    createInitializeMintInstruction,
+    createInitializePermanentDelegateInstruction,
+    mintTo,
+    createAccount,
+    getMintLen,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+(async () => {
+    const payer = Keypair.generate();
+
+    const mintAuthority = Keypair.generate();
+    const mintKeypair = Keypair.generate();
+    const mint = mintKeypair.publicKey;
+    const permanentDelegate = Keypair.generate();
+
+    const extensions = [ExtensionType.PermanentDelegate];
+    const mintLen = getMintLen(extensions);
+    const decimals = 9;
+
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintLamports = await connection.getMinimumBalanceForRentExemption(mintLen);
+    const mintTransaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: mint,
+            space: mintLen,
+            lamports: mintLamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializePermanentDelegateInstruction(mint, permanentDelegate.publicKey, TOKEN_2022_PROGRAM_ID),
+        createInitializeMintInstruction(mint, decimals, mintAuthority.publicKey, null, TOKEN_2022_PROGRAM_ID)
+    );
+    await sendAndConfirmTransaction(connection, mintTransaction, [payer, mintKeypair], undefined);
+})();
 ```
 
 ### CPI 守护
@@ -470,6 +1131,72 @@ $ spl-token enable-cpi-guard 4YfkXX89TrsWqSSxb3av36Rk8EZBoDqxGzuaDNXr7UnL
 Signature: 2fohon7oraTCgBZB3dfzhpGsBobYmYPgA8nvgCqKzjqpdX6EYZaBY3VwzjNuwDpsFYYNbpTVYBjxqiaMBrvXM8S2
 ```
 
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+import {
+    createMint,
+    createEnableCpiGuardInstruction,
+    createInitializeAccountInstruction,
+    disableCpiGuard,
+    enableCpiGuard,
+    getAccountLen,
+    ExtensionType,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+(async () => {
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const payer = Keypair.generate();
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintAuthority = Keypair.generate();
+    const decimals = 9;
+    const mint = await createMint(
+        connection,
+        payer,
+        mintAuthority.publicKey,
+        mintAuthority.publicKey,
+        decimals,
+        undefined,
+        undefined,
+        TOKEN_2022_PROGRAM_ID
+    );
+
+    const accountLen = getAccountLen([ExtensionType.CpiGuard]);
+    const lamports = await connection.getMinimumBalanceForRentExemption(accountLen);
+
+    const owner = Keypair.generate();
+    const destinationKeypair = Keypair.generate();
+    const destination = destinationKeypair.publicKey;
+    const transaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: destination,
+            space: accountLen,
+            lamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeAccountInstruction(destination, mint, owner.publicKey, TOKEN_2022_PROGRAM_ID),
+        createEnableCpiGuardInstruction(destination, owner.publicKey, [], TOKEN_2022_PROGRAM_ID)
+    );
+
+    await sendAndConfirmTransaction(connection, transaction, [payer, owner, destinationKeypair], undefined);
+
+    // OR
+    await enableCpiGuard(connection, payer, destination, owner, [], undefined, TOKEN_2022_PROGRAM_ID);
+})();
+```
+
 #### 示例: 为代币账户关闭CPI保护
 
 
@@ -477,6 +1204,10 @@ Signature: 2fohon7oraTCgBZB3dfzhpGsBobYmYPgA8nvgCqKzjqpdX6EYZaBY3VwzjNuwDpsFYYNb
 $ spl-token disable-cpi-guard 4YfkXX89TrsWqSSxb3av36Rk8EZBoDqxGzuaDNXr7UnL
 
 Signature: 4JJSBSc1UAtArbBqYRpTk9264WwJuZ8n6NqyXtCSmyVQpmHoetzyVDwHxtxrdK8wQawoocDxFD9rRPhpAMzJ6EdG
+```
+
+```js
+    await disableCpiGuard(connection, payer, destination, owner, [], undefined, TOKEN_2022_PROGRAM_ID);
 ```
 
 ### 转账触发器
@@ -521,12 +1252,79 @@ Decimals:  9
 Signature: 3ug4Ejs16jJgEm1WyBwDDxzh9xqPzQ3a2cmy1hSYiPFcLQi9U12HYF1Dbhzb2bx75SSydfU6W4e11dGUXaPbJqVc
 ```
 
+```js
+import {
+    clusterApiUrl,
+    sendAndConfirmTransaction,
+    Connection,
+    Keypair,
+    PublicKey,
+    SystemProgram,
+    Transaction,
+    LAMPORTS_PER_SOL,
+} from '@solana/web3.js';
+
+import {
+    ExtensionType,
+    createInitializeMintInstruction,
+    createInitializeTransferHookInstruction,
+    mintTo,
+    createAccount,
+    getMintLen,
+    TOKEN_2022_PROGRAM_ID,
+} from '@solana/spl-token';
+
+(async () => {
+    const payer = Keypair.generate();
+
+    const mintAuthority = Keypair.generate();
+    const mintKeypair = Keypair.generate();
+    const mint = mintKeypair.publicKey;
+
+    const extensions = [ExtensionType.TransferHook];
+    const mintLen = getMintLen(extensions);
+    const decimals = 9;
+    const transferHookProgramId = new PublicKey('7N4HggYEJAtCLJdnHGCtFqfxcB5rhQCsQTze3ftYstVj')
+
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+    const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+    await connection.confirmTransaction({ signature: airdropSignature, ...(await connection.getLatestBlockhash()) });
+
+    const mintLamports = await connection.getMinimumBalanceForRentExemption(mintLen);
+    const mintTransaction = new Transaction().add(
+        SystemProgram.createAccount({
+            fromPubkey: payer.publicKey,
+            newAccountPubkey: mint,
+            space: mintLen,
+            lamports: mintLamports,
+            programId: TOKEN_2022_PROGRAM_ID,
+        }),
+        createInitializeTransferHookInstruction(mint, payer.publicKey, transferHookProgramId, TOKEN_2022_PROGRAM_ID),
+        createInitializeMintInstruction(mint, decimals, mintAuthority.publicKey, null, TOKEN_2022_PROGRAM_ID)
+    );
+    await sendAndConfirmTransaction(connection, mintTransaction, [payer, mintKeypair], undefined);
+})();
+```
+
 #### 示例: 升级转账触发器
 
 ```
 $ spl-token set-transfer-hook HFg1FFaj4PqFHmkYrqbZsarNJEZT436aXAXgQFMJihwc EbPBt3XkCb9trcV4c8fidhrvoeURbDbW87Acustzyi8N
 
 Signature: 3Ffw6yjseDsL3Az5n2LjdwXXwVPYxDF3JUU1JC1KGAEb1LE68S9VN4ebtAyvKeYMHvhjdz1LJVyugGNdWHyotzay
+```
+
+```js
+await updateTransferHook(
+  connection,
+  payer, mint,
+  newTransferHookProgramId,
+  payer.publicKey,
+  [],
+  undefined,
+  TOKEN_2022_PROGRAM_ID
+);
 ```
 
 #### 示例: 管理转账触发器智能合约程序
@@ -591,15 +1389,89 @@ To initialize metadata inside the mint, please run `spl-token initialize-metadat
 
 Address:  5K8RVdjpY3CHujyKjQ7RkyiCJqTG8Kba9krNfpZnmvpS
 Decimals:  9
+
 Signature: 2BZH8KE7zVcBj7Mmnu6uCM9NT4ey7qHasZmEk6Bt3tyx1wKCXS3JtcgEvrXXEMFB5numQgA9wvR67o2Z4YQdEw7m
-```
-```
+
 $ spl-token initialize-metadata 5K8RVdjpY3CHujyKjQ7RkyiCJqTG8Kba9krNfpZnmvpS MyTokenName TOKEN http://my.token --update-authority 3pGiHDDek35npQuyWQ7FGcWxqJdHvVPDHDDmBFs2YxQj
 
 Signature: 2H16XtBqdwSbvvq8g5o2jhy4TknP6zgt71KHawEdyPvNuvusQrV4dPccUrMqjFeNTbk75AtzmzUVueH3yWiTjBCG
 ```
 
-#### 示例: 升级原数据
+
+```js
+import {
+  clusterApiUrl,
+  Connection,
+  Keypair,
+  LAMPORTS_PER_SOL,
+  sendAndConfirmTransaction,
+  SystemProgram,
+  Transaction,
+} from '@solana/web3.js';
+import {
+  createInitializeMetadataPointerInstruction,
+  createInitializeMintInstruction,
+  ExtensionType,
+  getMintLen,
+  LENGTH_SIZE,
+  TOKEN_2022_PROGRAM_ID,
+  TYPE_SIZE,
+} from '@solana/spl-token';
+import { createInitializeInstruction, pack, TokenMetadata } from '@solana/spl-token-metadata';
+
+(async () => {
+  const payer = Keypair.generate();
+
+  const mint = Keypair.generate();
+  const decimals = 9;
+
+  const metadata: TokenMetadata = {
+    mint: mint.publicKey,
+    name: 'TOKEN_NAME',
+    symbol: 'SMBL',
+    uri: 'URI',
+    additionalMetadata: [['new-field', 'new-value']],
+  };
+
+  const mintLen = getMintLen([ExtensionType.MetadataPointer]);
+
+  const metadataLen = TYPE_SIZE + LENGTH_SIZE + pack(metadata).length;
+
+  const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+
+  const airdropSignature = await connection.requestAirdrop(payer.publicKey, 2 * LAMPORTS_PER_SOL);
+  await connection.confirmTransaction({
+    signature: airdropSignature,
+    ...(await connection.getLatestBlockhash()),
+  });
+
+  const mintLamports = await connection.getMinimumBalanceForRentExemption(mintLen + metadataLen);
+  const mintTransaction = new Transaction().add(
+    SystemProgram.createAccount({
+      fromPubkey: payer.publicKey,
+      newAccountPubkey: mint.publicKey,
+      space: mintLen,
+      lamports: mintLamports,
+      programId: TOKEN_2022_PROGRAM_ID,
+    }),
+    createInitializeMetadataPointerInstruction(mint.publicKey, payer.publicKey, mint.publicKey, TOKEN_2022_PROGRAM_ID),
+    createInitializeMintInstruction(mint.publicKey, decimals, payer.publicKey, null, TOKEN_2022_PROGRAM_ID),
+    createInitializeInstruction({
+      programId: TOKEN_2022_PROGRAM_ID,
+      mint: mint.publicKey,
+      metadata: mint.publicKey,
+      name: metadata.name,
+      symbol: metadata.symbol,
+      uri: metadata.uri,
+      mintAuthority: payer.publicKey,
+      updateAuthority: payer.publicKey,
+    }),
+  );
+  await sendAndConfirmTransaction(connection, mintTransaction, [payer, mint]);
+})();
+```
+
+#### 示例: 升级字段
 
 ```
 $ spl-token update-metadata 5K8RVdjpY3CHujyKjQ7RkyiCJqTG8Kba9krNfpZnmvpS name YourToken
@@ -607,7 +1479,24 @@ $ spl-token update-metadata 5K8RVdjpY3CHujyKjQ7RkyiCJqTG8Kba9krNfpZnmvpS name Yo
 Signature: 2H16XtBqdwSbvvq8g5o2jhy4TknP6zgt71KHawEdyPvNuvusQrV4dPccUrMqjFeNTbk75AtzmzUVueH3yWiTjBCG
 ```
 
-#### 示例: 添加自定义文件
+```js
+import { createUpdateFieldInstruction } from "@solana/spl-token-metadata";
+
+(async () => {
+  const tx = new Transaction().add(
+    createUpdateFieldInstruction({
+      metadata: mint.publicKey,
+      updateAuthority: payer.publicKey,
+      programId: TOKEN_2022_PROGRAM_ID,
+      field: 'name',
+      value: 'YourToken',
+    }),
+  );
+  await sendAndConfirmTransaction(connection, tx, [ payer, mint ]);
+})();
+```
+
+#### 示例: 添加自定义字段
 
 ```
 $ spl-token update-metadata 5K8RVdjpY3CHujyKjQ7RkyiCJqTG8Kba9krNfpZnmvpS new-field new-value
@@ -615,12 +1504,46 @@ $ spl-token update-metadata 5K8RVdjpY3CHujyKjQ7RkyiCJqTG8Kba9krNfpZnmvpS new-fie
 Signature: 31uerYNa6yhb21k5CCX69k7RLUKEhJEV99UadEpPnZtWWpykwr7vkTFkuFeJ7AaEyQPrepe8m8xr4N23JEAeuTRY
 ```
 
-#### 示例: 移除自定义文件
+```js
+import { createUpdateFieldInstruction } from "@solana/spl-token-metadata";
+
+(async () => {
+  const tx = new Transaction().add(
+    createUpdateFieldInstruction({
+      metadata: mint.publicKey,
+      updateAuthority: payer.publicKey,
+      programId: TOKEN_2022_PROGRAM_ID,
+      field: 'new-field',
+      value: 'new-value',
+    }),
+  );
+  await sendAndConfirmTransaction(connection, tx, [ payer, mint ]);
+})();
+```
+
+#### 示例: 移除自定义字段
 
 ```
 $ spl-token update-metadata 5K8RVdjpY3CHujyKjQ7RkyiCJqTG8Kba9krNfpZnmvpS new-field --remove
 
 Signature: 52s1mxRqnr2jcZNvcmcgsQuXfVyT2w1TuRsEE3J6YwEZBu74BbFcHh2DvwnJG7qC7Cy6C5ZrTfnoPREFjFS7kXjF
+```
+
+```js
+import { createRemoveKeyInstruction } from "@solana/spl-token-metadata";
+
+(async () => {
+  const tx = new Transaction().add(
+    createRemoveKeyInstruction({
+      programId: TOKEN_2022_PROGRAM_ID,
+      metadata: mint.publicKey,
+      updateAuthority: payer.publicKey,
+      key: 'new-field',
+      idempotent: true, // If false the operation will fail if the field does not exist in the metadata
+    }),
+  );
+  await sendAndConfirmTransaction(connection, tx, [ payer, mint ]);
+})();
 ```
 
 ### 组指针
@@ -632,7 +1555,6 @@ Signature: 52s1mxRqnr2jcZNvcmcgsQuXfVyT2w1TuRsEE3J6YwEZBu74BbFcHh2DvwnJG7qC7Cy6C
 与元数据类似，组指针可以指向铸币本身，客户端必须检查铸币和组是否互相指向。
 
 #### 示例：铸造一个带有指向外部账户的组指针代币
-
 
 ```
 $ spl-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb create-token --group-address 7ZJVSav7y76M41eFeyA3xz39UDigQspVNwyJ469TgR1S
@@ -659,7 +1581,6 @@ Token-2022 实现了 [spl-token-group-interface](https://github.com/solana-labs/
 
 ```
 $ spl-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb create-token --enable-group
-
 Creating token 812A34SxxYx9KqFwUNAuW7Wpwtmuj2pc5u1TGQcvPnj3 under program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
 To initialize group configurations inside the mint, please run `spl-token initialize-group 812A34SxxYx9KqFwUNAuW7Wpwtmuj2pc5u1TGQcvPnj3 <MAX_SIZE>`, and sign with the mint authority.
 
@@ -667,12 +1588,11 @@ Address:  812A34SxxYx9KqFwUNAuW7Wpwtmuj2pc5u1TGQcvPnj3
 Decimals:  9
 
 Signature: 2BZH8KE7zVcBj7Mmnu6uCM9NT4ey7qHasZmEk6Bt3tyx1wKCXS3JtcgEvrXXEMFB5numQgA9wvR67o2Z4YQdEw7m
-```
-```
-$ spl-token initialize-group 812A34SxxYx9KqFwUNAuW7Wpwtmuj2pc5u1TGQcvPnj3 12 --update-authority 3pGiHDDek35npQuyWQ7FGcWxqJdHvVPDHDDmBFs2YxQj
 
+$ spl-token initialize-group 812A34SxxYx9KqFwUNAuW7Wpwtmuj2pc5u1TGQcvPnj3 12 --update-authority 3pGiHDDek35npQuyWQ7FGcWxqJdHvVPDHDDmBFs2YxQj
 Signature: 2H16XtBqdwSbvvq8g5o2jhy4TknP6zgt71KHawEdyPvNuvusQrV4dPccUrMqjFeNTbk75AtzmzUVueH3yWiTjBCG
 ```
+
 
 ### 成员指针
 
@@ -715,9 +1635,7 @@ Address:  9uyqmf9Ued4yQKi4hXT5wMzPF5Nv1S6skAjkjxcCaAyV
 Decimals:  9
 
 Signature: 2BZH8KE7zVcBj7Mmnu6uCM9NT4ey7qHasZmEk6Bt3tyx1wKCXS3JtcgEvrXXEMFB5numQgA9wvR67o2Z4YQdEw7m
-```
-```
-$ spl-token initialize-member 9uyqmf9Ued4yQKi4hXT5wMzPF5Nv1S6skAjkjxcCaAyV --update-authority 3pGiHDDek35npQuyWQ7FGcWxqJdHvVPDHDDmBFs2YxQj
 
+$ spl-token initialize-member 9uyqmf9Ued4yQKi4hXT5wMzPF5Nv1S6skAjkjxcCaAyV --update-authority 3pGiHDDek35npQuyWQ7FGcWxqJdHvVPDHDDmBFs2YxQj
 Signature: 2H16XtBqdwSbvvq8g5o2jhy4TknP6zgt71KHawEdyPvNuvusQrV4dPccUrMqjFeNTbk75AtzmzUVueH3yWiTjBCG
 ```
