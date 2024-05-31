@@ -1,394 +1,632 @@
 # On-chain Program Guide
 
-## Supporting Token and Token-2022 Together In Your Program[​](#supporting-token-and-token-2022-together-in-your-program "Direct link to Supporting Token and Token-2022 Together In Your Program")
+## 在程序中同时支持 Token 和 Token-2022
 
-This guide is meant for on-chain program / dapp developers who want to support Token and Token-2022 concurrently.
+本指南适用于希望同时支持 Token 和 Token-2022 的链上程序/去中心化应用（Dapp）开发者。
 
-## Prerequisites[​](#prerequisites "Direct link to Prerequisites")
+## 前置条件
 
-This guide requires the Solana CLI tool suite, minimum version 1.10.33 in order to support all Token-2022 features.
+本指南需要使用 Solana CLI 工具套件，最低版本为 1.10.33，以支持所有 Token-2022 功能。
 
-## Motivation[​](#motivation "Direct link to Motivation")
+## 动机
 
-On-chain program developers are accustomed to only including one token program, to be used for all tokens in the application.
+链上程序开发者通常习惯于在应用程序中只包含一个代币程序，用于所有代币。
 
-With the addition of Token-2022, developers must update on-chain programs. This guide walks through the steps required to support both.
+随着 Token-2022 的加入，开发者必须更新链上程序。本指南将引导完成支持两者所需的步骤。
 
-Important note: if you do not wish to support Token-2022, there is nothing to do. Your existing on-chain program will loudly fail if an instruction includes any Token-2022 mints / accounts.
+重要说明：如果不希望支持 Token-2022，无需进行任何操作。如果包含任何与 Token-2022 的代币铸造/账户相关的指令，现有的链上程序将会执行失败。
 
-Most likely, your program will fail with `ProgramError::IncorrectProgramId` while trying to create a CPI instruction into the Token program, providing the Token-2022 program id.
+最有可能的是，当尝试创建一个 CPI 指令进入 Token 程序时，如果提供了 Token-2022 程序 ID，程序将因 `ProgramError::IncorrectProgramId` 而失败。
 
-## Structure of this Guide[​](#structure-of-this-guide "Direct link to Structure of this Guide")
+## 本指南的结构
 
-To safely code the transition, we'll follow a test-driven development approach:
+为了安全地编写转账指令，本指南将遵循测试驱动开发的方法：
 
-+   add a dependency to `spl-token-2022`
-+   change tests to use `spl_token::id()` or `spl_token_2022::id()`, see that all tests fail with Token-2022
-+   update on-chain program code to always use the instruction and deserializers from `spl_token_2022`, make all tests pass
++ 添加对 `spl-token-2022` 的依赖
++ 更改测试以使用 `spl_token::id()` 或 `spl_token_2022::id()`，并查看所有测试是否因 Token-2022 而失败
++ 更新链上程序代码，始终使用来自 `spl_token_2022` 的指令和反序列化器，使所有测试通过
 
-Optionally, if an instruction uses more than one token mint, common to most DeFi, you must add an input token program account for each additional mint. Since it's possible to swap all types of tokens, we need to either invoke the correct token program.
+可选的，如果一条指令铸造超过一种代币，这在大多数 DeFi 中很常见，必须为每一个额外的代币铸造添加一个输入代币程序账户。由于有可能交换所有类型的代币，需要调用正确的 token 程序。
 
-Everything here will reference real commits to the token-swap program, so feel free to follow along and make the changes to your program.
+这里的所有内容都将引用 token-swap 程序的真实提交，因此开发者可以随时跟进并对程序进行更改。
 
-## Part I: Support both token programs in single-token use cases[​](#part-i-support-both-token-programs-in-single-token-use-cases "Direct link to Part I: Support both token programs in single-token use cases")
+## 第一部分：在单一代币使用场景中支持两种代币程序
 
-### Step 1: Update dependencies[​](#step-1-update-dependencies "Direct link to Step 1: Update dependencies")
+### 步骤 1：更新依赖
 
-In your `Cargo.toml`, add the latest `spl-token-2022` to your `dependencies`. Check for the latest version of `spl-token-2022` in [crates.io](https://crates.io/), since that will typically be the version deployed to mainnet-beta.
+在 `Cargo.toml` 文件中，添加最新版的 `spl-token-2022` 到 `dependencies`。在 [crates.io](https://crates.io/) 检查 `spl-token-2022` 的最新版本，因为通常跟随主网一同发布。
 
-### Step 2: Add test cases for Token and Token-2022[​](#step-2-add-test-cases-for-token-and-token-2022 "Direct link to Step 2: Add test cases for Token and Token-2022")
+### 步骤 2：为 Token 和 Token-2022 添加测试用例
 
-Using the `test-case` crate, you can update all tests to use both Token and Token-2022. For example, a test defined as:
-
-```text
-#[tokio::test]async fn test_swap() {    ...}
-```
-
-Will become:
+使用 `test-case` crate，可以更新所有测试以使用 Token 和 Token-2022。例如，定义一个测试如下：
 
 ```text
-#[test_case(spl_token::id() ; "Token Program")]#[test_case(spl_token_2022::id() ; "Token-2022 Program")]#[tokio::test]async fn test_swap(token_program_id: Pubkey) {    ...}
+#[tokio::test]
+async fn test_swap() {
+    ...
+}
 ```
 
-In your program-test setup, you must include `spl_token_2022.so` at the correct address. You can add it as normal to `tests/fixtures/` after downloading it using:
+```text
+#[test_case(spl_token::id() ; "Token Program")]
+#[test_case(spl_token_2022::id() ; "Token-2022 Program")]
+#[tokio::test]
+async fn test_swap(token_program_id: Pubkey) {
+    ...
+}
+```
+在测试程序中，必须确保将 `spl_token_2022.so` 放在正确的位置。可以在下载后，将其添加到 `tests/fixtures/` 目录中。
 
 ```console
 $ solana program dump TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb spl_token_2022.so
 ```
 
-If you're using `solana-test-validator` for your tests, you can include it using:
+如果在本地 `solana-test-validator` 测试环境中，可以替换为下列指令：
 
 ```console
 $ solana-test-validator -c TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
 ```
 
-**Note**: This step is temporary, until Token-2022 is included by default in `program-test` and `solana-test-validator`.
+**注意**：这个步骤是临时的，直到 Token-2022 默认包含在 `program-test` 和 `solana-test-validator` 中为止。
 
-The token-swap does not use `program-test`, so there's a bit more boilerplate, but the same principle applies.
+token-swap 不使用 `program-test`，所以会有更多的样板代码，但适用相同的原则。
 
-### Step 3: Replace instruction creators[​](#step-3-replace-instruction-creators "Direct link to Step 3: Replace instruction creators")
+### 步骤 3：替换指令生成器
 
-Everywhere in the code that uses `spl_token::instruction` must now use `spl_token_2022::instruction`. The `"Token-2022 Program"` tests will still fail, but importantly, the `"Token Program"` tests will pass using the new instruction creators.
+代码中所有使用 `spl_token::instruction` 的地方现在必须使用 `spl_token_2022::instruction`。"Token-2022 Program" 的测试仍然会失败，但使用新的指令生成器，"Token Program" 的测试将会通过。
 
-If your program uses unchecked transfers, you'll see a deprecation warning:
+如果程序使用了未经检查的转账，将看到一个弃用警告：
 
 ```text
 warning: use of deprecated function `spl_token_2022::instruction::transfer`: please use `transfer_checked` or `transfer_checked_with_fee` instead
 ```
 
-If a token has a transfer fee, an unchecked transfer will fail. We'll fix that later. If you want, in the meantime, feel free to add an `#[allow(deprecated)]` to pass CI, with a TODO or issue to transition to `transfer_checked` everywhere.
+如果一个代币有转账费用，未经检查的转账将会失败。后续会修正这个问题。如果愿意，在此期间，可以添加一个 `#[allow(deprecated)]` 来持续集成（CI），并附上一个 TODO 或者问题，以便在各处转换为 `transfer_checked`。
 
-### Step 4: Replace spl\_token::id() with a parameter[​](#step-4-replace-spl_tokenid-with-a-parameter "Direct link to Step 4: Replace spl_token::id() with a parameter")
 
-Step 2 started the transition away from a fixed program id by adding `token_program_id` as a parameter to the test function, but now you'll go through your program and tests to use it everywhere.
+### 第四步：将 `spl_token::id()` 替换为一个参数
 
-Whenever `spl_token::id()` appears in the code, use a parameter corresponding either to `spl_token::id()` or `spl_token_2022::id()`.
+从第二步开始，通过添加 `token_program_id` 作为参数，启动了从固定程序标识符向灵活参数转换的过程。现在，可以在智能合约程序和测试中广泛地使用这个参数。
 
-After this, all of your tests should pass! Not so fast though, there's one more step needed to ensure compatibility.
+无论何时代码中出现 `spl_token::id()`，都应用与 `spl_token::id()` 或 `spl_token_2022::id()` 相对应的参数代替。
 
-### Step 5: Add Extensions to Tests[​](#step-5-add-extensions-to-tests "Direct link to Step 5: Add Extensions to Tests")
+完成这些更改后，所有测试应该能够顺利通过！但别急，为了确保兼容性，还需要执行最后一个步骤。
 
-Although all of your tests are passing, you still need to account for differences in accounts in token-2022.
+### 第五步：在测试中添加扩展
 
-Account extensions are stored after the first 165 bytes of the account, and the normal `Account::unpack` and `Mint::unpack` will fail if the size of the account is not exactly 165 and 82, respectively.
+尽管所有测试都已通过，但仍需考虑到 token-2022 中账户的差异。
 
-Let's make the tests fail again by adding an extension to all mint and token accounts. We'll add the `MintCloseAuthority` extension to mints, and the `ImmutableOwner` extension to accounts.
+账户扩展存储在账户的前165字节之后，如果账户的大小不是165字节和82字节， `Account::unpack` 和 `Mint::unpack` 将会失败。
 
-When creating mint accounts, calculate the space required before allocating, then include an `initialize_mint_close_authority` instruction before `initialize_mint`. For example this could be:
+通过向所有铸币和代币账户添加扩展来再次使测试失败。将向铸币账户添加 `MintCloseAuthority` 扩展，并向账户添加 `ImmutableOwner` 扩展。
 
-```rust
-use spl_token_2022::{extension::ExtensionType, instruction::*, state::Mint};use solana_sdk::{system_instruction, transaction::Transaction};// Calculate the space required using the `ExtensionType`let space = ExtensionType::try_calculate_account_len::<Mint>(&[ExtensionType::MintCloseAuthority]).unwrap();// get the Rent object and calculate the rent requiredlet rent_required = rent.minimum_balance(space);// and then create the account using those parameterslet create_instruction = system_instruction::create_account(&payer.pubkey(), mint_pubkey, rent_required, space, token_program_id);// Important: you must initialize the mint close authority *BEFORE* initializing the mint,// and only when working with Token-2022, since the instruction is unsupported by Token.let initialize_close_authority_instruction = initialize_mint_close_authority(token_program_id, mint_pubkey, Some(close_authority)).unwrap();let initialize_mint_instruction = initialize_mint(token_program_id, mint_pubkey, mint_authority_pubkey, freeze_authority, 9).unwrap();// Make the transaction with all of these instructionslet create_mint_transaction = Transaction::new(&[create_instruction, initialize_close_authority_instruction, initialize_mint_instruction], Some(&payer.pubkey));// Sign it and send it however you want!
-```
-
-The concept is similar with token accounts, but we'll use the `ImmutableOwner` extension, which is actually supported by both programs, but `Tokenkeg...` will no-op.
+在创建铸币账户时，先计算所需空间，然后分配，接着在 `initialize_mint` 之前加入 `initialize_mint_close_authority` 指令。例如：
 
 ```rust
-use spl_token_2022::{extension::ExtensionType, instruction::*, state::Account};use solana_sdk::{system_instruction, transaction::Transaction};// Calculate the space required using the `ExtensionType`let space = ExtensionType::try_calculate_account_len::<Account>(&[ExtensionType::ImmutableOwner]).unwrap();// get the Rent object and calculate the rent requiredlet rent_required = rent.minimum_balance(space);// and then create the account using those parameterslet create_instruction = system_instruction::create_account(&payer.pubkey(), account_pubkey, rent_required, space, token_program_id);// Important: you must initialize immutable owner *BEFORE* initializing the accountlet initialize_immutable_owner_instruction = initialize_immutable_owner(token_program_id, account_pubkey).unwrap();let initialize_account_instruction = initialize_account(token_program_id, account_pubkey, mint_pubkey, owner_pubkey).unwrap();// Make the transaction with all of these instructionslet create_account_transaction = Transaction::new(&[create_instruction, initialize_immutable_owner_instruction, initialize_account_instruction], Some(&payer.pubkey));// Sign it and send it however you want!
+use spl_token_2022::{extension::ExtensionType, instruction::*, state::Mint};
+use solana_sdk::{system_instruction, transaction::Transaction};
+
+// Calculate the space required using the `ExtensionType`
+let space = ExtensionType::try_calculate_account_len::<Mint>(&[ExtensionType::MintCloseAuthority]).unwrap();
+
+// get the Rent object and calculate the rent required
+let rent_required = rent.minimum_balance(space);
+
+// and then create the account using those parameters
+let create_instruction = system_instruction::create_account(&payer.pubkey(), mint_pubkey, rent_required, space, token_program_id);
+
+// Important: you must initialize the mint close authority *BEFORE* initializing the mint,
+// and only when working with Token-2022, since the instruction is unsupported by Token.
+let initialize_close_authority_instruction = initialize_mint_close_authority(token_program_id, mint_pubkey, Some(close_authority)).unwrap();
+let initialize_mint_instruction = initialize_mint(token_program_id, mint_pubkey, mint_authority_pubkey, freeze_authority, 9).unwrap();
+
+// Make the transaction with all of these instructions
+let create_mint_transaction = Transaction::new(&[create_instruction, initialize_close_authority_instruction, initialize_mint_instruction], Some(&payer.pubkey));
+
+// Sign it and send it however you want!
 ```
 
-After making these changes, everything fails again. Well done!
 
-### Step 6: Use `StateWithExtensions` instead of `Mint` and `Account`[​](#step-6-use-statewithextensions-instead-of-mint-and-account "Direct link to step-6-use-statewithextensions-instead-of-mint-and-account")
+与代币账户的情况类似，但将使用 `ImmutableOwner` 扩展，两个程序都支持这一扩展，但 `Tokenkeg...` 将无操作执行。
 
-The test failures happen because the program is trying to deserialize a pure `Mint` or `Account`, and failing because there are extensions added to it.
-
-Token-2022 adds a new type called `StateWithExtensions`, which allows you to deserialize the base type, and then pull out any extensions on the fly. It's very close to the same cost as the normal `unpack`.
-
-Everywhere in your code, wherever you see `Mint::unpack` or `Account::unpack`, you'll have to change that to:
 
 ```rust
-use spl_token_2022::{extension::StateWithExtensions, state::{Account, Mint}};let account_state = StateWithExtensions::<Account>::unpack(&token_account_info.data.borrow())?;let mint_state = StateWithExtensions::<Mint>::unpack(&mint_account_info.data.borrow())?;
+use spl_token_2022::{extension::ExtensionType, instruction::*, state::Account};
+use solana_sdk::{system_instruction, transaction::Transaction};
+
+// Calculate the space required using the `ExtensionType`
+let space = ExtensionType::try_calculate_account_len::<Account>(&[ExtensionType::ImmutableOwner]).unwrap();
+
+// get the Rent object and calculate the rent required
+let rent_required = rent.minimum_balance(space);
+
+// and then create the account using those parameters
+let create_instruction = system_instruction::create_account(&payer.pubkey(), account_pubkey, rent_required, space, token_program_id);
+
+// Important: you must initialize immutable owner *BEFORE* initializing the account
+let initialize_immutable_owner_instruction = initialize_immutable_owner(token_program_id, account_pubkey).unwrap();
+let initialize_account_instruction = initialize_account(token_program_id, account_pubkey, mint_pubkey, owner_pubkey).unwrap();
+
+// Make the transaction with all of these instructions
+let create_account_transaction = Transaction::new(&[create_instruction, initialize_immutable_owner_instruction, initialize_account_instruction], Some(&payer.pubkey));
+
+// Sign it and send it however you want!
 ```
 
-Anytime you access fields in the state, you'll need to go through the `base`. For example, to access the amount, you must do:
+在进行这些更改之后，一切会再次失败！
+
+### 第六步：使用 `StateWithExtensions` 代替 `Mint` 和 `Account`
+
+由于添加了扩展，程序试图反序列化 `Mint` 或 `Account`将导致失败。
+
+Token-2022 添加了一种称为 `StateWithExtensions`的新类型，它允许反序列化基本类型，然后随时提取任何扩展。其成本与普通的 `unpack` 非常接近。
+
+在代码中的任何地方，无论看到 `Mint::unpack` 或 `Account::unpack`，都将需要将其更改为：
+
+```rust
+use spl_token_2022::{extension::StateWithExtensions, state::{Account, Mint}};
+let account_state = StateWithExtensions::<Account>::unpack(&token_account_info.data.borrow())?;
+let mint_state = StateWithExtensions::<Mint>::unpack(&mint_account_info.data.borrow())?;
+```
+每当需要访问状态中的字段时，都需要通过 `base` 来进行。例如，要访问数量，必须这样做：
 
 ```rust
 let token_amount = account_state.base.amount;
 ```
+通常情况下，只需要在访问这些字段的地方添加 `.base`。
 
-So typically, you'll just need to add in `.base` wherever those fields are accessed.
+完成这些操作后，所有测试应该都能通过！现在程序与 Token-2022 兼容了！
 
-Once that's done, all of your tests should pass! Congratulations, your program is now compatible with Token-2022!
+不过，如果程序同时使用多种代币类型，那么还需要做更多的工作。
 
-If your program is using multiple token types at once, however, you will need to do more work.
+## 第二部分：支持混合代币程序：将 Token 代币交易为 Token-2022 代币
 
-## Part II: Support Mixed Token Programs: trading a Token for a Token-2022[​](#part-ii-support-mixed-token-programs-trading-a-token-for-a-token-2022 "Direct link to Part II: Support Mixed Token Programs: trading a Token for a Token-2022")
+在第一部分中，探讨了在程序中支持 Token-2022 所需的最少工作量。然而，这些工作并不能涵盖所有情况。特别是在代币交换程序中，大多数指令涉及多种代币类型。如果这些代币类型来自不同的代币程序，那么当前的实现将会失败。
 
-In Part I, we looked at the minimal amount of work to support Token-2022 in your program. This work won't cover all cases, however. Specifically, in the token-swap program, most instructions involve multiple token types. If those token types are from different token programs, then our current implementation will fail.
+例如，如果想将来自 Token 程序的代币交换为来自 Token-2022 程序的代币，那么程序指令必须提供每个代币程序，以便程序可以调用它们。
 
-For example, if you want to swap tokens from the Token program for tokens from the Token-2022 program, then your program's instruction must provide each token program, so that your program may invoke them.
+以下是如何在同一指令中支持这两个代币程序的步骤。
 
-Let's go through the steps to support both token programs in the same instruction.
+### 第一步：更新所有指令接口
 
-### Step 1: Update all instruction interfaces[​](#step-1-update-all-instruction-interfaces "Direct link to Step 1: Update all instruction interfaces")
+第一步是更新所有指令接口，使其能够接受程序中使用的每种代币类型的代币程序。
 
-The first step is to update all instruction interfaces to accept a token program for each token type used in the program.
-
-For example, here is the previous definition for the `Swap` instruction:
-
-```rust
-///   Swap the tokens in the pool.//////   0. `[]` Token-swap///   1. `[]` swap authority///   2. `[]` user transfer authority///   3. `[writable]` token_(A|B) SOURCE Account, amount is transferable by user transfer authority,///   4. `[writable]` token_(A|B) Base Account to swap INTO.  Must be the SOURCE token.///   5. `[writable]` token_(A|B) Base Account to swap FROM.  Must be the DESTINATION token.///   6. `[writable]` token_(A|B) DESTINATION Account assigned to USER as the owner.///   7. `[writable]` Pool token mint, to generate trading fees///   8. `[writable]` Fee account, to receive trading fees///   9. `[]` Token program id///   10. `[optional, writable]` Host fee account to receive additional trading feesSwap {    pub amount_in: u64,    pub minimum_amount_out: u64}
-```
-
-`Swap` contains 3 different token types: token A, token B, and the pool token. Let's add a separate token program for each, transforming the instruction into:
+例如，这里是 `Swap` 指令的之前的定义：
 
 ```rust
-///   Swap the tokens in the pool.//////   0. `[]` Token-swap///   1. `[]` swap authority///   2. `[]` user transfer authority///   3. `[writable]` token_(A|B) SOURCE Account, amount is transferable by user transfer authority,///   4. `[writable]` token_(A|B) Base Account to swap INTO.  Must be the SOURCE token.///   5. `[writable]` token_(A|B) Base Account to swap FROM.  Must be the DESTINATION token.///   6. `[writable]` token_(A|B) DESTINATION Account assigned to USER as the owner.///   7. `[writable]` Pool token mint, to generate trading fees///   8. `[writable]` Fee account, to receive trading fees///   9. `[]` Token (A|B) SOURCE program id///   10. `[]` Token (A|B) DESTINATION program id///   11. `[]` Pool Token program id///   12. `[optional, writable]` Host fee account to receive additional trading feesSwap {    pub amount_in: u64,    pub minimum_amount_out: u64}
+///   Swap the tokens in the pool.
+///
+///   0. `[]` Token-swap
+///   1. `[]` swap authority
+///   2. `[]` user transfer authority
+///   3. `[writable]` token_(A|B) SOURCE Account, amount is transferable by user transfer authority,
+///   4. `[writable]` token_(A|B) Base Account to swap INTO.  Must be the SOURCE token.
+///   5. `[writable]` token_(A|B) Base Account to swap FROM.  Must be the DESTINATION token.
+///   6. `[writable]` token_(A|B) DESTINATION Account assigned to USER as the owner.
+///   7. `[writable]` Pool token mint, to generate trading fees
+///   8. `[writable]` Fee account, to receive trading fees
+///   9. `[]` Token program id
+///   10. `[optional, writable]` Host fee account to receive additional trading fees
+Swap {
+    pub amount_in: u64,
+    pub minimum_amount_out: u64
+}
 ```
 
-Note the new inputs of `9.` and `10.`, and the clarification on `11`.
-
-All of these additional accounts may make you wonder: how big will transactions get with these new accounts? If you are using both Token and Token-2022, the additional Token-2022 program will take up space in the transaction, 32 bytes for the pubkey, and 1 byte for its index.
-
-On the flip side, if you're only using one token program at once, you will only incur 1 byte of overhead because of the deduplication of accounts in the Solana transaction format.
-
-Also note that some instructions will remain unchanged. For example, here is the `Initialize` instruction:
+`Swap` 包含三种不同的代币类型：代币 A，代币 B 和池代币。为每种代币添加一个单独的代币程序，将指令转换为：
 
 ```rust
-///   Initializes a new swap//////   0. `[writable, signer]` New Token-swap to create.///   1. `[]` swap authority derived from `create_program_address(&[Token-swap account])`///   2. `[]` token_a Account. Must be non zero, owned by swap authority.///   3. `[]` token_b Account. Must be non zero, owned by swap authority.///   4. `[writable]` Pool Token Mint. Must be empty, owned by swap authority.///   5. `[]` Pool Token Account to deposit trading and withdraw fees.///   Must be empty, not owned by swap authority///   6. `[writable]` Pool Token Account to deposit the initial pool token///   supply.  Must be empty, not owned by swap authority.///   7. `[]` Token program idInitialize { ... } // details omitted
+///   Swap the tokens in the pool.
+///
+///   0. `[]` Token-swap
+///   1. `[]` swap authority
+///   2. `[]` user transfer authority
+///   3. `[writable]` token_(A|B) SOURCE Account, amount is transferable by user transfer authority,
+///   4. `[writable]` token_(A|B) Base Account to swap INTO.  Must be the SOURCE token.
+///   5. `[writable]` token_(A|B) Base Account to swap FROM.  Must be the DESTINATION token.
+///   6. `[writable]` token_(A|B) DESTINATION Account assigned to USER as the owner.
+///   7. `[writable]` Pool token mint, to generate trading fees
+///   8. `[writable]` Fee account, to receive trading fees
+///   9. `[]` Token (A|B) SOURCE program id
+///   10. `[]` Token (A|B) DESTINATION program id
+///   11. `[]` Pool Token program id
+///   12. `[optional, writable]` Host fee account to receive additional trading fees
+Swap {
+    pub amount_in: u64,
+    pub minimum_amount_out: u64
+}
 ```
 
-Although we pass in token A and token B accounts, we don't actually need to invoke their respective token programs. We do, however, mint new pool tokens, so we must pass in the token program for the pool token mint.
+请注意新输入的 `9.` 和 `10.` 以及对 `11` 的澄清。
 
-This step is mostly churn since interfaces must be updated. Don't worry if some tests fail after this step. We'll fix them in the next step.
+这些额外的账户可能会让让人产生疑问：随着这些新账户的加入，交易的大小会有多大？如果同时使用 Token 和 Token-2022，额外的 Token-2022 程序将占用交易中的空间，公钥需要 32 字节，其索引需要 1 字节。
 
-### Step 2: Update instruction processors[​](#step-2-update-instruction-processors "Direct link to Step 2: Update instruction processors")
+另一方面，由于 Solana 交易格式中的账户去重，如果一次只使用一个代币程序，将只产生 1 字节的开销。
 
-If your instruction processor is expecting accounts after the added token programs, you may see some test failures.
-
-Specifically, in the token-swap example, the `Swap` instruction is expecting an optional account at the end, which has been clobbered by the added token programs.
-
-For this step, we'll simply pull out all of the new provided accounts. For example, in the `Swap` instruction processor, we'll go from:
+还请注意，有些指令将保持不变。例如，这里是 `Initialize` 指令：
 
 ```rust
-let account_info_iter = &mut accounts.iter();let swap_info = next_account_info(account_info_iter)?;let authority_info = next_account_info(account_info_iter)?;let user_transfer_authority_info = next_account_info(account_info_iter)?;let source_info = next_account_info(account_info_iter)?;let swap_source_info = next_account_info(account_info_iter)?;let swap_destination_info = next_account_info(account_info_iter)?;let destination_info = next_account_info(account_info_iter)?;let pool_mint_info = next_account_info(account_info_iter)?;let pool_fee_account_info = next_account_info(account_info_iter)?;let token_program_info = next_account_info(account_info_iter)?;
+///   Initializes a new swap
+///
+///   0. `[writable, signer]` New Token-swap to create.
+///   1. `[]` swap authority derived from `create_program_address(&[Token-swap account])`
+///   2. `[]` token_a Account. Must be non zero, owned by swap authority.
+///   3. `[]` token_b Account. Must be non zero, owned by swap authority.
+///   4. `[writable]` Pool Token Mint. Must be empty, owned by swap authority.
+///   5. `[]` Pool Token Account to deposit trading and withdraw fees.
+///   Must be empty, not owned by swap authority
+///   6. `[writable]` Pool Token Account to deposit the initial pool token
+///   supply.  Must be empty, not owned by swap authority.
+///   7. `[]` Token program id
+Initialize { ... } // details omitted
 ```
 
-To:
+尽管传入了代币 A 和代币 B 的账户，但实际上不需要调用它们各自的代币程序。但因为需要铸造新的池代币，必须传入池代币铸造所需的代币程序。
+
+这一步主要是接口更新的繁琐工作。如果在这一步之后有些测试失败了，不用担心，将在下一步中修复它们。
+
+### 第二步：更新指令处理器
+
+如果指令处理器在添加了代币程序后期望获得账户，可能会看到一些测试失败。
+
+具体来说，在代币交换示例中，`Swap` 指令期望在末尾有一个可选账户，这个账户已经被新增的代币程序覆盖了。
+
+在这一步中，将提取所有新提供的账户。例如，在 `Swap` 指令处理器中，我们将从：
 
 ```rust
-let account_info_iter = &mut accounts.iter();let swap_info = next_account_info(account_info_iter)?;let authority_info = next_account_info(account_info_iter)?;let user_transfer_authority_info = next_account_info(account_info_iter)?;let source_info = next_account_info(account_info_iter)?;let swap_source_info = next_account_info(account_info_iter)?;let swap_destination_info = next_account_info(account_info_iter)?;let destination_info = next_account_info(account_info_iter)?;let pool_mint_info = next_account_info(account_info_iter)?;let pool_fee_account_info = next_account_info(account_info_iter)?;let source_token_program_info = next_account_info(account_info_iter)?; // addedlet destination_token_program_info = next_account_info(account_info_iter)?; // addedlet pool_token_program_info = next_account_info(account_info_iter)?; // renamed
+let account_info_iter = &mut accounts.iter();
+let swap_info = next_account_info(account_info_iter)?;
+let authority_info = next_account_info(account_info_iter)?;
+let user_transfer_authority_info = next_account_info(account_info_iter)?;
+let source_info = next_account_info(account_info_iter)?;
+let swap_source_info = next_account_info(account_info_iter)?;
+let swap_destination_info = next_account_info(account_info_iter)?;
+let destination_info = next_account_info(account_info_iter)?;
+let pool_mint_info = next_account_info(account_info_iter)?;
+let pool_fee_account_info = next_account_info(account_info_iter)?;
+let token_program_info = next_account_info(account_info_iter)?;
 ```
 
-For now, just use one of those. For example, we'll just use `pool_token_program_info` everywhere. In the next step, we'll add some tests which will properly fail since we're always using the same token program.
-
-Once again, all of your tests should pass! But not for long.
-
-### Step 3: Write tests using multiple token programs at once[​](#step-3-write-tests-using-multiple-token-programs-at-once "Direct link to Step 3: Write tests using multiple token programs at once")
-
-In the spirit of test-driven development, let's start by writing some failing tests.
-
-Previously, our `test_case`s defined only provided one program id. Now it's time to mix them up and add more cases. For full coverage, we could do all permutations of different programs, but let's go with:
-
-+   all mints belong to Token
-+   all mints belong to Token-2022
-+   the pool mint belongs to Token, but token A and B belong to Token-2022
-+   the pool mint belongs to Token-2022, but token A and B are mixed
-
-Let's update test cases to pass in three different program ids, and then use them in the tests. For example, that means transforming:
+变换为:
 
 ```rust
-#[test_case(spl_token::id(); "token")]#[test_case(spl_token_2022::id(); "token-2022")]fn test_initialize(token_program_id: Pubkey) {
+let account_info_iter = &mut accounts.iter();
+let swap_info = next_account_info(account_info_iter)?;
+let authority_info = next_account_info(account_info_iter)?;
+let user_transfer_authority_info = next_account_info(account_info_iter)?;
+let source_info = next_account_info(account_info_iter)?;
+let swap_source_info = next_account_info(account_info_iter)?;
+let swap_destination_info = next_account_info(account_info_iter)?;
+let destination_info = next_account_info(account_info_iter)?;
+let pool_mint_info = next_account_info(account_info_iter)?;
+let pool_fee_account_info = next_account_info(account_info_iter)?;
+let source_token_program_info = next_account_info(account_info_iter)?; // added
+let destination_token_program_info = next_account_info(account_info_iter)?; // added
+let pool_token_program_info = next_account_info(account_info_iter)?; // renamed
 ```
 
-Into:
+目前，只需使用其中一个即可。例如，将在所有地方使用 `pool_token_program_info`。在下一步中，将添加一些测试，由于总是使用相同的代币程序，这些测试将如预期地失败。
+
+再次强调，所有测试应该都能通过！但这种情况不会持续太久。
+
+### 第3步：同时使用多个代币程序编写测试
+
+遵循测试驱动开发的原则，首先编写一些将失败的测试。
+
+之前定义的 `test_case` 仅提供了一个程序ID。现在是时候混合使用，并增加更多案例。为了全面覆盖，可以做所有不同程序的排列组合，但先从以下几种情况开始：
+
++   所有的代币都属于 Token
++   所有的代币都属于 Token-2022
++   池代币属于 Token，但是代币 A 和 B 属于 Token-2022
++   池代币属于 Token-2022，但是代币 A 和 B 是混合的
+
+更新测试用例，传入三个不同的程序ID，然后在测试中使用它们。例如，转换如下：
 
 ```rust
-#[test_case(spl_token::id(), spl_token::id(), spl_token::id(); "all-token")]#[test_case(spl_token_2022::id(), spl_token_2022::id(), spl_token_2022::id(); "all-token-2022")]#[test_case(spl_token::id(), spl_token_2022::id(), spl_token_2022::id(); "mixed-pool-token")]#[test_case(spl_token_2022::id(), spl_token_2022::id(), spl_token::id(); "mixed-pool-token-2022")]fn test_initialize(pool_token_program_id: Pubkey, token_a_program_id: Pubkey, token_b_program_id: Pubkey) {    ...}
+#[test_case(spl_token::id(); "token")]
+#[test_case(spl_token_2022::id(); "token-2022")]
+fn test_initialize(token_program_id: Pubkey) {
 ```
 
-This step may also involve churn, but take your time to go through it carefully, and you'll have failing tests for the `mixed-pool-token` and `mixed-pool-token-2022` test cases.
-
-### Step 4: Use appropriate token program in your processor[​](#step-4-use-appropriate-token-program-in-your-processor "Direct link to Step 4: Use appropriate token program in your processor")
-
-Let's fix the failing tests! The errors come up because we're trying to operate on tokens with the wrong program in a "mixed" Token and Token-2022 environment.
-
-We need to properly use all of the `pool_token_program_info` / `token_a_program_info` variables that we extracted in Step 2.
-
-In the token-swap example, we'll check anywhere we filled in `pool_token_program_info` by default, and instead choose the correct program info. For example, when transferring the source tokens in `process_swap`, we currently have:
+变换为:
 
 ```rust
-Self::token_transfer(    swap_info.key,    pool_token_program_info.clone(),    source_info.clone(),    swap_source_info.clone(),    user_transfer_authority_info.clone(),    token_swap.bump_seed(),    to_u64(result.source_amount_swapped)?,)?;
+#[test_case(spl_token::id(), spl_token::id(), spl_token::id(); "all-token")]
+#[test_case(spl_token_2022::id(), spl_token_2022::id(), spl_token_2022::id(); "all-token-2022")]
+#[test_case(spl_token::id(), spl_token_2022::id(), spl_token_2022::id(); "mixed-pool-token")]
+#[test_case(spl_token_2022::id(), spl_token_2022::id(), spl_token::id(); "mixed-pool-token-2022")]
+fn test_initialize(pool_token_program_id: Pubkey, token_a_program_id: Pubkey, token_b_program_id: Pubkey) {
+    ...
+}
 ```
+这一步也可能涉及到频繁的修改，但请花时间仔细处理，会得到 `mixed-pool-token` 和 `mixed-pool-token-2022` 测试案例的失败测试。
 
-Let's use the correct token program, making this:
+
+### 第4步：在处理器中使用适当的代币程序
+
+现在修复失败的测试！错误发生的原因是，试图在“混合”Token和Token-2022环境中使用错误程序操作代币。
+
+需要正确使用在第2步中提取的所有 `pool_token_program_info` / `token_a_program_info` 变量。
+
+在代币交换示例中，检查所有默认填充 `pool_token_program_info` 的地方，并改为正确的程序信息。例如，在 `process_swap` 中转移代币时，当前有：
 
 ```rust
-Self::token_transfer(    swap_info.key,    source_token_program_info.clone(),    source_info.clone(),    swap_source_info.clone(),    user_transfer_authority_info.clone(),    token_swap.bump_seed(),    to_u64(result.source_amount_swapped)?,)?;
+Self::token_transfer(
+    swap_info.key,
+    pool_token_program_info.clone(),
+    source_info.clone(),
+    swap_source_info.clone(),
+    user_transfer_authority_info.clone(),
+    token_swap.bump_seed(),
+    to_u64(result.source_amount_swapped)?,
+)?;
+```
+使用正确的代币程序，如下：
+
+```rust
+Self::token_transfer(
+    swap_info.key,
+    source_token_program_info.clone(),
+    source_info.clone(),
+    swap_source_info.clone(),
+    user_transfer_authority_info.clone(),
+    token_swap.bump_seed(),
+    to_u64(result.source_amount_swapped)?,
+)?;
 ```
 
-While going through this, if you notice any owner checks for a token account or mint in the form of:
+在进行此操作时，如果注意到以下形式的代币账户或铸币的所有者检查：
 
 ```rust
 if token_account_info.owner != &spl_token::id() { ... }
 ```
 
-You'll need to update to a new owner check from `spl_token_2022`:
+需要从 `spl_token_2022` 更新到一个新的所有者检查：
 
 ```rust
 if spl_token_2022::check_spl_token_program_account(token_account_info.owner).is_err() { ... }
 ```
 
-In this step, because of all the test cases in token-swap, we also have to update the expected error due to mismatched owner token programs.
+在这一步中，由于代币交换中的所有测试案例，还必须更新由于所有者代币程序不匹配而导致的预期错误。
 
-It's tedious, but at this point, we have updated our program to use both Token and Token-2022 simultaneously. Congratulations! You're ready to be part of the next stage of DeFi on Solana.
+这很繁琐，但到目前为止，我们已经更新了程序，使其能同时使用 Token 和 Token-2022。
 
-## Part III: Support All Extensions[​](#part-iii-support-all-extensions "Direct link to Part III: Support All Extensions")
+## 第三部分：支持所有扩展
 
-It seems like our program is working perfectly and that it won't have any issues processing Token-2022 mints.
+目前看起来程序运行得很完美，处理 Token-2022 铸币时不会有任何问题。
 
-Unfortunately, there's one more bit of work required for full compatibility in token-swap. Since the program is using `transfer` instead of `transfer_checked`, it will fail for certain mints.
+不幸的是，为了在代币交换中实现完全兼容，还需要做一些工作。由于程序使用的是 `transfer` 而不是 `transfer_checked`，对于某些铸币操作它将失败。
 
-We must upgrade to using `transfer_checked` if we want to support all extensions in Token-2022. As always, let's start by making our tests fail.
+如果想要支持 Token-2022 中的所有扩展，必须升级到使用 `transfer_checked`。像往常一样，先从失败测试开始。
 
-### Step 1: Add transfer fee extension to Token-2022 tests[​](#step-1-add-transfer-fee-extension-to-token-2022-tests "Direct link to Step 1: Add transfer fee extension to Token-2022 tests")
+### 第1步：向 Token-2022 测试中添加转账费用扩展
 
-The Token-2022 tests currently initialize the `MintCloseAuthority` extension. Let's add the `TransferFeeConfig` extension to the mint, and the `TransferFeeAmount` extension to the token accounts.
+Token-2022 测试初始化了 `MintCloseAuthority` 扩展。让我们在铸币中添加 `TransferFeeConfig` 扩展，并在代币账户中添加 `TransferFeeAmount` 扩展。
 
-Instead of:
-
-```rust
-let mint_space = ExtensionType::try_calculate_account_len::<Mint>(&[ExtensionType::MintCloseAuthority]).unwrap();let account_space = ExtensionType::try_calculate_account_len::<Account>(&[ExtensionType::ImmutableOwner]).unwrap();
-```
-
-We'll do:
+替换：
 
 ```rust
-let mint_space = ExtensionType::try_calculate_account_len::<Mint>(&[ExtensionType::MintCloseAuthority, ExtensionType::TransferFeeConfig]).unwrap();let account_space = ExtensionType::try_calculate_account_len::<Account>(&[ExtensionType::ImmutableOwner, ExtensionType::TransferFeeAmount]).unwrap();
+let mint_space = ExtensionType::try_calculate_account_len::<Mint>(&[ExtensionType::MintCloseAuthority]).unwrap();
+let account_space = ExtensionType::try_calculate_account_len::<Account>(&[ExtensionType::ImmutableOwner]).unwrap();
 ```
 
-And during initialization of the mint, we'll add in the instruction to initialize the transfer fee config to the initialization transaction:
+替换为:
 
 ```rust
-let rate_authority = Keypair::new();let withdraw_authority = Keypair::new();let instruction = spl_token_2022::extension::transfer_fee::instruction::initialize_transfer_fee_config(    program_id, &mint_key, rate_authority.pubkey(), withdraw_authority.pubkey(), 0, 0).unwrap();
+let mint_space = ExtensionType::try_calculate_account_len::<Mint>(&[ExtensionType::MintCloseAuthority, ExtensionType::TransferFeeConfig]).unwrap();
+let account_space = ExtensionType::try_calculate_account_len::<Account>(&[ExtensionType::ImmutableOwner, ExtensionType::TransferFeeAmount]).unwrap();
 ```
-
-With this step, some of the Token-2022 test variants fail with: "Mint required for this account to transfer tokens, use `transfer_checked` or `transfer_checked_with_fee`".
-
-### Step 2: Add mints to instructions that use `transfer`[​](#step-2-add-mints-to-instructions-that-use-transfer "Direct link to step-2-add-mints-to-instructions-that-use-transfer")
-
-The biggest difference between `transfer` and `transfer_checked` is the presence of the mint for the tokens. First, we must provide the mint account for every instruction that uses `transfer`.
-
-For example, the swap instruction becomes:
+在初始化铸币时，我们将在初始化交易中添加指令以初始化转账费配置：
 
 ```rust
-///   Swap the tokens in the pool.//////   0. `[]` Token-swap///   1. `[]` swap authority///   2. `[]` user transfer authority///   3. `[writable]` token_(A|B) SOURCE Account, amount is transferable by user transfer authority,///   4. `[writable]` token_(A|B) Base Account to swap INTO.  Must be the SOURCE token.///   5. `[writable]` token_(A|B) Base Account to swap FROM.  Must be the DESTINATION token.///   6. `[writable]` token_(A|B) DESTINATION Account assigned to USER as the owner.///   7. `[writable]` Pool token mint, to generate trading fees///   8. `[writable]` Fee account, to receive trading fees///   9. `[]` Token (A|B) SOURCE mint///   10. `[]` Token (A|B) DESTINATION mint///   11. `[]` Token (A|B) SOURCE program id///   12. `[]` Token (A|B) DESTINATION program id///   13. `[]` Pool Token program id///   14. `[optional, writable]` Host fee account to receive additional trading feesSwap(...),
+let rate_authority = Keypair::new();
+let withdraw_authority = Keypair::new();
+
+let instruction = spl_token_2022::extension::transfer_fee::instruction::initialize_transfer_fee_config(
+    program_id, &mint_key, rate_authority.pubkey(), withdraw_authority.pubkey(), 0, 0
+).unwrap();
 ```
 
-Note the addition of `Token (A|B) SOURCE mint` and `Token (A|B) DESTINATION mint`. The pool token mint is already included, so we're safe there.
+通过这一步，一些 Token-2022 测试会出现以下失败：“Mint required for this account to transfer tokens, use `transfer_checked` or `transfer_checked_with_fee`”。
 
-Next, in the processor code, we'll extract these additional accounts, but we won't use them yet.
+### 第2步：在使用 `transfer` 的指令中添加铸币
 
-For swap, the beginning becomes:
+`transfer` 和 `transfer_checked` 之间的最大区别是代币是否已铸造。首先，我们必须为使用 `transfer` 的每一个指令提供铸币账户。
+
+例如，swap 指令变为：
 
 ```rust
-let account_info_iter = &mut accounts.iter();let swap_info = next_account_info(account_info_iter)?;let authority_info = next_account_info(account_info_iter)?;let user_transfer_authority_info = next_account_info(account_info_iter)?;let source_info = next_account_info(account_info_iter)?;let swap_source_info = next_account_info(account_info_iter)?;let swap_destination_info = next_account_info(account_info_iter)?;let destination_info = next_account_info(account_info_iter)?;let pool_mint_info = next_account_info(account_info_iter)?;let pool_fee_account_info = next_account_info(account_info_iter)?;let source_token_mint_info = next_account_info(account_info_iter)?;let destination_token_mint_info = next_account_info(account_info_iter)?;let source_token_program_info = next_account_info(account_info_iter)?;let destination_token_program_info = next_account_info(account_info_iter)?;let pool_token_program_info = next_account_info(account_info_iter)?;
+///   Swap the tokens in the pool.
+///
+///   0. `[]` Token-swap
+///   1. `[]` swap authority
+///   2. `[]` user transfer authority
+///   3. `[writable]` token_(A|B) SOURCE Account, amount is transferable by user transfer authority,
+///   4. `[writable]` token_(A|B) Base Account to swap INTO.  Must be the SOURCE token.
+///   5. `[writable]` token_(A|B) Base Account to swap FROM.  Must be the DESTINATION token.
+///   6. `[writable]` token_(A|B) DESTINATION Account assigned to USER as the owner.
+///   7. `[writable]` Pool token mint, to generate trading fees
+///   8. `[writable]` Fee account, to receive trading fees
+///   9. `[]` Token (A|B) SOURCE mint
+///   10. `[]` Token (A|B) DESTINATION mint
+///   11. `[]` Token (A|B) SOURCE program id
+///   12. `[]` Token (A|B) DESTINATION program id
+///   13. `[]` Pool Token program id
+///   14. `[optional, writable]` Host fee account to receive additional trading fees
+Swap(...),
 ```
 
-Note the addition of `source_token_mint_info` and `destination_token_mint_info`.
+请注意添加的 `Token (A|B) SOURCE mint` 和 `Token (A|B) DESTINATION mint`。池代币的铸币已经包含在内，所以这里是安全的。
 
-We'll go through every instruction that uses `transfer`, which for token-swap, includes `swap`, `deposit_all_token_types`, `withdraw_all_token_types`, `deposit_single_token_type_exact_amount_in`, and `withdraw_single_token_type_exact_amount_out`.
+接下来，在处理器代码中，将提取这些额外的账户，但尚未使用它们。
 
-By the end of this, some of the Token-2022 tests still fail, but the Token tests all pass.
-
-### Step 3: Change `transfer` to `transfer_checked` instruction[​](#step-3-change-transfer-to-transfer_checked-instruction "Direct link to step-3-change-transfer-to-transfer_checked-instruction")
-
-Everything's in place to use `transfer_checked`, so the next step will thankfully be quite simple and get all of our tests to pass.
-
-Where we normally use `spl_token_2022::instruction::transfer`, we'll instead use `spl_token_2022::instruction::transfer_checked`, also providing the mint account info and decimals.
-
-For example, we can do:
+对于swap，变为：
 
 ```rust
-let decimals = StateWithExtensions::<Mint>::unpack(&mint.data.borrow()).map(|m| m.base)?.decimals;let ix = spl_token_2022::instruction::transfer_checked(  token_program.key,  source.key,  mint.key,  destination.key,  authority.key,  &[],  amount,  decimals,)?;invoke(  &ix,  &[source, mint, destination, authority, token_program],)
+let account_info_iter = &mut accounts.iter();
+let swap_info = next_account_info(account_info_iter)?;
+let authority_info = next_account_info(account_info_iter)?;
+let user_transfer_authority_info = next_account_info(account_info_iter)?;
+let source_info = next_account_info(account_info_iter)?;
+let swap_source_info = next_account_info(account_info_iter)?;
+let swap_destination_info = next_account_info(account_info_iter)?;
+let destination_info = next_account_info(account_info_iter)?;
+let pool_mint_info = next_account_info(account_info_iter)?;
+let pool_fee_account_info = next_account_info(account_info_iter)?;
+let source_token_mint_info = next_account_info(account_info_iter)?;
+let destination_token_mint_info = next_account_info(account_info_iter)?;
+let source_token_program_info = next_account_info(account_info_iter)?;
+let destination_token_program_info = next_account_info(account_info_iter)?;
+let pool_token_program_info = next_account_info(account_info_iter)?;
 ```
 
-After this step, all of your tests should pass once again, so congratulations again!
+请注意添加的 `source_token_mint_info` 和 `destination_token_mint_info`。
 
-## Part IV: Support transfer fees in calculation[​](#part-iv-support-transfer-fees-in-calculation "Direct link to Part IV: Support transfer fees in calculation")
+将检查所有使用 `transfer` 的指令，对于代币交换来说，包括 `swap`、`deposit_all_token_types`、`withdraw_all_token_types`、`deposit_single_token_type_exact_amount_in` 和 `withdraw_single_token_type_exact_amount_out`。
 
-Now that everything is in place to support every possible extension in Token-2022, we find that token-swap has some strange behavior for certain extensions.
+完成这些后，一些 Token-2022 的测试仍然会失败，但是 Token 的测试都通过了。
 
-In token-swap, if a token has transfer fees, then the curve calculations will not be correct. For example, if you try to trade token A for B, and token A has a 1% transfer fee, then fewer tokens will arrive into the pool, which means that you should receive fewer tokens.
+### 第3步：将 `transfer` 指令更改为 `transfer_checked` 指令
 
-We'll add logic to properly handle the transfer fee extension as an example in token-swap.
+一切都已就绪，可以使用 `transfer_checked` 了，所以下一步将非常简单，并使所有测试都通过。
 
-### Step 1: Add a failing test swapping with transfer fees[​](#step-1-add-a-failing-test-swapping-with-transfer-fees "Direct link to Step 1: Add a failing test swapping with transfer fees")
+在使用 `spl_token_2022::instruction::transfer` 的地方，改为使用 `spl_token_2022::instruction::transfer_checked`，同时提供铸币账户信息和小数位数。
 
-Let's start by adding a failing test where we swap between tokens that have non-zero transfer fees.
-
-For token-swap, we can reuse a previous test which checks that the curve calculation lines up with what is actually traded. The most important part is to add a transfer fee when initializing the mint, meaning we go from:
+例如：
 
 ```rust
-let rate_authority = Keypair::new();let withdraw_authority = Keypair::new();let instruction = spl_token_2022::extension::transfer_fee::instruction::initialize_transfer_fee_config(    program_id, &mint_key, rate_authority.pubkey(), withdraw_authority.pubkey(), 0, 0).unwrap();
+let decimals = StateWithExtensions::<Mint>::unpack(&mint.data.borrow()).map(|m| m.base)?.decimals;
+let ix = spl_token_2022::instruction::transfer_checked(
+  token_program.key,
+  source.key,
+  mint.key,
+  destination.key,
+  authority.key,
+  &[],
+  amount,
+  decimals,
+)?;
+invoke(
+  &ix,
+  &[source, mint, destination, authority, token_program],
+)
 ```
 
-To:
+完成这一步后，所有测试会再次通过！
+
+## 第四部分：支持转账费用计算
+
+为支持 Token-2022 中的每一个可能的扩展，我们发现 token-swap 在某些扩展上表现出一些奇怪的行为。
+
+在 token-swap 中，如果一个代币有转账费用，那么曲线计算将不正确。例如，如果尝试用代币 A 兑换代币 B，而代币 A 有 1% 的转账费用，那么到达池中的代币将会减少，这意味着您应该收到更少的代币。
+
+下列示例将添加逻辑来正确处理 token-swap 中的转账费用扩展。
+
+### 第1步：添加一个有转账费用的失败交换测试
+
+从添加一个交换具有非零转账费用代币的失败测试开始。
+
+对于 token-swap，可以复用之前的测试，该测试检查曲线计算是否与实际交易一致。最重要的部分是在初始化铸币时添加转账费用：
 
 ```rust
-let rate_authority = Keypair::new();let withdraw_authority = Keypair::new();let transfer_fee_basis_points = 100;let maximum_transfer_fee = 1_000_000_000;let instruction = spl_token_2022::extension::transfer_fee::instruction::initialize_transfer_fee_config(    program_id, &mint_key, rate_authority.pubkey(), withdraw_authority.pubkey(),     transfer_fee_basis_points, maximum_transfer_fee).unwrap();
+let rate_authority = Keypair::new();
+let withdraw_authority = Keypair::new();
+
+let instruction = spl_token_2022::extension::transfer_fee::instruction::initialize_transfer_fee_config(
+    program_id, &mint_key, rate_authority.pubkey(), withdraw_authority.pubkey(), 0, 0
+).unwrap();
 ```
 
-### Step 2: Calculate the expected transfer fee[​](#step-2-calculate-the-expected-transfer-fee "Direct link to Step 2: Calculate the expected transfer fee")
-
-Whenever the program moves tokens, it needs to check if the mint contains a transfer fee and account for them.
-
-To check if the mint has an extension, we simply need to get the extension for the desired type, and properly handle the valid error case.
-
-Roughly speaking that means changing the amount traded before calculation:
+替换为:
 
 ```rust
-use solana_program::{clock::Clock, sysvar::Sysvar};use spl_token_2022::{extension::{StateWithExtensions, transfer_fee::TransferFeeConfig}, state::Mint};let mint_data = token_mint_info.data.borrow();let mint = StateWithExtensions::<Mint>::unpack(&mint_data)?;let actual_amount = if let Ok(transfer_fee_config) = mint.get_extension::<TransferFeeConfig>() {    let fee = transfer_fee_config        .calculate_epoch_fee(Clock::get()?.epoch, amount)        .ok_or(ProgramError::InvalidArgument)?;    amount.saturating_sub(fee)} else {    amount};
+let rate_authority = Keypair::new();
+let withdraw_authority = Keypair::new();
+let transfer_fee_basis_points = 100;
+let maximum_transfer_fee = 1_000_000_000;
+
+let instruction = spl_token_2022::extension::transfer_fee::instruction::initialize_transfer_fee_config(
+    program_id, &mint_key, rate_authority.pubkey(), withdraw_authority.pubkey(), 
+    transfer_fee_basis_points, maximum_transfer_fee
+).unwrap();
 ```
 
-After making these changes, our tests pass once again, congratulations!
+### 第2步：计算预期的转账费用
 
-**Note**: in the case of token-swap, we need to reverse calculate the fee, which introduces extra complexity. Most likely, your program won't need that.
+每当程序转移代币时，需要检查铸币是否包含转账费用并相应地处理。
 
-## Part V: Prohibit closable mints[​](#part-v-prohibit-closable-mints "Direct link to Part V: Prohibit closable mints")
+要检查铸币是否有扩展，只需要获取所需类型的扩展，并正确处理有效的错误情况。
 
-In Token-2022, it's possible for certain mints to be closed if their supply is 0. Typically, this won't cause any damage, because all token accounts are empty if a mint is closable.
-
-If your program stores any information about mints, however, it can go out of sync if the mint is closed and re-created on that same address. Worse, the account can be used for something completely different. If your program is storing mint info, find a way to redesign your solution so it always uses the information from the mint directly.
-
-In token-swap, the program gracefully handles closed mints, but an empty pool can be rendered unusable if the pool mint is closed. No funds are at risk, since the pool is empty anyway, but for the sake of the tutorial, let's prohibit the pool mint from being closable.
-
-Let's add a mint close authority to the pool token mint. During initialization, we'll do:
+要更改交易的金额：
 
 ```rust
-use spl_token_2022::{extension::ExtensionType, instruction::*, state::Mint};use solana_sdk::{system_instruction, transaction::Transaction};// Calculate the space required using the `ExtensionType`let space = ExtensionType::try_calculate_account_len::<Mint>(&[ExtensionType::MintCloseAuthority]).unwrap();// get the Rent object and calculate the rent requiredlet rent_required = rent.minimum_balance(space);// and then create the account using those parameterslet create_instruction = system_instruction::create_account(&payer.pubkey(), mint_pubkey, rent_required, space, token_program_id);// Important: you must initialize the mint close authority *BEFORE* initializing the mint,// and only when working with Token-2022, since the instruction is unsupported by Token.let initialize_close_authority_instruction = initialize_mint_close_authority(token_program_id, mint_pubkey, Some(close_authority)).unwrap();let initialize_mint_instruction = initialize_mint(token_program_id, mint_pubkey, mint_authority_pubkey, freeze_authority, 9).unwrap();// Make the transaction with all of these instructionslet create_mint_transaction = Transaction::new(&[create_instruction, initialize_close_authority_instruction, initialize_mint_instruction], Some(&payer.pubkey));
+use solana_program::{clock::Clock, sysvar::Sysvar};
+use spl_token_2022::{extension::{StateWithExtensions, transfer_fee::TransferFeeConfig}, state::Mint};
+
+let mint_data = token_mint_info.data.borrow();
+let mint = StateWithExtensions::<Mint>::unpack(&mint_data)?;
+let actual_amount = if let Ok(transfer_fee_config) = mint.get_extension::<TransferFeeConfig>() {
+    let fee = transfer_fee_config
+        .calculate_epoch_fee(Clock::get()?.epoch, amount)
+        .ok_or(ProgramError::InvalidArgument)?;
+    amount.saturating_sub(fee)
+} else {
+    amount
+};
 ```
+在进行这些更改后，测试将会再次通过！
 
-And then try to initialize the token swap pool as normal, checking for a failure. Since there isn't any logic to prohibit a close authority, it should fail. Nice!
+**注意**：在 token-swap 的情况下，需要反向计算费用，这增加了额外的复杂性。但大多数情况下，程序不需要这样做。
 
-### Step 2: Add processor check to prevent a mint close authority[​](#step-2-add-processor-check-to-prevent-a-mint-close-authority "Direct link to Step 2: Add processor check to prevent a mint close authority")
+## 第五部分：禁用可关闭的代币铸造
 
-When processing the initialize code, we simply add a check to see if a non-`None` mint close authority exists.
+在 Token-2022 中，如果某些代币铸造的供应量为0，它们是可以被关闭的。通常情况下，因为所有的代币账户都是空的，代币是可关闭的，这不会造成任何损害。
 
-For example, that means:
+然而，如果程序存储了关于铸造代币的任何信息，代币铸造被关闭并在同一地址上重新创建，信息可能会不同步。更糟的是，该账户可能被用于完全不同的事情。如果程序正在存储铸造代币的信息，请找到一种方法重新设计解决方案，使其始终能直接使用铸造代币的信息。
+
+在 token-swap 中，程序很好地处理了关闭的铸造代币，但如果池铸币被关闭，一个空的池可能会变得无法使用。由于池子本来就是空的，所以没有资金风险，但为了本教程的目的，禁止池铸币被关闭。
+
+向池铸币添加一个关闭权限。在初始化期间执行：
 
 ```rust
-let pool_mint_data = pool_mint_info.data.borrow();let pool_mint = StateWithExtensions::<Mint>::unpack(pool_mint_data)?;if let Ok(extension) = pool_mint.get_extension::<MintCloseAuthority>() {    let close_authority: Option<Pubkey> = extension.close_authority.into();    if close_authority.is_some() {        return Err(ProgramError::InvalidAccountData);    }}
+use spl_token_2022::{extension::ExtensionType, instruction::*, state::Mint};
+use solana_sdk::{system_instruction, transaction::Transaction};
+
+// Calculate the space required using the `ExtensionType`
+let space = ExtensionType::try_calculate_account_len::<Mint>(&[ExtensionType::MintCloseAuthority]).unwrap();
+
+// get the Rent object and calculate the rent required
+let rent_required = rent.minimum_balance(space);
+
+// and then create the account using those parameters
+let create_instruction = system_instruction::create_account(&payer.pubkey(), mint_pubkey, rent_required, space, token_program_id);
+
+// Important: you must initialize the mint close authority *BEFORE* initializing the mint,
+// and only when working with Token-2022, since the instruction is unsupported by Token.
+let initialize_close_authority_instruction = initialize_mint_close_authority(token_program_id, mint_pubkey, Some(close_authority)).unwrap();
+let initialize_mint_instruction = initialize_mint(token_program_id, mint_pubkey, mint_authority_pubkey, freeze_authority, 9).unwrap();
+
+// Make the transaction with all of these instructions
+let create_mint_transaction = Transaction::new(&[create_instruction, initialize_close_authority_instruction, initialize_mint_instruction], Some(&payer.pubkey));
 ```
 
-Now the test should pass. Well done!
+然后尝试像平常一样初始化 token swap 池，并检查是否失败。由于没有逻辑禁止关闭权限，它会失败。
+
+### 第2步：添加处理器检查以禁用铸币关闭权限
+
+在处理初始化代码时，添加一个检查，看看是否存在非 `None` 的铸币关闭权限。
+
+例如：
+
+```rust
+let pool_mint_data = pool_mint_info.data.borrow();
+let pool_mint = StateWithExtensions::<Mint>::unpack(pool_mint_data)?;
+if let Ok(extension) = pool_mint.get_extension::<MintCloseAuthority>() {
+    let close_authority: Option<Pubkey> = extension.close_authority.into();
+    if close_authority.is_some() {
+        return Err(ProgramError::InvalidAccountData);
+    }
+}
+```
+
+现在测试可以通过！
