@@ -97,7 +97,6 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       link: "economics/index" ,
       items: [
         { text: "通胀", 
-        link: "economics/inflation/inflation-schedule",
         collapsed: true ,
           items: [
             { text: "通胀计划", link: "economics/inflation/inflation-schedule" },
