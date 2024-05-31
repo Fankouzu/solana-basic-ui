@@ -8,7 +8,7 @@ function nav(): DefaultTheme.NavItem[] {
       activeMatch: "/SolanaDocumention/",
     },
     {
-      text: "Solana验证者文档",
+      text: "Solana验证器文档",
       link: "/SolanaValidatorDocumentation/connecting-to-a-cluster",
       activeMatch: "/SolanaValidatorDocumentation/",
     },
@@ -131,11 +131,11 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [
         {
-          text: "什么是验证者",
+          text: "什么是验证器",
           link: "what-is-a-validator",
         },
         { text: "什么是RPC节点", link: "what-is-an-rpc-node" },
-        { text: "关于验证者的常见问题", link: "faq" },
+        { text: "关于验证器的常见问题", link: "faq" },
         { text: "向后兼容性策略", link: "backwards-compatibility" },
       ],
     },
