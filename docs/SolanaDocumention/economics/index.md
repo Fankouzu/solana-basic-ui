@@ -10,7 +10,7 @@ Solana 的加密经济系统旨在促进一个健康、可持续发展的长期�
 
 交易费是在参与者之间的转账过程中，附加于网络交互，作为激励和补偿，以促进和执行提出的交易。下面还将讨论通过部分销毁每笔交易费来实现长期经济稳定性和分叉保护的机制。
 
-首先，我们将介绍通胀机制的设计概述。本节一开始将定义和阐明后续讨论通胀及其相关要素时常用的[术语](./inflation/terminology.md)。接下来，我们将概述 Solana 拟定的[通胀计划](./inflation/inflation-schedule.md)，即随着时间推移，唯一参数化协议驱动通胀发行的具体参数。然后，我们将简要介绍调整后的质押收益率以及代币稀释如何影响质押行为。
+首先，我们将介绍通胀机制的设计概述。本节一开始将定义和阐明后续讨论通胀及其相关要素时常用的[术语](https://solana.com/zh/docs/economics/inflation/terminology)。接下来，我们将概述 Solana 拟定的[通胀计划](https://solana.com/zh/docs/economics/inflation/inflation_schedule)，即随着时间推移，唯一参数化协议驱动通胀发行的具体参数。然后，我们将简要介绍调整后的质押收益率以及代币稀释如何影响质押行为。
 
-接下来，是关于 Solana [交易费用](./core/fees.md#transaction-fees)的概述，以及对[存储租金经济](./core/fees.md#rent)的讨论。我们描述了存储租金的实现方式，以补偿维护活跃账本状态的外部性成本。
+接下来，是关于 Solana [交易费用](https://solana.com/zh/docs/core/fees#transaction-fees)的概述，以及对[存储租金经济](https://solana.com/zh/docs/core/fees#rent)的讨论。我们描述了存储租金的实现方式，以补偿维护活跃账本状态的外部性成本。
 
