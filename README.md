@@ -7,7 +7,7 @@
 <a href="https://github.com/Fankouzu/solana-basic-ui/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Fankouzu/solana-basic-ui?color=2b9348"></a>
 <a href="https://github.com/Fankouzu/solana-basic-ui/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Fankouzu/solana-basic-ui?color=2b9348" alt="License Badge"/></a>
 
-此仓库的代码会部署在 [solana-basic.surge.sh](https://solana-basic.surge.sh/) 域名下，后面会挑选一个更合适的顶级域名。
+此仓库的代码会部署在 [solana-cn.com](https://solana-basic.surge.sh/) 域名下。
 
 ## 任务认领
 
