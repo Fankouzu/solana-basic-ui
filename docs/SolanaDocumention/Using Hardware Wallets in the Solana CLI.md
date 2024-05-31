@@ -6,21 +6,17 @@
 
 Solana命令行为硬件钱包提供了一流的支持，在任何地方使用密钥对文件路径（在使用文档中被称作`<keypair>`），用户可以发送*一个密钥对链接*，这个链接唯一标识了硬件钱包中的密钥对
 
-
-
 ## 支持的硬件钱包[](#支持的硬件钱包)
 
 Solana命令行支持的硬件钱包如下
 
 - [Ledger Nano S and Ledger Nano X](https://docs.solanalabs.com/cli/wallets/hardware/ledger)
 
-
-
-## 指定一个密钥对链接[](#指定一个密钥对)
+## 指定一个密钥对链接
 
 Solana定义了密钥对链接格式，以唯一定位连接到计算机的硬件钱包上的任何Solana密钥对。
 
- 密钥对链接有以下形式，其中的方括号表示可选字段:
+密钥对链接有以下形式，其中的方括号表示可选字段:
 
 ```txt
  usb://<MANUFACTURER>[/<WALLET_ID>][?key=<DERIVATION_PATH>]WALLET_ID
