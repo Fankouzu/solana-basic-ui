@@ -17,9 +17,9 @@ Solana 运行时支持两种交易版本：
 
 如果返回的版本化交易高于设置的 `maxSupportedTransactionVersion`，则 RPC 请求将失败。 （即，如果选择旧版时返回 v0 版本交易，返回版本高于 `maxSupportedTransactionVersion` 的版本，交易失败）
 
-> 小贴士
->
-> 警告：如果未设置 `maxSupportedTransactionVersion` 值，则 RPC 响应中将仅允许旧交易。因此，如果返回 v0 版本交易，RPC 请求将失败。
+::: tip INFO
+警告：如果未设置 `maxSupportedTransactionVersion` 值，则 RPC 响应中将仅允许旧交易。因此，如果返回 v0 版本交易，RPC 请求将失败。
+:::
 
 ## 如何设置最大交易版本
 

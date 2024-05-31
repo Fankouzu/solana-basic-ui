@@ -40,6 +40,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "交易与指令", link: "core/transactions" },
         { text: "交易费用", link: "core/fees" },
         { text: "程序", link: "core/programs" },
+        { text: "程序派生地址", link: "core/pda" },
         { text: "群集和公共 RPC 端点", link: "core/clusters" },
       ],
     },

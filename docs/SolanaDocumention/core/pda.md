@@ -219,7 +219,7 @@ bump 250: Error: Invalid seeds, address must fall off the curve
 具有不同值的增量种子仍然可以派生有效的 PDA。
 
 
-::: tip DANGER
+::: danger WARNING
 在构建 Solana 程序时，建议包括安全检查，以验证传递给程序的 PDA 是否使用规范Bump派生。如果不这样做，可能会引入漏洞，从而允许向程序提供非预期帐户。
 :::
 
