@@ -12,7 +12,7 @@ function nav(): DefaultTheme.NavItem[] {
       link: "/SolanaValidatorDocumentation/connecting-to-a-cluster",
       activeMatch: "/SolanaValidatorDocumentation/",
     },
-    { 
+    {
       text: "Solana程序库",
       link: "/SolanaProgramLibrary/index",
       activeMatch: "/SolanaProgramLibrary/",
@@ -41,6 +41,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "交易费用", link: "core/fees" },
         { text: "程序", link: "core/programs" },
         { text: "程序派生地址", link: "core/pda" },
+        { text: "跨程序调用", link: "core/cpl" },
         { text: "群集和公共 RPC 端点", link: "core/clusters" },
       ],
     },
@@ -141,6 +142,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
           text: "命令行钱包",
           collapsed: false,
           items: [
+            {
+              text: "概述",
+              link: "cli/wallets/index",
+            },
             {
               text: "硬件钱包",
               collapsed: false,
