@@ -130,14 +130,21 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
 
 function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
   return [
+    { text: "介绍", link: "index" },
+    { text: "Token程序", link: "token" },
     {
-      text: "Solana程序库",
+      text: "Token2022",
       collapsed: false,
       items: [
-        { text: "介绍", link: "index" },
-        { text: "Token程序", link: "token" },
+        { text: "Token2022程序", link: "token-2022/index" },
+        { text: "项目状态", link: "token-2022/status" },
+        { text: "扩展指南", link: "token-2022/extensions" },
+        { text: "钱包指南", link: "token-2022/wallet" },
+        { text: "链上程序指南", link: "token-2022/onchain" },
+        { text: "幻灯片演示", link: "token-2022/presentation" },
       ],
     },
+    { text: "Token 兑换程序", link: "token-swap" },
   ];
 }
 // refer https://vitepress.dev/reference/site-config for details
