@@ -4,7 +4,7 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     {
       text: "Solana中文文档",
-      link: "/SolanaDocumention/overview",
+      link: "/SolanaDocumention/intro/overview",
       activeMatch: "/SolanaDocumention/",
     },
     {
@@ -26,35 +26,54 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       text: "Solana中文文档",
       collapsed: false,
       items: [
-        { text: "概述", link: "overview" },
-        { text: "租金经济", link: "rent" },
-        { text: "钱包指南", link: "wallets" },
-        { text: "开发入门", link: "dev" },
+        { text: "概述", link: "intro/overview" },
+        // { text: "租金经济", link: "rent" },
+        { text: "钱包指南", link: "intro/wallets" },
+        { text: "开发入门", link: "intro/dev" },
       ],
     },
     {
       text: "核心概念",
       collapsed: false,
       items: [
-        { text: "账户模型", link: "accounts" },
+        { text: "账户模型", link: "core/accounts" },
+        { text: "交易与指令", link: "core/transactions" },
+        { text: "交易费用", link: "core/fees" },
+        { text: "程序", link: "core/programs" },
+        { text: "群集和公共 RPC 端点", link: "core/clusters" },
       ],
     },
     {
       text: "高级概念",
       collapsed: false,
       items: [
-        { text: "版本化交易", link: "versions" },
-        { text: "地址查找表", link: "lookup-tables" },
-        { text: "交易确认及过期", link: "confirmation" },
-        { text: "重试交易", link: "retry" },
-        { text: "状态压缩", link: "state-compression" },
+        { text: "版本化交易", link: "advanced/versions" },
+        { text: "地址查找表", link: "advanced/lookup-tables" },
+        { text: "交易确认及过期", link: "advanced/confirmation" },
+        { text: "重试交易", link: "advanced/retry" },
+        { text: "状态压缩", link: "advanced/state-compression" },
       ],
     },
     {
       text: "Solana客户端",
       collapsed: false,
       items: [
-        { text: "Rust", link: "rust" },
+        { text: "Rust", link: "clients/rust" },
+        { text: "JavaScript/TypeScript", link: "clients/javascript" },
+        { text: "Web3.js API 范例", link: "clients/javascript-reference" },
+      ],
+    },
+    {
+      text: "经济",
+      collapsed: false,
+      items: [
+        {
+          text: "质押",
+          collapsed: false,
+          items: [
+            { text: "质押编程", link: "economics/staking/stake-programming" },
+          ],
+        },
       ],
     },
   ];
@@ -62,8 +81,22 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
 
 function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
   return [
+    { text: "首页", link: "index" },
     {
-      text: "Solana验证者文档",
+      text: "介绍",
+      collapsed: false,
+      items: [
+        {
+          text: "什么是验证者",
+          link: "what-is-a-validator",
+        },
+        { text: "什么是RPC节点", link: "what-is-an-rpc-node" },
+        { text: "关于验证者的常见问题", link: "faq" },
+        { text: "向后兼容性策略", link: "backwards-compatibility" },
+      ],
+    },
+    {
+      text: "命令行CLI工具",
       collapsed: false,
       items: [
         {
@@ -100,7 +133,7 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
       text: "Solana程序库",
       collapsed: false,
       items: [
-        { text: "概述", link: "index" },
+        { text: "介绍", link: "index" },
         { text: "Token程序", link: "token" },
       ],
     },
@@ -120,8 +153,14 @@ export default defineConfig({
         base: "/SolanaDocumention/",
         items: sidebarSolanaDocumention(),
       },
-      "/SolanaValidatorDocumentation/": { base: "/SolanaValidatorDocumentation/", items: sidebarSolanaValidatorDocumentation() },
-      "/SolanaProgramLibrary/": { base: "/SolanaProgramLibrary/", items: sidebarSolanaProgramLibrary() },
+      "/SolanaValidatorDocumentation/": {
+        base: "/SolanaValidatorDocumentation/",
+        items: sidebarSolanaValidatorDocumentation(),
+      },
+      "/SolanaProgramLibrary/": {
+        base: "/SolanaProgramLibrary/",
+        items: sidebarSolanaProgramLibrary(),
+      },
     },
     footer: {
       message:
@@ -147,23 +186,23 @@ export default defineConfig({
       },
     },
     search: {
-      provider: 'local',
+      provider: "local",
       options: {
         translations: {
           button: {
-            buttonText: '搜索文档',
-            buttonAriaLabel: '搜索文档'
+            buttonText: "搜索文档",
+            buttonAriaLabel: "搜索文档",
           },
           modal: {
-            noResultsText: '无法找到相关结果',
-            resetButtonTitle: '清除查询条件',
+            noResultsText: "无法找到相关结果",
+            resetButtonTitle: "清除查询条件",
             footer: {
-              selectText: '选择',
-              navigateText: '切换'
-            }
-          }
-        }   
-      }
-    }
+              selectText: "选择",
+              navigateText: "切换",
+            },
+          },
+        },
+      },
+    },
   },
 });

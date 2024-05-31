@@ -94,14 +94,14 @@ Sysvar帐户是位于预定义地址的特殊帐户，用于提供对集群状�
 为简单起见，您可以将“程序帐户”视为程序本身。
 
 ![Program Account](https://solana-developer-content.vercel.app/assets/docs/core/accounts/program-account-simple.svg)
-<center>计划帐户</center>
+<center>程序帐户</center>
 
 ```
 INFO 
 “程序帐户”的地址通常称为“程序 ID”，用于调用程序。
 ```
 
-## 数据帐户#
+## 数据帐户
 Solana程序是“无状态的”，这意味着程序帐户仅包含程序的可执行字节码。若要存储和修改其他数据，必须创建新帐户。这些帐户通常称为“数据帐户”。
 
 数据帐户可以存储所有者程序代码中定义的任何任意数据。

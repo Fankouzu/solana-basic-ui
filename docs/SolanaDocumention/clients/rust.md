@@ -11,7 +11,7 @@ Solana的Rust包已经发布到[crates.io](https://crates.io/search?q=solana-)�
 > 
 > *   [在本地本地环境设置并使用本地的测试验证器。](https://solana.com/developers/guides/getstarted/setup-local-development)
 
-## Rust 包 \#
+## Rust 包
 
 以下是Solana开发中最重要且常用的Rust包：
 *   [`solana-program`](https://docs.rs/solana-program/latest/solana_program/) — 由在Solana上运行的程序导入，编译为SBF。该包包含许多基本数据类型，并从[`solana-sdk`](https://docs.rs/solana-sdk/latest/solana_sdk/)重导出，Solana程序无法直接导入该包。
