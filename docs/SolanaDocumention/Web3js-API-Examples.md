@@ -458,7 +458,7 @@ Struct结构体 类用于在 JavaScript 中创建与 Rust 兼容的结构体。�
 
 #### 示例用法 
 
-Struct in Rust:
+Rust中的结构体:
 
 ```rust
 pub struct Fee {
@@ -467,7 +467,7 @@ pub struct Fee {
 }
 ```
 
-Using web3:
+使用web3:
 
 ```js
 import BN from "bn.js";
@@ -762,9 +762,9 @@ await web3.sendAndConfirmTransaction(connection, withdrawTransaction, [
 
 [源文档](https://solana-labs.github.io/solana-web3.js/classes/Authorized.html)
 
-Authorized授权者 是一个对象，用于在 Solana 内部创建一个授权账户进行质押时使用。你可以分别指定`质押者`和`提取者`，允许不同的账户提取，而不是质押者。
+Authorized授权者是一个对象，用于在 Solana 内部创建一个授权账户进行质押时使用。你可以分别指定`质押者`和`提取者`，允许不同的账户提取，而不是质押者。
 
-你可以在 `质押程序 ` 下找到更多 `授权者`对象的用法。
+你可以在 [质押程序](https://solana.com/zh/docs/clients/javascript#stakeprogram) 下找到更多 `授权者`对象的用法。
 
 ### Lockup
 
