@@ -122,6 +122,21 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
         {
           text: "使用 Solana CLI 发送和接收代币",
           link: "transfer-tokens",
+        },{
+          text: "命令行钱包",
+          collapsed: false,
+          items: [
+            {
+              text: "硬件钱包",
+              collapsed: false,
+              items: [
+                {
+                  text: "在Solana CLI中使用",
+                  link: "cli/wallets/hardware/index",
+                },
+              ],
+            },
+          ],
         },
       ],
     },
