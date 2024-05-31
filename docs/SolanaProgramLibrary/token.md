@@ -1,4 +1,4 @@
-# Token Program
+# Token 程序
 
 一种定义在 Solana 区块链上的代币智能合约程序。
 
