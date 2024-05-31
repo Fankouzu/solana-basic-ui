@@ -1,4 +1,4 @@
-# Wallet Guide
+# 钱包指南
 
 本指南面向希望支持 Token-2022 程序的钱包开发者。
 
@@ -73,11 +73,10 @@ Signature: 5A4MbdMTgGiV7hzLesKbzmrPSCvYPG15e1bg3d7dViqMaPbZrdJweKSuY1BQAfq245RMM
 
 ```
 $ mkdir test-accounts
-
-$ solana -ul account --output-file test-accounts/token-account.json --output json 4L45ZpFS6dqTyLMofmQZ9yuTqYvQrfCJfWL2xAjd5WDW... output truncated ...
-
-$ solana -ul account --output-file test-accounts/mint.json --output json E5SUrbnx7bMBp3bRdMWNCFS3FXp5VpvFDdNFp8rjrMLM... output truncated ...
-
+$ solana -ul account --output-file test-accounts/token-account.json --output json 4L45ZpFS6dqTyLMofmQZ9yuTqYvQrfCJfWL2xAjd5WDW
+... output truncated ...
+$ solana -ul account --output-file test-accounts/mint.json --output json E5SUrbnx7bMBp3bRdMWNCFS3FXp5VpvFDdNFp8rjrMLM
+... output truncated ...
 $ solana -ul account --output-file test-accounts/wallet.json --output json <TEST_WALLET_ADDRESS>
 ```
 
