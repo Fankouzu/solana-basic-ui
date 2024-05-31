@@ -12,7 +12,7 @@ function nav(): DefaultTheme.NavItem[] {
       link: "/SolanaValidatorDocumentation/connecting-to-a-cluster",
       activeMatch: "/SolanaValidatorDocumentation/",
     },
-    {
+    { 
       text: "Solana程序库",
       link: "/SolanaProgramLibrary/index",
       activeMatch: "/SolanaProgramLibrary/",
@@ -77,6 +77,20 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         },
       ],
     },
+    {
+      text: "开发程序",
+      collapsed: false,
+      items: [
+        { text: "概述", link: "programs/overview" },
+        { text: "调试程序", link: "programs/debugging" },
+        { text: "部署程序", link: "programs/deploying" },
+        { text: "程序示例", link: "programs/examples" },
+        { text: "常见问题", link: "programs/faq" },
+        { text: "使用C语言开发", link: "programs/lang-c" },
+        { text: "使用Rust语言开发", link: "programs/lang-rust" },
+        { text: "Solana的局限性", link: "programs/limitations" },
+      ],
+    },
   ];
 }
 
@@ -122,7 +136,8 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
         {
           text: "使用 Solana CLI 发送和接收代币",
           link: "transfer-tokens",
-        },{
+        },
+        {
           text: "命令行钱包",
           collapsed: false,
           items: [
