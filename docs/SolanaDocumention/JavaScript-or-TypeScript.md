@@ -129,7 +129,7 @@ transaction.add(
 );
 ```
 
-上述代码创建了一个准备签署并广播到网络的交易。`SystemProgram.transfer` 指令被添加到交易中，包含发送的 lamports 数量以及接收和发送公钥。
+上述代码创建了一个准备签署并广播到网络的交易。`SystemProgram.transfer` 指令被添加到交易中，包含发送的 lamports 数量以及`接收`和`发送`公钥。
 
 剩下的就是使用密钥对签署交易并将其发送到网络。你可以使用 `sendAndConfirmTransaction` 来发送交易，如果你希望在交易完成后通知用户或执行某些操作；如果你不需要等待交易确认，可以使用 `sendTransaction`。
 
@@ -146,7 +146,7 @@ let connection = new Connection(clusterApiUrl("testnet"));
 sendAndConfirmTransaction(connection, transaction, [keypair]);
 ```
 
-上述代码使用 `SystemProgram` 接受一个 `TransactionInstruction`，创建一个交易并将其发送到网络。你需要使用 `Connection` 定义你连接的 Solana 网络，即主网-beta版、测试网或开发网。
+上述代码使用 `SystemProgram` 接受一个 `TransactionInstruction`，创建一个交易并将其发送到网络。你需要使用 `Connection` 定义你连接的 Solana 网络，即`主网-beta版`、`测试网`或`开发网`。
 
 ### 与自定义程序交互
 
