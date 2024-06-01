@@ -9,7 +9,7 @@ function nav(): DefaultTheme.NavItem[] {
     },
     {
       text: "Solana验证器文档",
-      link: "/SolanaValidatorDocumentation/connecting-to-a-cluster",
+      link: "/SolanaValidatorDocumentation/index",
       activeMatch: "/SolanaValidatorDocumentation/",
     },
     {
@@ -183,6 +183,16 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   link: "cli/wallets/hardware/index",
                 },
               ],
+            },
+          ],
+        },
+        {
+          text: "命令示例",
+          collapsed: false,
+          items: [
+            {
+              text: "质押",
+              link: "cli/examples/delegate-staking",
             },
           ],
         },
