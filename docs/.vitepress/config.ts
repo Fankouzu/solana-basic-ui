@@ -9,7 +9,7 @@ function nav(): DefaultTheme.NavItem[] {
     },
     {
       text: "Solana验证器文档",
-      link: "/SolanaValidatorDocumentation/connecting-to-a-cluster",
+      link: "/SolanaValidatorDocumentation/index",
       activeMatch: "/SolanaValidatorDocumentation/",
     },
     {

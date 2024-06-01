@@ -1,6 +1,8 @@
 ---
 layout: home
 
+title: Solana中文大全
+
 hero:
   name: Solana中文大全
   text: 最全面的中文Solana开发教学.
