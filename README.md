@@ -24,7 +24,7 @@
 
 ## 开发
 
-此站点基于 [Vitepress](https://vitepress.dev/zh/) 构建，并部署在 [surge.sh](https://surge.sh)
+此站点基于 [Vitepress](https://vitepress.dev/zh/) 构建，并部署在 [vercel.com](https://vercel.com)
 
 ## 本地调试
 如下本地调试，请根据你的运行环境安装 [Node.js](https://nodejs.org)，并进行如下操作：
