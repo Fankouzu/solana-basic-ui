@@ -1,114 +1,85 @@
 # 使用 Solana CLI 质押 SOL
 
-接收到 SOL 后，你可以考虑将其用于委托给验证者。Stake 是我们在 stake 账户中称为的代币。Solana 通过委托给验证者的 stake 数量来权衡验证者的投票权，从而使这些验证者在确定区块链中下一个有效交易块时具有更多的影响力。Solana 然后定期生成新的 SOL 以奖励委托者和验证者。你委托的 stake 越多，就可以获得更多的奖励。
+收到SOL后，您可以考虑通过将质押委托给验证者节点来使用它。质押就是我们所说的质押账户中的代币。Solana 根据委托给他们的质押量来衡量验证者节点的投票，这让这些节点在确定区块链中下一个有效的交易块时拥有更大的影响力。然后，Solana 会定期生成新的 SOL 来奖励质押者和验证者节点。您委托的质押越多，您获得的奖励就越多。
 
-## 创建质押账户
+> **更多信息**:
+> 
+> 要了解有关质押的概述，请首先阅读 [质押和通胀常见问题解答](https://solana.com/staking).
 
+## 创建一个质押账户
 
-如果您想委托质押, 您需要两步操作: 
+要委托质押，您需要将一些代币转入质押账户。要创建账户，您需要一个密钥对。其公钥将用作[质押账户地址](https://solana.com/docs/economics/staking/stake-accounts#account-address)。这里不需要密码或加密；创建质押账户后，此密钥对将被丢弃。
 
-1. 您需要将一些token转入stake账户。 
-2. 要创建stake帐户，您将需要密钥对, 公钥将作为stake账户的地址。 这里不需要密码或加密；创建完之后, 这个密钥对就会被丢弃.
-
-#### 第一步: 生成密钥对
-```
+``` bash
 solana-keygen new --no-passphrase -o stake-account.json
 ```
-
-输出公钥(stake账户地址):
-
-```
+输出将在文本后包含公钥 `pubkey:`
+``` bash
 pubkey: GKvqsuNcnwWqPzzuhLmGi4rzzh55FhJtGizkhHaEJqiV
 ```
-
-复制公钥并妥善保管。后面要用. 
-
-#### 第二步: 创建一个stake账户,并转入代币：
-
-```
+复制公钥并将其保存以备不时之需。当您下次想要对质押账户执行操作时，您将需要它。
+现在，创建一个质押账户：
+```bash
 solana create-stake-account --from <KEYPAIR> stake-account.json <AMOUNT> \
     --stake-authority <KEYPAIR> --withdraw-authority <KEYPAIR> \
     --fee-payer <KEYPAIR>
 ```
+`<AMOUNT>` 代币从 "from" 处的账户转移 `<KEYPAIR>` 到 stake-account.json 公钥处的新质押账户。
 
-`KEYPAIR`: 你的密钥对
+现在可以暂时丢弃 stake-account.json 文件。要授权其他操作，您将使用 `--stake-authority` 或者 `--withdraw-authority` 密钥对，而不是 stake-account.json。
 
-`AMOUNT`: 转移的代币数量
-
-`stake-account.json`: 你的stake账户的公钥文件路径
-
-现在可以删除 `stake-account.json` 文件了。要授权其他操作，您可以使用 --stake-authority 或 --withdraw-authority 密钥对，而不是 `stake-account.json`。
-
-使用 solana stake-account 命令查看新的权益账户：
-
-```
+使用以下命令查看新的质押账户 `solana stake-account`：
+```bash
 solana stake-account <STAKE_ACCOUNT_ADDRESS>
 ```
-
-输出将类似于以下内容：
-
+输出将类似于此：
 ```
 Total Stake: 5000 SOL
 Stake account is undelegated
 Stake Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F
 Withdraw Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F
 ```
-
-## 设置质押和取款权限
-
-
-质押和取款权限可以在创建账户时通过 --stake-authority 和 --withdraw-authority 选项来设置，或者后面通过 solana stake-authorize 命令来设置。
-
-例如，要设置一个新的质押权限，运行:
-
-```
+## 设置质押和提取权限
+[质押和提取权限](https://solana.com/docs/economics/staking/stake-accounts#understanding-account-authorities) 
+可以在创建账户时通过 `--stake-authority` 和 `--withdraw-authority` 选项设置, 也可以在创建账户后使用 `solana stake-authorize` 命令设置。
+例如，要设置新的质押权限，请运行：
+```bash
 solana stake-authorize <STAKE_ACCOUNT_ADDRESS> \
     --stake-authority <KEYPAIR> --new-stake-authority <PUBKEY> \
     --fee-payer <KEYPAIR>
 ```
+这将使用现有的质押权限密钥对 `<KEYPAIR>` 来授权一个新的质押权限公钥 `<PUBKEY>` 给质押账户 `<STAKE_ACCOUNT_ADDRESS>`。
 
-`KEYPAIR`: stake账户的权限所有者
+## <span id="高级-派生质押账户地址">高级: 派生质押账户地址</span>
 
-`STAKE_ACCOUNT_ADDRESS`: stake账户地址
-
-`PUBKEY`: 新的权限所有者
-
-这里做了一个质押的权限的移交. 
-
-
-## 委托质押
-
-要将您的质押委托给验证人，您需要知道它的投票账户地址。通过使用`solana validators`命令查询群集以获取所有验证人及其投票账户列表来找到它：
-
+当你委托质押时，你将质押账户中的所有代币委托给单个节点。要委托给多个节点，你需要多个质押账户。为每个账户创建一个新的密钥对并管理这些地址可能会很繁琐。幸运的是，你可以使用 `--seed` 选项派生质押地址：
+```bash
+solana create-stake-account --from <KEYPAIR> <STAKE_ACCOUNT_KEYPAIR> --seed <STRING> <AMOUNT> \
+    --stake-authority <PUBKEY> --withdraw-authority <PUBKEY> --fee-payer <KEYPAIR>
 ```
+`<STRING>` 是一个任意字符串，长度最多为32字节，通常是一个数字，用于表示这是第几个派生账户。第一个账户可能是 "0", 然后是 "1", 依此类推。`<STAKE_ACCOUNT_KEYPAIR>` 的公钥作为基础地址。该命令从基础地址和种子字符串派生出一个新地址。要查看命令将派生出哪个质押地址，可以使用 `solana create-address-with-seed`:
+```bash
+solana create-address-with-seed --from <PUBKEY> <SEED_STRING> STAKE
+```
+`<PUBKEY>` 是传递给 `solana create-stake-account`的 `<STAKE_ACCOUNT_KEYPAIR>` 的公钥。
+该命令将输出一个派生地址，该地址可以用作质押操作中的 `<STAKE_ACCOUNT_ADDRESS>` 参数。
+## 委托质押
+要将您的权益委托给验证者，您需要其投票账户地址。可以通过使用 `solana validators` 命令查询集群中所有验证者及其投票账户的列表来找到该地址：
+```bash
 solana validators
 ```
-
-每行的第一列包含验证人的身份，第二列是投票账户地址。
-
-选择一个验证人
-
-运行以下命令, 把你的质押委托给验证人: 
-
-```
+每行的第一列包含验证者的身份信息，第二列是投票账户地址。选择一个验证者并在 `solana delegate-stake` 命令中使用其投票账户地址：
+```bash
 solana delegate-stake --stake-authority <KEYPAIR> <STAKE_ACCOUNT_ADDRESS> <VOTE_ACCOUNT_ADDRESS> \
     --fee-payer <KEYPAIR>
 ```
-
-`VOTE_ACCOUNT_ADDRESS`: 验证人地址
-
-`KEYPAIR`: 你的密钥对
-
-`STAKE_ACCOUNT_ADDRESS`: 你的stake账户
-
-委托后，使用solana stake-account观察stake账户的变化：
-
-```
+该授权密钥对 `<KEYPAIR>` 授权对地址为 `<STAKE_ACCOUNT_ADDRESS>` 的账户进行操作。该权益被委托给地址为 `<VOTE_ACCOUNT_ADDRESS>` 的投票账户。
+在委托质押后，使用 `solana stake-account` 命令观察权益账户的变化：
+```bash
 solana stake-account <STAKE_ACCOUNT_ADDRESS>
 ```
-
-您将在输出中看到新的字段"代币委托"和"代币委托账户地址"。 输出将类似于这样：
-```
+在输出中，你会看到新的字段 "Delegated Stake" 和 "Delegated Vote Account Address"。输出将类似于以下内容：
+```bash
 Total Stake: 5000 SOL
 Credits Observed: 147462
 Delegated Stake: 4999.99771712 SOL
@@ -117,28 +88,48 @@ Stake activates starting from epoch: 42
 Stake Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F
 Withdraw Authority: EXU95vqs93yPeCeAU7mPPu6HbRUmTFPEiGug9oCdvQ5F
 ```
-
-
-## 取消委托
-
-您可以使用 solana deactivate-stake 取消委托：
-
-```
+## 撤销质押
+一旦委托了质押，你可以使用 `solana deactivate-stake` 命令来取消委托质押：
+```bash
 solana deactivate-stake --stake-authority <KEYPAIR> <STAKE_ACCOUNT_ADDRESS> \
     --fee-payer <KEYPAIR>
 ```
+质押授权密钥对 `<KEYPAIR>` 授权对地址为 `<STAKE_ACCOUNT_ADDRESS>` 的账户进行操作。
+请注意，质押需要经过一段时间才能 "冷却"。 在冷却期间尝试委托质押将失败。
 
-请注意，刚刚委托的权益账户有冷却期, 不能马上取消委托. 
-
-## 取出质押
-
-```
+## 取回质押
+使用 `solana withdraw-stake` 命令从质押账户中转移代币：
+```bash
 solana withdraw-stake --withdraw-authority <KEYPAIR> <STAKE_ACCOUNT_ADDRESS> <RECIPIENT_ADDRESS> <AMOUNT> \
     --fee-payer <KEYPAIR>
 ```
+`<STAKE_ACCOUNT_ADDRESS>` 是现有的质押账户, `<KEYPAIR>` 是质押权限, `<AMOUNT>` 是要转移到 `<RECIPIENT_ADDRESS>` 的代币数量。
 
-`RECIPIENT_ADDRESS`: 取出到哪个地址
+## 拆分质押
+在你现有的质押不符合取回条件时，你可能希望将质押委托给其他验证者节点。这可能是因为它当前正在质押、冷却或锁定。要将代币从现有的质押账户转移到新的账户，可以使用 `solana split-stake` 命令：
+```bash
+solana split-stake --stake-authority <KEYPAIR> <STAKE_ACCOUNT_ADDRESS> <NEW_STAKE_ACCOUNT_KEYPAIR> <AMOUNT> \
+    --fee-payer <KEYPAIR>
+```
+`<STAKE_ACCOUNT_ADDRESS>` 是现有的质押账户, `<KEYPAIR>` 是质押授权的密钥对, `<NEW_STAKE_ACCOUNT_KEYPAIR>` 是新账户的密钥对, `<AMOUNT>` 是要转移到新账户的代币数量。
+要将质押账户拆分为衍生账户地址, 请使用 `--seed `选项。有关详细信息，请参阅[派生质押账户地址](#高级-派生质押账户地址)。
 
-`KEYPAIR`: 你的密钥对
 
-`STAKE_ACCOUNT_ADDRESS`: 现在的stake账户
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
