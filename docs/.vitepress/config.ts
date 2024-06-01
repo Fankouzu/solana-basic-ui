@@ -24,64 +24,83 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
   return [
     {
       text: "Solana文档",
+      base: "/SolanaDocumention/",
       link: "index",
       collapsed: false,
-      items: [
-        { text: "术语", link: "terminology" },
-      ],
+      items: [{ text: "术语", link: "terminology" }],
     },
     {
       text: "简介",
       collapsed: false,
+      base: "/SolanaDocumention/intro/",
       items: [
-        { text: "概述", link: "intro/overview" },
-        // { text: "租金经济", link: "rent" },
-        { text: "钱包指南", link: "intro/wallets" },
-        { text: "开发入门", link: "intro/dev" },
+        { text: "概述", link: "overview" },
+        { text: "钱包指南", link: "wallets" },
+        { text: "开发入门", link: "dev" },
       ],
     },
     {
       text: "核心概念",
       collapsed: false,
+      base: "/SolanaDocumention/core/",
       items: [
-        { text: "账户模型", link: "core/accounts" },
-        { text: "交易与指令", link: "core/transactions" },
-        { text: "交易费用", link: "core/fees" },
-        { text: "程序", link: "core/programs" },
-        { text: "程序派生地址", link: "core/pda" },
-        { text: "跨程序调用", link: "core/cpl" },
-        { text: "群集和公共 RPC 端点", link: "core/clusters" },
+        { text: "账户模型", link: "accounts" },
+        { text: "交易与指令", link: "transactions" },
+        { text: "交易费用", link: "fees" },
+        { text: "程序", link: "programs" },
+        { text: "程序派生地址", link: "pda" },
+        { text: "跨程序调用", link: "cpl" },
+        { text: "群集和公共 RPC 端点", link: "clusters" },
       ],
     },
     {
       text: "高级概念",
       collapsed: false,
+      base: "/SolanaDocumention/advanced/",
       items: [
-        { text: "版本化交易", link: "advanced/versions" },
-        { text: "地址查找表", link: "advanced/lookup-tables" },
-        { text: "交易确认及过期", link: "advanced/confirmation" },
-        { text: "重试交易", link: "advanced/retry" },
-        { text: "状态压缩", link: "advanced/state-compression" },
+        { text: "版本化交易", link: "versions" },
+        { text: "地址查找表", link: "lookup-tables" },
+        { text: "交易确认及过期", link: "confirmation" },
+        { text: "重试交易", link: "retry" },
+        { text: "状态压缩", link: "state-compression" },
       ],
     },
     {
       text: "Solana客户端",
       collapsed: false,
+      base: "/SolanaDocumention/clients/",
       items: [
-        { text: "Rust", link: "clients/rust" },
-        { text: "JavaScript/TypeScript", link: "clients/javascript" },
-        { text: "Web3.js API 范例", link: "clients/javascript-reference" },
+        { text: "Rust", link: "rust" },
+        { text: "JavaScript/TypeScript", link: "javascript" },
+        { text: "Web3.js API 范例", link: "javascript-reference" },
       ],
     },
     {
-      text: "经济",
+      text: "Solana 经济",
       collapsed: false,
+      base: "/SolanaDocumention/economics/",
+      link: "index",
       items: [
         {
-          text: "质押",
-          collapsed: false,
+          text: "通胀",
+          collapsed: true,
+          base: "/SolanaDocumention/economics/inflation/",
           items: [
-            { text: "质押编程", link: "economics/staking/stake-programming" },
+            {
+              text: "通胀计划",
+              link: "inflation-schedule",
+            },
+            { text: "通胀术语", link: "terminology" },
+          ],
+        },
+        {
+          text: "质押",
+          base: "/SolanaDocumention/economics/staking/",
+          link: "index",
+          collapsed: true,
+          items: [
+            { text: "质押编程", link: "stake-programming" },
+            { text: "质押账户", link: "stake-accounts" },
           ],
         },
       ],
@@ -89,110 +108,99 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
     {
       text: "开发程序",
       collapsed: false,
+      base: "/SolanaDocumention/programs/",
       items: [
-        { text: "概述", link: "programs/overview" },
-        { text: "调试程序", link: "programs/debugging" },
-        // { text: "部署程序", link: "programs/deploying" },
-        // { text: "程序示例", link: "programs/examples" },
-        // { text: "常见问题", link: "programs/faq" },
-        // { text: "使用C语言开发", link: "programs/lang-c" },
-        // { text: "使用Rust语言开发", link: "programs/lang-rust" },
-        // { text: "Solana的局限性", link: "programs/limitations" },
+        { text: "概述", link: "overview" },
+        { text: "调试程序", link: "debugging" },
+        // { text: "部署程序", link: "deploying" },
+        // { text: "程序示例", link: "examples" },
+        // { text: "常见问题", link: "faq" },
+        // { text: "使用C语言开发", link: "lang-c" },
+        // { text: "使用Rust语言开发", link: "lang-rust" },
+        // { text: "Solana的局限性", link: "limitations" },
       ],
     },
-    {
-      text: "Solana 经济",
-      collapsed: false,
-      link: "economics/index" ,
-      items: [
-        { text: "通胀", 
-        collapsed: true ,
-          items: [
-            { text: "通胀计划", link: "economics/inflation/inflation-schedule" },
-            { text: "通胀术语", link: "economics/inflation/terminology" },
-          ]
-        },
-        { text: "质押", 
-        link: "economics/staking/index" ,
-        collapsed: true,
-        items: [
-          { text: "质押账户", link: "economics/staking/stake-accounts" },
-        ]},
-      ],
-    }
   ];
 }
 
 function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
   return [
-    { text: "首页", link: "index" },
     {
-      text: "介绍",
-      collapsed: false,
+      text: "Solana验证器文档",
       items: [
         {
-          text: "什么是验证器",
-          link: "what-is-a-validator",
-        },
-        { text: "什么是RPC节点", link: "what-is-an-rpc-node" },
-        { text: "关于验证器的常见问题", link: "faq" },
-        { text: "向后兼容性策略", link: "backwards-compatibility" },
-      ],
-    },
-    {
-      text: "命令行CLI工具",
-      collapsed: false,
-      items: [
-        {
-          text: "使用 Solana CLI 连接到集群",
-          link: "connecting-to-a-cluster",
-        },
-        { text: "使用 Solana CLI 质押 SOL", link: "staking" },
-        { text: "使用 CLI 部署 Solana 程序", link: "deploy-a-program" },
-        { text: "Solana CLI 中的持久交易nonce", link: "durable-nonce" },
-        {
-          text: "使用 Solana CLI 进行离线交易签名",
-          link: "offline-signing",
+          text: "首页",
+          link: "index",
         },
         {
-          text: "使用 Solana CLI 进行链下消息签名",
-          link: "sign-offchain-message",
-        },
-        {
-          text: "使用本地集群进行开发",
-          link: "test-validator",
-        },
-        {
-          text: "使用 Solana CLI 发送和接收代币",
-          link: "transfer-tokens",
-        },
-        {
-          text: "命令行钱包",
+          text: "介绍",
           collapsed: false,
           items: [
             {
-              text: "概述",
-              link: "cli/wallets/index",
+              text: "什么是验证器",
+              link: "what-is-a-validator",
             },
-            {
-              text: "硬件钱包",
-              collapsed: false,
-              items: [
-                {
-                  text: "在Solana CLI中使用",
-                  link: "cli/wallets/hardware/index",
-                },
-              ],
-            },
+            { text: "什么是RPC节点", link: "what-is-an-rpc-node" },
+            { text: "关于验证器的常见问题", link: "faq" },
+            { text: "向后兼容性策略", link: "backwards-compatibility" },
           ],
         },
         {
-          text: "命令示例",
+          text: "命令行CLI工具",
           collapsed: false,
           items: [
+            // {
+            //   text: "使用 Solana CLI 连接到集群",
+            //   link: "connecting-to-a-cluster",
+            // },
+            // { text: "使用 Solana CLI 质押 SOL", link: "staking" },
+            // { text: "使用 CLI 部署 Solana 程序", link: "deploy-a-program" },
+            // { text: "Solana CLI 中的持久交易nonce", link: "durable-nonce" },
+            // {
+            //   text: "使用 Solana CLI 进行离线交易签名",
+            //   link: "offline-signing",
+            // },
+            // {
+            //   text: "使用 Solana CLI 进行链下消息签名",
+            //   link: "sign-offchain-message",
+            // },
+            // {
+            //   text: "使用本地集群进行开发",
+            //   link: "test-validator",
+            // },
+            // {
+            //   text: "使用 Solana CLI 发送和接收代币",
+            //   link: "transfer-tokens",
+            // },
             {
-              text: "质押",
-              link: "cli/examples/delegate-staking",
+              text: "命令行钱包",
+              collapsed: false,
+              items: [
+                {
+                  text: "概述",
+                  link: "cli/wallets/index",
+                },
+                {
+                  text: "硬件钱包",
+                  collapsed: false,
+                  items: [
+                    {
+                      text: "在Solana CLI中使用",
+                      link: "cli/wallets/hardware/index",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              text: "命令示例",
+              collapsed: false,
+              items: [
+                {
+                  text: "质押",
+                  link: "cli/examples/delegate-staking",
+                },
+              ],
             },
           ],
         },
