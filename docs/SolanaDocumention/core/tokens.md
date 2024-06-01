@@ -11,12 +11,12 @@
 ([Solana 程序库](https://github.com/solana-labs/solana-program-library))
 代币
 
-- [代币程序](#token-program)包含与网络上的代币（同质化和非同质化）交互的所有指令逻辑。
+- [代币程序](https://solana.com/docs/core/tokens#token-program)包含与网络上的代币（同质化和非同质化）交互的所有指令逻辑。
 
-- [铸币账户](#mint-account)代表一种特定类型的代币，并存储有关代币的全局元数据，
+- [铸币账户](https://solana.com/docs/core/tokens#mint-account)代表一种特定类型的代币，并存储有关代币的全局元数据，
   例如总供应量和铸币权限（授权创建代币新单位的地址）。
 
-- [代币账户](#token-account)跟踪特定地址拥有特定类型代币（铸币账户）的单位数量的个人所有权。
+- [代币账户](https://solana.com/docs/core/tokens#token-account)跟踪特定地址拥有特定类型代币（铸币账户）的单位数量的个人所有权。
 
 
 > 代币程序目前有两个版本。
@@ -46,7 +46,7 @@
 [代币程序](https://github.com/solana-labs/solana-program-library/tree/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program)
 包含与网络上的代币（同质化和非同质化）交互的所有指令逻辑。
 Solana上的所有代币实际上是代币计划拥有的
-[数据账户](/docs/core/accounts.md#data-account)。
+[数据账户](https://solana.com/docs/core/accounts#data-account)。
 
 您可以在
 [此处](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/instruction.rs)
@@ -153,7 +153,7 @@ pub struct Account {
 
 > 请注意，每个代币账户的数据都包含一个owner字段，
 > 用于识别谁对该特定代币账户拥有权限。
-> 这与 AccountInfo 中指定的程序所有者是分开的，[AccountInfo](/docs/core/accounts.md#accountinfo)
+> 这与 AccountInfo 中指定的程序所有者是分开的，[AccountInfo](https://solana.com/docs/core/accounts#accountinfo)
 > 是所有代币帐户的代币程序。
 
 ### 关联代币账户
@@ -168,7 +168,7 @@ pub struct Account {
 
 ![关联代币账户](https://solana-developer-content.vercel.app/assets/docs/core/tokens/associated-token-account.svg)
 
-这在 Solana 开发中引入了一个关键概念：[程序派生地址（PDA](/docs/core/pda.md)。
+这在 Solana 开发中引入了一个关键概念：[程序派生地址（PDA](https://solana.com/docs/core/pda)。
 从概念上讲，PDA提供了一种使用一些预定义输入生成地址的确定性方法。这使我们能够在以后轻松找到帐户的地址。
 
 这是一个 [Solana Playground](https://beta.solpg.io/656a2dd0fb53fa325bfd0c41)
@@ -236,7 +236,7 @@ spl-token --help
 
 ###  创建新代币
 
-要创建新代币（[mint 帐户](#mint-account) ），请在 Solana Playground 终端中运行以下命令。
+要创建新代币（[mint 帐户](https://solana.com/docs/core/tokens#mint-account) ），请在 Solana Playground 终端中运行以下命令。
 
 ```sh
 spl-token create-token
@@ -282,7 +282,7 @@ spl-token supply 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg
 
 ### 创建代币账户
 
-要持有特定代币的单位，您必须首先创建一个[代币账户](#token-account)。
+要持有特定代币的单位，您必须首先创建一个[代币账户](https://solana.com/docs/core/tokens#token-account)。
 若要创建新的代币帐户，请使用以下命令：
 
 ```sh
@@ -304,10 +304,8 @@ Creating account AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9
 Signature: 2BtrynuCLX9CNofFiaw6Yzbx6hit66pup9Sk7aFjwU2NEbFz7NCHD9w9sWhrCfEd73XveAGK1DxFpJoQZPXU9tS1
 ```
 
-By default the `create-account` command creates an
-[associated token account](#associated-token-account) with your wallet address
-as the token account owner.
-默认情况下，该 `create-account`命令会创建一个[关联代币帐户](#associated-token-account)，
+
+默认情况下，该 `create-account`命令会创建一个[关联代币帐户](https://solana.com/docs/core/tokens#associated-token-account)，
 并将你的钱包地址作为代币帐户所有者。
 
 您可以使用以下命令创建具有不同所有者的代币帐户：
@@ -343,7 +341,7 @@ Signature: 44vqKdfzspT592REDPY4goaRJH3uJ3Ce13G4BCuUHg35dVUbHuGTHvqn4ZjYF9BGe9Qrj
 [Solana Playground](https://beta.solpg.io/660ce868cffcf4b13384d011)
 上的一个 Javascript 示例。
 
-关联代币程序使用[跨程序调用](/docs/core/cpi.md)
+关联代币程序使用[跨程序调用](https://solana.com/docs/core/cpi)
 来处理：
 
 
