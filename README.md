@@ -42,6 +42,10 @@ npm install
 ```
 npm run docs:dev
 ```
+
+![Alt](https://repobeats.axiom.co/api/embed/dee699aaf19f40a044b9f5fa987add4eb3b6ec23.svg "Repobeats analytics image")
+
+
 ## 贡献者
 <a href="https://github.com/fankouzu/solana-basic-ui/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=fankouzu/solana-basic-ui&anon=1" />
