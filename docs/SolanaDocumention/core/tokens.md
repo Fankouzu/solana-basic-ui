@@ -53,14 +53,10 @@ Solana上的所有代币实际上是代币计划拥有的
 
 一些常用的说明包括：
 
-- [`InitializeMint`](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/processor.rs#L29):
-   ：创建一个新的铸币账户来代表一种新型的代币。
-- [`InitializeAccount`](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/processor.rs#L84):
- ：创建一个新的代币账户来持有特定类型代币（铸币厂）的单位。
-- [`MintTo`](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/processor.rs#L522):
- 创建特定类型代币的新单位，并将其添加到代币帐户。这增加了代币的供应，并且只能由铸币账户的铸币厂机构完成。
-- [`Transfer`](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/processor.rs#L228):
- 将特定类型代币的单位从一个代币账户转移到另一个代币账户。
+- [InitializeMint](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/processor.rs#L29):创建一个新的铸币账户来代表一种新型的代币。
+- [InitializeAccount](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/processor.rs#L84):创建一个新的代币账户来持有特定类型代币（铸币厂）的单位。
+- [MintTo](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/processor.rs#L522):创建特定类型代币的新单位，并将其添加到代币帐户。这增加了代币的供应，并且只能由铸币账户的铸币厂机构完成。
+- [Transfer](https://github.com/solana-labs/solana-program-library/blob/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program/src/processor.rs#L228):将特定类型代币的单位从一个代币账户转移到另一个代币账户。
 
 ### Mint账户
 

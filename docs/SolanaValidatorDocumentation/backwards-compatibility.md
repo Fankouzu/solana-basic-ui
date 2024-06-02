@@ -55,11 +55,11 @@ Solana RPC API、Rust SDK、CLI 工具和 SBF 程序 SDK 都会随每个 Solana 
 
 ## Rust 包
 
-- [`solana-sdk`](https://docs.rs/solana-sdk/) - 用于创建交易和解析账户状态的 Rust SDK
-- [`solana-program`](https://docs.rs/solana-program/) - 用于编写程序的 Rust SDK
-- [`solana-client`](https://docs.rs/solana-client/) - 用于连接 RPC API 的 Rust 客户端
-- [`solana-cli-config`](https://docs.rs/solana-cli-config/) - 用于管理 Solana CLI 配置文件的 Rust 客户端
-- [`solana-geyser-plugin-interface`](https://docs.rs/solana-geyser-plugin-interface/) - 用于开发 Solana Geyser 插件的 Rust 接口
+- [solana-sdk](https://docs.rs/solana-sdk/) - 用于创建交易和解析账户状态的 Rust SDK
+- [solana-program](https://docs.rs/solana-program/) - 用于编写程序的 Rust SDK
+- [solana-client](https://docs.rs/solana-client/) - 用于连接 RPC API 的 Rust 客户端
+- [solana-cli-config](https://docs.rs/solana-cli-config/) - 用于管理 Solana CLI 配置文件的 Rust 客户端
+- [solana-geyser-plugin-interface](https://docs.rs/solana-geyser-plugin-interface/) - 用于开发 Solana Geyser 插件的 Rust 接口
 
 **补丁发布**：
 

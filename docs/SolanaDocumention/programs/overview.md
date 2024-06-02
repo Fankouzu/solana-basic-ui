@@ -37,7 +37,7 @@
 
 ### 4. 生成程序的公共地址
 
-使用[Solana CLI](https://docs.solanalabs.com/cli/install)，开发者将为新程序生成一个新的唯一[密钥对](https://solana.com/zh/docs/terminology#keypair)。这个密钥对的公共地址（又称[Pubkey](https://solana.com/zh/docs/terminology#public-key-pubkey)）将在链上用作程序的公共地址（又称[`programId`](https://solana.com/zh/docs/terminology#program-id)）。
+使用[Solana CLI](https://docs.solanalabs.com/cli/install)，开发者将为新程序生成一个新的唯一[密钥对](https://solana.com/zh/docs/terminology#keypair)。这个密钥对的公共地址（又称[Pubkey](https://solana.com/zh/docs/terminology#public-key-pubkey)）将在链上用作程序的公共地址（又称[programId](https://solana.com/zh/docs/terminology#program-id)）。
 
 ### 5. 部署程序
 

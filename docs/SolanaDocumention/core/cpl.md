@@ -12,7 +12,7 @@
 - 这些程序可以代表源自其程序ID的程序[PDAs](https://solana.com/zh/docs/core/pda)进行“签名”
 
 ::: tip INFO
-Solana程序运行时定义了一个名为[`max_invoke_stack_height`](https://github.com/solana-labs/solana/blob/27eff8408b7223bb3c4ab70523f8a8dca3ca6645/program-runtime/src/compute_budget.rs#L31-L35)的常量，其[值设定为5](https://github.com/solana-labs/solana/blob/27eff8408b7223bb3c4ab70523f8a8dca3ca6645/program-runtime/src/compute_budget.rs#L138)。这代表着程序指令调用堆栈的最大高度。对于交易指令，堆栈高度从1开始，每当一个程序调用另一个指令时，高度增加1。这个设置实质上将CPI的调用深度限制在了4层。
+Solana程序运行时定义了一个名为[max_invoke_stack_height](https://github.com/solana-labs/solana/blob/27eff8408b7223bb3c4ab70523f8a8dca3ca6645/program-runtime/src/compute_budget.rs#L31-L35)的常量，其[值设定为5](https://github.com/solana-labs/solana/blob/27eff8408b7223bb3c4ab70523f8a8dca3ca6645/program-runtime/src/compute_budget.rs#L138)。这代表着程序指令调用堆栈的最大高度。对于交易指令，堆栈高度从1开始，每当一个程序调用另一个指令时，高度增加1。这个设置实质上将CPI的调用深度限制在了4层。
 ::: 
 
 ## 关键点

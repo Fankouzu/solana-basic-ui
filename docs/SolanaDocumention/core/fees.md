@@ -85,7 +85,7 @@ Solana也是如此。具体说来：
 
 ### 账户数据大小限制
 
-交易可以通过包含一个`SetLoadedAccountsDataSizeLimit`指令（不得超过运行时的绝对最大值）来指定它允许加载的账户数据的最大字节数。如果没有提供`SetLoadedAccountsDataSizeLimit`，则交易默认使用运行时的[`MAX_LOADED_ACCOUNTS_DATA_SIZE_BYTES`](https://github.com/anza-xyz/agave/blob/b7bbe36918f23d98e2e73502e3c4cba78d395ba9/program-runtime/src/compute_budget_processor.rs#L137-L139) 值。
+交易可以通过包含一个`SetLoadedAccountsDataSizeLimit`指令（不得超过运行时的绝对最大值）来指定它允许加载的账户数据的最大字节数。如果没有提供`SetLoadedAccountsDataSizeLimit`，则交易默认使用运行时的[MAX_LOADED_ACCOUNTS_DATA_SIZE_BYTES](https://github.com/anza-xyz/agave/blob/b7bbe36918f23d98e2e73502e3c4cba78d395ba9/program-runtime/src/compute_budget_processor.rs#L137-L139) 值。
 
 可以使用`ComputeBudgetInstruction::set_loaded_accounts_data_size_limit`函数创建此指令：
 
@@ -121,7 +121,7 @@ let instruction = ComputeBudgetInstruction::set_loaded_accounts_data_size_limit(
 >
 > 对于[跨程序调用](https://solana.com/zh/docs/core/cpi)，调用的指令将继承其父级的计算预算和限制。如果调用的指令消耗了事务的剩余预算，或者超出了边界，则整个调用链和顶级交易处理将终止。
 
-您可以在Solana运行时的[`ComputeBudget`](https://github.com/anza-xyz/agave/blob/b7bbe36918f23d98e2e73502e3c4cba78d395ba9/program-runtime/src/compute_budget.rs#L19-L123)中找到有关消耗计算单元的所有操作的更多详细信息。
+您可以在Solana运行时的[ComputeBudget](https://github.com/anza-xyz/agave/blob/b7bbe36918f23d98e2e73502e3c4cba78d395ba9/program-runtime/src/compute_budget.rs#L19-L123)中找到有关消耗计算单元的所有操作的更多详细信息。
 
 ### 计算单元限制
 
@@ -151,8 +151,8 @@ let instruction = ComputeBudgetInstruction::set_loaded_accounts_data_size_limit(
 
 交易的优先级费用是通过将其**计算单元限制**乘以**计算单元价格**（以*micro-lamports*为单位）来计算的。这些值可以通过包含以下计算预算指令来每笔交易设置一次：
 
-- [`SetComputeUnitLimit`](https://github.com/anza-xyz/agave/blob/b7bbe36918f23d98e2e73502e3c4cba78d395ba9/sdk/src/compute_budget.rs#L47-L50) - 设置交易可以消耗的最大计算单元数
-- [`SetComputeUnitPrice`](https://github.com/anza-xyz/agave/blob/b7bbe36918f23d98e2e73502e3c4cba78d395ba9/sdk/src/compute_budget.rs#L52-L55) - 设置交易愿意支付的额外费用以提高其优先级
+- [SetComputeUnitLimit](https://github.com/anza-xyz/agave/blob/b7bbe36918f23d98e2e73502e3c4cba78d395ba9/sdk/src/compute_budget.rs#L47-L50) - 设置交易可以消耗的最大计算单元数
+- [SetComputeUnitPrice](https://github.com/anza-xyz/agave/blob/b7bbe36918f23d98e2e73502e3c4cba78d395ba9/sdk/src/compute_budget.rs#L52-L55) - 设置交易愿意支付的额外费用以提高其优先级
 
 如果没有提供`SetComputeUnitLimit`指令，则将使用[默认计算单元限制](#计算单元限制)。
 
@@ -183,7 +183,7 @@ let instruction = ComputeBudgetInstruction::set_compute_unit_price(1);
 
 #### Javascript
 
-`@solana/web3.js`库在[`ComputeBudgetProgram`](https://solana-labs.github.io/solana-web3.js/classes/ComputeBudgetProgram.html)类中包含了用于设置计算单元限制和计算单元价格的指令的函数：
+`@solana/web3.js`库在[ComputeBudgetProgram](https://solana-labs.github.io/solana-web3.js/classes/ComputeBudgetProgram.html)类中包含了用于设置计算单元限制和计算单元价格的指令的函数：
 
 ```js
 const instruction = ComputeBudgetProgram.setComputeUnitLimit({

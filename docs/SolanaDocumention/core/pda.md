@@ -66,9 +66,9 @@ PDA的推导需要3个输入。
 
 ### 查找程序地址
 要推导 PDA，我们可以使用 
-[`findProgramAddressSync`](https://github.com/solana-labs/solana-web3.js/blob/ca9da583a39cdf8fd874a2e03fccdc849e29de34/packages/library-legacy/src/publickey.ts#L212)
+[findProgramAddressSync](https://github.com/solana-labs/solana-web3.js/blob/ca9da583a39cdf8fd874a2e03fccdc849e29de34/packages/library-legacy/src/publickey.ts#L212)
 的方法。 
-[`@solana/web3.js`](https://www.npmjs.com/package/@solana/web3.js)
+[@solana/web3.js](https://www.npmjs.com/package/@solana/web3.js)
 在其他编程语言（例如
 [Rust](https://github.com/solana-labs/solana/blob/27eff8408b7223bb3c4ab70523f8a8dca3ca6645/sdk/program/src/pubkey.rs#L484)), 
 中也有此函数的等效项，但在本节中，我们将介绍使用 Javascript 的示例。

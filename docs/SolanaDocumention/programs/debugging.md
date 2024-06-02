@@ -33,9 +33,9 @@ export RUST_LOG=solana_runtime::system_instruction_processor=trace,solana_runtim
 - SBF 加载器可能无法解析程序，这不应该发生，因为加载器已经 _finalized_ 程序的账户数据。
   - `InstructionError::InvalidAccountData` 将作为事务错误的一部分返回。
 - SBF 加载器可能无法设置程序的执行环境
-  - `InstructionError::Custom(0x0b9f_0001)` 将作为事务错误的一部分返回。“0x0b9f_0001” 是 [`VirtualMachineCreationFailed`](https://github.com/solana-labs/solana/blob/bc7133d7526a041d1aaee807b80922baa89b6f90/programs/bpf_loader/src/lib.rs#L44) 的十六进制表示。
+  - `InstructionError::Custom(0x0b9f_0001)` 将作为事务错误的一部分返回。“0x0b9f_0001” 是 [VirtualMachineCreationFailed](https://github.com/solana-labs/solana/blob/bc7133d7526a041d1aaee807b80922baa89b6f90/programs/bpf_loader/src/lib.rs#L44) 的十六进制表示。
 - SBF 加载器可能在程序执行期间检测到致命错误（例如恐慌、内存违规、系统调用错误等）
-  - `InstructionError::Custom(0x0b9f_0002)` 将作为事务错误的一部分返回。“0x0b9f_0002” 是 [`VirtualMachineFailedToRunProgram`](https://github.com/solana-labs/solana/blob/bc7133d7526a041d1aaee807b80922baa89b6f90/programs/bpf_loader/src/lib.rs#L46) 的十六进制表示。
+  - `InstructionError::Custom(0x0b9f_0002)` 将作为事务错误的一部分返回。“0x0b9f_0002” 是 [VirtualMachineFailedToRunProgram](https://github.com/solana-labs/solana/blob/bc7133d7526a041d1aaee807b80922baa89b6f90/programs/bpf_loader/src/lib.rs#L46) 的十六进制表示。
 - 程序本身可能返回错误
   - `InstructionError::Custom(<用户定义的值>)` 将返回。用户定义的值不得与任何内置的[运行时程序错误冲突](https://github.com/solana-labs/solana/blob/bc7133d7526a041d1aaee807b80922baa89b6f90/sdk/program/src/program_error.rs#L87)。程序通常使用枚举类型来定义错误代码，从零开始，以便它们不会冲突。
 

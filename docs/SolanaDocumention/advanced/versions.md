@@ -27,7 +27,7 @@ Solana 运行时支持两种交易版本：
 
 ### 使用 web3.js
 
-使用 [`@solana/web3.js`](https://solana-labs.github.io/solana-web3.js/) 库, 可以检索最近的块或获取指定的交易：
+使用 [@solana/web3.js](https://solana-labs.github.io/solana-web3.js/) 库, 可以检索最近的块或获取指定的交易：
 
 ```js
 // connect to the `devnet` cluster and get the current `slot`
