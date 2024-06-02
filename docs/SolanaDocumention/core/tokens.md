@@ -19,7 +19,7 @@
 - [代币账户](https://solana.com/docs/core/tokens#token-account)跟踪特定地址拥有特定类型代币（铸币账户）的单位数量的个人所有权。
 
 
-：：：tips INFO
+:::tip INFO
 代币程序目前有两个版本。原始[代币程序](https://github.com/solana-labs/solana-program-library/tree/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program)和[代币扩展程序](https://github.com/solana-labs/solana-program-library/tree/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program-2022)（Token2022）。代币扩展程序的功能与原始代币程序相同，但具有附加功能和改进。代币扩展程序是用于创建新代币（铸币账户）的推荐版本。
 :::
 
@@ -145,7 +145,7 @@ pub struct Account {
 
 ![Account Relationship](https://solana-developer-content.vercel.app/assets/docs/core/tokens/token-account-relationship.svg)
 
-:::tips INFO
+:::tip INFO
 请注意，每个代币账户的数据都包含一个`owner`字段，用于识别谁对该特定代币账户拥有权限。这与 AccountInfo 中指定的程序所有者是分开的，[AccountInfo](https://solana.com/docs/core/accounts#accountinfo)是所有代币帐户的代币程序。
 :::
 
@@ -221,7 +221,7 @@ spl-token --help
 或者，你可以使用以下命令在本地安装 spl-token CLI。这需要首先
 [安装 Rust](https://rustup.rs/)。
 
-:::tips INFO
+:::tip INFO
 在以下各节中，运行 CLI 命令时显示的帐户地址将与下面显示的示例输出不同。请使用 Playground 终端中显示的地址进行操作。例如，输出的地址 `create-token`是 Playground 钱包设置为铸币机构的铸币帐户。
 :::
 
@@ -446,7 +446,7 @@ Signature: 5y6HVwV8V2hHGLTVmTmdySRiEUCZnWmkasAvJ7J6m7JR46obbGKCBqUFgLpZu5zQGwM4X
 
 代币扩展计划允许将其他可自定义的元数据（例如名称、符号、图像链接）直接存储在 Mint 帐户上。
 
-:::tips INFO
+:::tip INFO
 要使用 Token Extensions CLI 标志，请确保您已本地安装 CLI，版本 3.4.0 或更高版本：
 `cargo install --version 3.4.0 spl-token-cli`
 :::

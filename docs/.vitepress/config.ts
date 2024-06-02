@@ -50,6 +50,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "程序", link: "programs" },
         { text: "程序派生地址", link: "pda" },
         { text: "跨程序调用", link: "cpl" },
+        { text: "Solana链上代币", link: "tokens" },
         { text: "群集和公共 RPC 端点", link: "clusters" },
       ],
     },
