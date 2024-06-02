@@ -4,7 +4,6 @@
 
 > 文件系统钱包是存储 SOL 代币最不安全的方法。不建议在文件系统钱包中存储大量代币。
 
-
 ## 开始之前
 
 确保您[已安装Solana命令行工具](https://docs.solanalabs.com/cli/install)
@@ -18,7 +17,7 @@ mkdir ~/my-solana-wallet
 solana-keygen new --outfile ~/my-solana-wallet/my-keypair.json
 ```
 
-这个文件包含了您的未加密的密钥对。实际上，即便您指定了密码，该密码也适用于恢复助记词，而不是文件本身。不要与任何人分享这个文件。任何能够访问此文件的人都能访问发送到其公钥的代币。相反，您应该仅分享其的公钥。要显示公钥，请运行：
+这个文件包含了您的**未加密**的密钥对。实际上，即便您指定了密码，该密码也适用于恢复助记词，而不是文件本身。不要与任何人分享这个文件。任何能够访问此文件的人都能访问发送到其公钥的代币。相反，您应该仅分享其的公钥。要显示公钥，请运行：
 
 ```
 solana-keygen pubkey ~/my-solana-wallet/my-keypair.json
