@@ -89,7 +89,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         },
         {
           text: "质押",
-          link: "staking",
+          link: "economics/staking/staking",
           collapsed: true,
           items: [
             { text: "质押编程", link: "economics/staking/stake-programming" },
@@ -200,6 +200,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
               text: "命令示例",
               collapsed: false,
               items: [
+                {
+                  text: "连接到集群",
+                  link: "cli/examples/choose-a-cluster",
+                },
                 {
                   text: "质押",
                   link: "cli/examples/delegate-staking",
