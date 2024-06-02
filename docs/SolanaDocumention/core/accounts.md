@@ -40,10 +40,9 @@
 
 作为Solana账户模型的关键部分，Solana 上的每个账户都有一个指定的“所有者”，特别是一个程序。只有被指定为账户所有者的程序才能修改账户上存储的数据或扣除lamport余额。需要注意的是，虽然只有所有者可以扣除余额，但任何人都可以增加余额。
 
-```
-INFO
+:::tip INFO
 要在链上存储数据，必须将一定数量的SOL转移到一个账户。转移的金额与帐户中存储的数据大小成正比。这个概念通常被称为“租金”。但是，您可以将“租金”视为“押金”，因为当帐户关闭时，分配给帐户的SOL可以完全恢复。
-```
+:::
 
 ## 本机程序
 Solana包含少量原生程序，这些程序是验证器实现的一部分，并为网络提供各种核心功能。您可以在[此处](https://docs.solanalabs.com/runtime/programs)找到本机程序的完整列表。
@@ -64,10 +63,9 @@ New Account Creation: Only the System Program can create new accounts.
 
 <center>系统帐户</center>
 
-```
-INFO
+:::tip INFO
 只有系统程序拥有的帐户才能用作交易费用支付方。
-```
+:::
 
 ### BPFLoader程序
 [BPF加载程序](https://github.com/solana-labs/solana/tree/27eff8408b7223bb3c4ab70523f8a8dca3ca6645/programs/bpf_loader/src)是被指定为网络上所有其他程序（不包括本机程序）的“所有者”的程序。它负责部署、升级和执行自定义程序。
@@ -96,10 +94,9 @@ Sysvar帐户是位于预定义地址的特殊帐户，用于提供对集群状�
 ![Program Account](https://solana-developer-content.vercel.app/assets/docs/core/accounts/program-account-simple.svg)
 <center>程序帐户</center>
 
-```
-INFO 
+:::tip INFO
 “程序帐户”的地址通常称为“程序 ID”，用于调用程序。
-```
+:::
 
 ## 数据帐户
 Solana程序是“无状态的”，这意味着程序帐户仅包含程序的可执行字节码。若要存储和修改其他数据，必须创建新帐户。这些帐户通常称为“数据帐户”。
