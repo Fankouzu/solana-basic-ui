@@ -1,3 +1,9 @@
+---
+next:
+    text: 术语
+    link: SolanaDocumention/terminology
+---
+
 # Solana 文档
 
 Solana 是一个为广泛应用而设计的区块链平台。它是一个高效能的网络，适用于多种场景，包括金融、非同质化代币（NFT）、支付和游戏等。Solana 作为一个全球统一的状态机运行，它是开放的、可互操作的，并且具有去中心化特性。

@@ -1,4 +1,8 @@
-
+---
+next:
+    text: 什么是验证器
+    link: SolanaValidatorDocumentation/what-is-a-validator
+---
 # Solana 验证器文档
 
 Solana 是专为大规模采用而构建的区块链。它是一个高性能网络，可用于各种用例，包括金融、NFT、支付和游戏。Solana 作为单一全球状态机运行，并且开放、可互操作且去中心化。
