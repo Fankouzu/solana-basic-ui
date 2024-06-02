@@ -205,6 +205,21 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
             },
           ],
         },
+        {
+          text: "架构",
+          collapsed: false,
+          items: [
+            {
+              text: "共识",
+              collapsed: false,
+              base: "/SolanaValidatorDocumentation/consensus/",
+              items: [
+                { text: "Solana承诺状态", link: "commitments" },
+                { text: "分叉生成", link: "fork-generation" },
+              ],
+            },
+          ],
+        },
       ],
     },
   ];
@@ -217,7 +232,7 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
     {
       text: "Token2022",
       collapsed: false,
-      base:"/SolanaProgramLibrary/token-2022/",
+      base: "/SolanaProgramLibrary/token-2022/",
       items: [
         { text: "Token2022程序", link: "token-2022" },
         { text: "项目状态", link: "status" },
