@@ -4,3 +4,4 @@ dist
 cache
 .DS_Store
 package-lock.json
+.idea
