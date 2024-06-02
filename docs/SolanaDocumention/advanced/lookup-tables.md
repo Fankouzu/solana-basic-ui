@@ -1,4 +1,4 @@
-# **地址查找表**
+# 地址查找表
 
 地址查找表通常称为 “查找表” 或简称 “ALT”，允许开发人员创建相关地址的集合，以便在单个交易中有效地加载更多地址。
 
@@ -41,9 +41,9 @@ console.log("lookup table address:", lookupTableAddress.toBase58());
 // 在交易中发送 `lookupTableInst` 指令
 ```
 
-> 小贴士
->
-> 注意：地址查找表可以使用 v0 或 `legacy` 交易创建。但在使用 v0 版本交易时，Solana 运行时只能检索和处理查找表中的其他地址。
+::: tip INFO
+注意：地址查找表可以使用 v0 或 `legacy` 交易创建。但在使用 v0 版本交易时，Solana 运行时只能检索和处理查找表中的其他地址。
+:::
 
 ## 将地址添加到查找表
 
@@ -66,11 +66,10 @@ const extendInstruction = web3.AddressLookupTableProgram.extendLookupTable({
 // 将 `addresses` 列表插入到地址为 `lookupTableAddress` 的查找表中
 ```
 
-> 小贴士
->
-> 注意：由于与 `legacy` 交易具有相同的内存限制，用于扩展地址查找表的交易也有每次可添加的地址数量的限制。
->
-> 因此，需要使用多个交易来扩展具有更多地址（~20）的任何表，这些地址可以适应单个交易的内存限制。
+::: tip INFO
+注意：由于与 `legacy` 交易具有相同的内存限制，用于扩展地址查找表的交易也有每次可添加的地址数量的限制。
+因此，需要使用多个交易来扩展具有更多地址（~20）的任何表，这些地址可以适应单个交易的内存限制。
+:::
 
 将这些地址插入表中并存储在链上，就能在交易中使用地址查找表。在交易中最多使用 256 个地址。
 
@@ -108,9 +107,9 @@ for (let i = 0; i < lookupTableAccount.state.addresses.length; i++) {
 
 就像 `legacy` 交易一样，创建在链上执行的所有交易指令。然后，将这些指令数组提供给 `v0` 交易中使用的消息。
 
-> 小贴士
->
+::: tip INFO
 > 注意：`v0` 交易的指令的构造方法就是构造指令的常见方法和函数, 涉及地址查找表的指令无需更改。
+:::
 
 ```js
 // 假设：
@@ -139,9 +138,9 @@ console.log(
 );
 ```
 
-> 小贴士
->
+::: tip INFO
 > 注意：将 `VersionedTransaction` 发送到集群时，必须在调用 `sendAndConfirmTransaction` 方法之前对其进行签名。传递签名者数组（和 `legacy` 交易一样）将触发错误！
+::: 
 
 ## 更多资源
 
