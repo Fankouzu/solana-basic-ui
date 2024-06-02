@@ -4,17 +4,17 @@ function nav(): DefaultTheme.NavItem[] {
   return [
     {
       text: "Solana中文文档",
-      link: "/SolanaDocumention/index",
+      link: "/SolanaDocumention/home",
       activeMatch: "/SolanaDocumention/",
     },
     {
       text: "Solana验证器文档",
-      link: "/SolanaValidatorDocumentation/index",
+      link: "/SolanaValidatorDocumentation/home",
       activeMatch: "/SolanaValidatorDocumentation/",
     },
     {
       text: "Solana程序库",
-      link: "/SolanaProgramLibrary/index",
+      link: "/SolanaProgramLibrary/home",
       activeMatch: "/SolanaProgramLibrary/",
     },
   ];
@@ -25,7 +25,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
     {
       text: "Solana文档",
       base: "/SolanaDocumention/",
-      link: "index",
+      link: "home",
       collapsed: false,
       items: [{ text: "术语", link: "terminology" }],
     },
@@ -50,6 +50,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "程序", link: "programs" },
         { text: "程序派生地址", link: "pda" },
         { text: "跨程序调用", link: "cpl" },
+        { text: "Solana链上代币", link: "tokens" },
         { text: "群集和公共 RPC 端点", link: "clusters" },
       ],
     },
@@ -79,7 +80,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       text: "Solana 经济",
       collapsed: false,
       base: "/SolanaDocumention/economics/",
-      link: "index",
+      link: "economics",
       items: [
         {
           text: "通胀",
@@ -96,7 +97,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         {
           text: "质押",
           base: "/SolanaDocumention/economics/staking/",
-          link: "index",
+          link: "staking",
           collapsed: true,
           items: [
             { text: "质押编程", link: "stake-programming" },
@@ -130,7 +131,7 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
       items: [
         {
           text: "首页",
-          link: "index",
+          link: "home",
         },
         {
           text: "介绍",
@@ -178,7 +179,7 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
               items: [
                 {
                   text: "概述",
-                  link: "cli/wallets/index",
+                  link: "cli/wallets/wallets",
                 },
                 {
                   text: "硬件钱包",
@@ -186,7 +187,7 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   items: [
                     {
                       text: "在Solana CLI中使用",
-                      link: "cli/wallets/hardware/index",
+                      link: "cli/wallets/hardware/hardware",
                     },
                   ],
                 },
@@ -211,18 +212,19 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
 
 function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
   return [
-    { text: "介绍", link: "index" },
+    { text: "介绍", link: "home" },
     { text: "Token程序", link: "token" },
     {
       text: "Token2022",
       collapsed: false,
+      base:"/SolanaProgramLibrary/token-2022/",
       items: [
-        { text: "Token2022程序", link: "token-2022/index" },
-        { text: "项目状态", link: "token-2022/status" },
-        { text: "扩展指南", link: "token-2022/extensions" },
-        { text: "钱包指南", link: "token-2022/wallet" },
-        { text: "链上程序指南", link: "token-2022/onchain" },
-        { text: "幻灯片演示", link: "token-2022/presentation" },
+        { text: "Token2022程序", link: "token-2022" },
+        { text: "项目状态", link: "status" },
+        { text: "扩展指南", link: "extensions" },
+        { text: "钱包指南", link: "wallet" },
+        { text: "链上程序指南", link: "onchain" },
+        { text: "幻灯片演示", link: "presentation" },
       ],
     },
     { text: "Token 兑换程序", link: "token-swap" },

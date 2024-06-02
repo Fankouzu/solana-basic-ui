@@ -378,5 +378,5 @@ SWQoS允许[交易](https://solana.com/zh/developers/guides/advanced/stake-weigh
 
 
 ## 预热期
-在[质押]()被委派后若干[周期](#周期)，期间质押逐渐生效。在此期间，质押被认为是“正在激活”。
+在[质押](#质押)被委派后若干[周期](#周期)，期间质押逐渐生效。在此期间，质押被认为是“正在激活”。
 更多信息请参见：[质押预热和冷却](https://docs.solanalabs.com/consensus/stake-delegation-and-rewards#stake-warmup-cooldown-withdrawal)。
