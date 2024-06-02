@@ -71,7 +71,7 @@ console.log(solanaWeb3);
 有两种方法可以获得密钥对：
 
 1. 生成一个新的密钥对
-2. 使用秘密密钥获取密钥对
+2. 使用私钥获取密钥对
 
 你可以通过以下方式获得一个新的密钥对：
 
@@ -83,7 +83,7 @@ let keypair = Keypair.generate();
 
 这将为用户生成一个全新的密钥对，以便在你的应用中进行存储和使用。
 
-你可以允许用户通过文本框输入秘密密钥，并使用 `Keypair.fromSecretKey(secretKey)` 获取密钥对。
+你可以允许用户通过文本框输入私钥，并使用 `Keypair.fromSecretKey(secretKey)` 获取密钥对。
 
 ```js
 const { Keypair } = require("@solana/web3.js");
