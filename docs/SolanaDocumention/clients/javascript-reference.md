@@ -467,7 +467,7 @@ pub struct Fee {
 }
 ```
 
-使用web3:
+使用web3js:
 
 ```js
 import BN from "bn.js";
@@ -509,7 +509,7 @@ export class AccountType extends Enum {}
 
 [源文档](https://solana-labs.github.io/solana-web3.js/classes/NonceAccount.html)
 
-如果交易的 `recentBlockhash` 字段太旧，通常会被拒绝。为了提供某些托管服务，使用了 NonceAccount Nonce 账户。使用 Nonce 账户在链上捕获的 `recentBlockhash` 的交易只要 Nonce 账户不被推进就不会过期。
+如果交易的 `recentBlockhash` 字段太旧，通常会被拒绝。为了提供某些托管服务，使用了 NonceAccount Nonce账户。使用 Nonce 账户在链上捕获的 `recentBlockhash` 的交易只要 Nonce 账户不被推进就不会过期。
 
 你可以先创建一个普通账户，然后使用 `SystemProgram` 将其变为 Nonce 账户来创建一个 nonce 账户。
 
@@ -766,11 +766,11 @@ Authorized授权者是一个对象，用于在 Solana 内部创建一个授权�
 
 你可以在 [质押程序](https://solana.com/zh/docs/clients/javascript#stakeprogram) 下找到更多 `授权者`对象的用法。
 
-### Lockup
+### 锁定
 
 [源文档](https://solana-labs.github.io/solana-web3.js/classes/Lockup.html)
 
-Lockup 与 [StakeProgram](https://solana.com/zh/docs/clients/javascriptstakeprogram) 一起使用来创建一个账户。Lockup 用于确定质押将被锁定或无法提取的时间。如果 epoch 和 Unix 时间戳都设置为 0，则该账户的锁定将被禁用。
+Lockup锁定 与 [StakeProgram](https://solana.com/zh/docs/clients/javascriptstakeprogram) 一起使用来创建一个账户。用于确定质押将被锁定或无法提取的时间。如果 epoch 和 Unix 时间戳都设置为 0，则该账户的锁定将被禁用。
 
 #### 示例用法
 
