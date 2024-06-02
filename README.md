@@ -7,7 +7,7 @@
 <a href="https://github.com/Fankouzu/solana-basic-ui/graphs/contributors"><img alt="GitHub contributors" src="https://img.shields.io/github/contributors/Fankouzu/solana-basic-ui?color=2b9348"></a>
 <a href="https://github.com/Fankouzu/solana-basic-ui/blob/master/LICENSE"><img src="https://img.shields.io/github/license/Fankouzu/solana-basic-ui?color=2b9348" alt="License Badge"/></a>
 
-此仓库的代码会部署在 [solana-basic.surge.sh](https://solana-basic.surge.sh/) 域名下，后面会挑选一个更合适的顶级域名。
+此仓库的代码会部署在 [solana-cn.com](https://solana-basic.surge.sh/) 域名下。
 
 ## 任务认领
 
@@ -24,7 +24,7 @@
 
 ## 开发
 
-此站点基于 [Vitepress](https://vitepress.dev/zh/) 构建，并部署在 [surge.sh](https://surge.sh)
+此站点基于 [Vitepress](https://vitepress.dev/zh/) 构建，并部署在 [vercel.com](https://vercel.com)
 
 ## 本地调试
 如下本地调试，请根据你的运行环境安装 [Node.js](https://nodejs.org)，并进行如下操作：
@@ -42,7 +42,11 @@ npm install
 ```
 npm run docs:dev
 ```
+
+![Alt](https://repobeats.axiom.co/api/embed/dee699aaf19f40a044b9f5fa987add4eb3b6ec23.svg "Repobeats analytics image")
+
+
 ## 贡献者
 <a href="https://github.com/fankouzu/solana-basic-ui/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=fankouzu/solana-basic-ui" />
+  <img src="https://contrib.rocks/image?repo=fankouzu/solana-basic-ui&anon=1" />
 </a>
