@@ -19,12 +19,9 @@
 - [代币账户](https://solana.com/docs/core/tokens#token-account)跟踪特定地址拥有特定类型代币（铸币账户）的单位数量的个人所有权。
 
 
-> 代币程序目前有两个版本。
-> 原始[代币程序](https://github.com/solana-labs/solana-program-library/tree/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program)
-> 和[代币扩展程序](https://github.com/solana-labs/solana-program-library/tree/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program-2022)
-> （Token2022）。
-> 代币扩展程序的功能与原始代币程序相同，但具有附加功能和改进。
-> 代币扩展程序是用于创建新代币（铸币账户）的推荐版本。
+：：：tips INFO
+代币程序目前有两个版本。原始[代币程序](https://github.com/solana-labs/solana-program-library/tree/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program)和[代币扩展程序](https://github.com/solana-labs/solana-program-library/tree/b1c44c171bc95e6ee74af12365cb9cbab68be76c/token/program-2022)（Token2022）。代币扩展程序的功能与原始代币程序相同，但具有附加功能和改进。代币扩展程序是用于创建新代币（铸币账户）的推荐版本。
+:::
 
 ## 要点
 
@@ -144,17 +141,13 @@ pub struct Account {
 }
 ```
 
-为了让钱包拥有某个代币的单位数量，它需要为特定类型的代币（铸币）创建一个代币账户，
-将钱包指定为代币账户的所有者。
-一个钱包可以为同一类型的代币创建多个代币账户，
-但每个代币账户只能由一个钱包拥有，并持有一种代币的数量。
+为了让钱包拥有某个代币的单位数量，它需要为特定类型的代币（铸币）创建一个代币账户，将钱包指定为代币账户的所有者。一个钱包可以为同一类型的代币创建多个代币账户，但每个代币账户只能由一个钱包拥有，并持有一种代币的数量。
 
 ![Account Relationship](https://solana-developer-content.vercel.app/assets/docs/core/tokens/token-account-relationship.svg)
 
-> 请注意，每个代币账户的数据都包含一个owner字段，
-> 用于识别谁对该特定代币账户拥有权限。
-> 这与 AccountInfo 中指定的程序所有者是分开的，[AccountInfo](https://solana.com/docs/core/accounts#accountinfo)
-> 是所有代币帐户的代币程序。
+:::tips INFO
+请注意，每个代币账户的数据都包含一个`owner`字段，用于识别谁对该特定代币账户拥有权限。这与 AccountInfo 中指定的程序所有者是分开的，[AccountInfo](https://solana.com/docs/core/accounts#accountinfo)是所有代币帐户的代币程序。
+:::
 
 ### 关联代币账户
 
@@ -184,9 +177,7 @@ const associatedTokenAccountAddress = getAssociatedTokenAddressSync(
 );
 ```
 
-具体而言，关联代币账户的地址是使用以下输入派生的。下面是一个
-[Solana Playground](https://beta.solpg.io/656a31d0fb53fa325bfd0c42)
-示例，它生成的地址与上一个示例相同。
+具体而言，关联代币账户的地址是使用以下输入派生的。下面是一个[Solana Playground](https://beta.solpg.io/656a31d0fb53fa325bfd0c42)示例，它生成的地址与上一个示例相同。
 
 ```ts
 import { PublicKey } from "@solana/web3.js";
@@ -230,9 +221,9 @@ spl-token --help
 或者，你可以使用以下命令在本地安装 spl-token CLI。这需要首先
 [安装 Rust](https://rustup.rs/)。
 
-> 在以下各节中，运行 CLI 命令时显示的帐户地址将与下面显示的示例输出不同。
-> 请使用 Playground 终端中显示的地址进行操作。
-> 例如，输出的地址 `create-token`是 Playground 钱包设置为铸币机构的铸币帐户。
+:::tips INFO
+在以下各节中，运行 CLI 命令时显示的帐户地址将与下面显示的示例输出不同。请使用 Playground 终端中显示的地址进行操作。例如，输出的地址 `create-token`是 Playground 钱包设置为铸币机构的铸币帐户。
+:::
 
 ###  创建新代币
 
@@ -291,19 +282,19 @@ spl-token create-account [OPTIONS] <TOKEN_ADDRESS>
 
 例如，在 Solana Playground 终端中运行以下命令：
 
-```sh /99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg/
+```sh
 spl-token create-account 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg
 ```
+
 返回以下输出：
 
 - `AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9`  是为保存 `create-account`命令中指定的代币单位而创建代币帐户的地址。
 
-```console filename="Terminal Output" /AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9/
+```console
 Creating account AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9
 
 Signature: 2BtrynuCLX9CNofFiaw6Yzbx6hit66pup9Sk7aFjwU2NEbFz7NCHD9w9sWhrCfEd73XveAGK1DxFpJoQZPXU9tS1
 ```
-
 
 默认情况下，该 `create-account`命令会创建一个[关联代币帐户](https://solana.com/docs/core/tokens#associated-token-account)，
 并将你的钱包地址作为代币帐户所有者。
@@ -316,7 +307,7 @@ spl-token create-account --owner <OWNER_ADDRESS> <TOKEN_ADDRESS>
 
 例如，运行以下命令：
 
-```sh /2i3KvjDCZWxBsqcxBHpdEaZYQwQSYE6LXUMx5VjY5XrR/
+```sh
 spl-token create-account --owner 2i3KvjDCZWxBsqcxBHpdEaZYQwQSYE6LXUMx5VjY5XrR 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg
 ```
 
@@ -329,7 +320,7 @@ spl-token create-account --owner 2i3KvjDCZWxBsqcxBHpdEaZYQwQSYE6LXUMx5VjY5XrR 99
   (`2i3KvjDCZWxBsqcxBHpdEaZYQwQSYE6LXUMx5VjY5XrR`). This is useful when you need
   to create a token account for another user.
 
-```console filename="Terminal Output" /Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt/
+```sh
 Creating account Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt
 
 Signature: 44vqKdfzspT592REDPY4goaRJH3uJ3Ce13G4BCuUHg35dVUbHuGTHvqn4ZjYF9BGe9QrjMfe9GmuLkQhSZCBQuEt
@@ -377,13 +368,11 @@ spl-token mint 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg 100
 
 返回以下输出：
 
-
-
 - `99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg` 是铸造代币的铸币账户的地址（增加总供应量）。
 
 - `AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9`是你的钱包代币账户的地址，代币单位正在被铸造到（增加金额）。
 
-```console filename="Terminal Output" /99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg/ /AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9/
+```sh
 Minting 100 tokens
   Token: 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg
   Recipient: AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9
@@ -393,8 +382,7 @@ Signature: 2NJ1m7qCraPSBAVxbr2ssmWZmBU9Jc8pDtJAnyZsZJRcaYCYMqq1oRY1gqA4ddQno3g3x
 
 要将代币铸造到其他代币账户，请指定预期收件人代币账户的地址。例如，运行以下命令：
 
-
-```sh /Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt/
+```sh
 spl-token mint 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg 100 -- Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt
 ```
 
@@ -406,7 +394,7 @@ spl-token mint 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg 100 -- Hmyk3FSw4cfsu
 - `Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt` is the address of the token
   account that units of the token are being minted to (increasing amount).
 
-```console filename="Terminal Output" /99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg/ /Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt/
+```sh
 Minting 100 tokens
   Token: 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg
   Recipient: Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt
@@ -414,11 +402,7 @@ Minting 100 tokens
 Signature: 3SQvNM3o9DsTiLwcEkSPT1Edr14RgE2wC54TEjonEP2swyVCp2jPWYWdD6RwXUGpvDNUkKWzVBZVFShn5yntxVd7
 ```
 
-在后台，创建代币的新单位需要调用代币程序上的 MintTo 指令。该指令必须由铸币厂当局签署。
-该指令将代币的新单位铸造到代币账户中，并增加铸币账户的总供应量。这是 
-[Solana Playground](https://beta.solpg.io/660cea45cffcf4b13384d012)
-上的一个 Javascript 示例。
-
+在后台，创建代币的新单位需要调用代币程序上的 MintTo 指令。该指令必须由铸币厂当局签署。该指令将代币的新单位铸造到代币账户中，并增加铸币账户的总供应量。这是 [Solana Playground](https://beta.solpg.io/660cea45cffcf4b13384d012)上的一个 Javascript 示例。
 
 ### 转移代币
 
@@ -442,7 +426,7 @@ spl-token transfer 99zqUzQGohamfYxyo8ykTEbi91iom3CLmwCA75FK5zTg 100 Hmyk3FSw4cfs
 
 - `Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt` 是要将代币转移到的代币账户的地址。
 
-```console filename="Terminal Output" /AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9/ /Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt/
+```sh
 Transfer 100 tokens
   Sender: AfB7uwBEsGtrrBqPTVqEgzWed5XdYfM1psPNLmf7EeX9
   Recipient: Hmyk3FSw4cfsuAes7sanp2oxSkE9ivaH6pMzDzbacqmt
@@ -462,14 +446,12 @@ Signature: 5y6HVwV8V2hHGLTVmTmdySRiEUCZnWmkasAvJ7J6m7JR46obbGKCBqUFgLpZu5zQGwM4X
 
 代币扩展计划允许将其他可自定义的元数据（例如名称、符号、图像链接）直接存储在 Mint 帐户上。
 
-<Callout>
-   To use the Token Extensions CLI flags, ensure you have a local installation of the CLI, version 3.4.0 or later:
-   
-   `cargo install --version 3.4.0 spl-token-cli`
-</Callout>
+:::tips INFO
+要使用 Token Extensions CLI 标志，请确保您已本地安装 CLI，版本 3.4.0 或更高版本：
+`cargo install --version 3.4.0 spl-token-cli`
+:::
 
 若要创建启用了元数据扩展的新代币，请使用以下命令：
-
 
 ```sh
 spl-token create-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
@@ -480,7 +462,7 @@ spl-token create-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
 
 - `BdhzpzhTD1MFqBiwNdrRy4jFo2FHFufw3n9e8sVjJczP`是在启用元数据扩展的情况下创建的新代币的地址。
 
-```console filename="Terminal Output" /BdhzpzhTD1MFqBiwNdrRy4jFo2FHFufw3n9e8sVjJczP/
+```sh
 Creating token BdhzpzhTD1MFqBiwNdrRy4jFo2FHFufw3n9e8sVjJczP under program TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb
 To initialize metadata inside the mint, please run `spl-token initialize-metadata BdhzpzhTD1MFqBiwNdrRy4jFo2FHFufw3n9e8sVjJczP <YOUR_TOKEN_NAME> <YOUR_TOKEN_SYMBOL> <YOUR_TOKEN_URI>`, and sign with the mint authority.
 
@@ -490,8 +472,7 @@ Decimals:  9
 Signature: 5iQofFeXdYhMi9uTzZghcq8stAaa6CY6saUwcdnELST13eNSifiuLbvR5DnRt311frkCTUh5oecj8YEvZSB3wfai
 ```
 
-创建启用了元数据扩展的新代币后，请使用以下命令初始化元数据。
-
+一旦创建启用了元数据扩展的新代币后，请使用以下命令初始化元数据。
 
 ```sh
 spl-token initialize-metadata <TOKEN_MINT_ADDRESS> <YOUR_TOKEN_NAME>
@@ -504,7 +485,7 @@ spl-token initialize-metadata <TOKEN_MINT_ADDRESS> <YOUR_TOKEN_NAME>
 
 例如，运行以下命令会将额外的元数据直接存储在指定的铸币帐户上：
 
-```sh /BdhzpzhTD1MFqBiwNdrRy4jFo2FHFufw3n9e8sVjJczP/
+```sh
 spl-token initialize-metadata BdhzpzhTD1MFqBiwNdrRy4jFo2FHFufw3n9e8sVjJczP "TokenName" "TokenSymbol" "https://raw.githubusercontent.com/solana-developers/opos-asset/main/assets/DeveloperPortal/metadata.json"
 ```
 然后，您可以在资源管理器中查找铸币帐户的地址以检查元数据。例如，这是在 
