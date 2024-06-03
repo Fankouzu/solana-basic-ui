@@ -6,10 +6,10 @@
 
 ## 入门
 
-要开始使用 Solana 命令行 （CLI） 工具，请执行以下操作：
+要开始使用 Solana 命令行（CLI）工具，请执行以下操作：
 
-- [安装Solana CLI工具套件](https://docs.solanalabs.com/cli/install)
-- [CLI工具介绍](https://docs.solanalabs.com/cli/intro)
-- [使用CLI创建钱包](https://docs.solanalabs.com/cli/wallets/)
-- [使用CLI来选择要连接的集群](https://docs.solanalabs.com/cli/examples/choose-a-cluster)
+- [安装 Solana CLI 工具套件](https://docs.solanalabs.com/cli/install)
+- [CLI 工具介绍](https://docs.solanalabs.com/cli/intro)
+- [使用 CLI 创建钱包](https://docs.solanalabs.com/cli/wallets/)
+- [使用 CLI 来选择要连接的集群](https://docs.solanalabs.com/cli/examples/choose-a-cluster)
 
