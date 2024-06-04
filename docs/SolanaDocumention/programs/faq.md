@@ -84,9 +84,10 @@ SBF堆栈帧占用从`0x200000000`开始的虚拟地址范围。
 
 ## 堆大小
 
-程序可以直接在C中或通过Rust的`alloc` API访问运行时堆。为了快速分配，使用了一个简单的32KB突增堆。堆不支持`free`或`realloc`，所以要明智地使用它。
+程序可以直接使用 C 语言或是通过 Rust 的 `alloc` API 访问运行时堆（runtime heap）。为了实现快速的内存分配，程序会使用一个简单的 32KB 的碰撞分配器（bump heap）。需要注意的是，该分配器不支持释放 (`free`) 或重新分配 (`realloc`) 内存，因此请谨慎使用。
 
-内部，程序可以访问从虚拟地址0x300000000开始的32KB内存区域，并可以根据程序的具体需求实现自定义堆。
+技术层面来讲，程序可以访问从虚拟地址 0x300000000 开始的 32KB 内存区域，并根据程序的特定需求实现自定义的堆分配器。
+
 
 - [Rust程序堆使用](/docs/programs/lang-rust.md#heap)
 - [C程序堆使用](/docs/programs/lang-c.md#heap)
@@ -146,6 +147,3 @@ SBF加载器将程序输入参数序列化为字节数组，然后传递给程�
 - 8字节无符号指令数据数量
 - x字节指令数据
 - 32字节程序ID
-
-Citations:
-[1] https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/1785762/b8060ac4-4af9-405b-9833-397a0e3ba766/faq.md
