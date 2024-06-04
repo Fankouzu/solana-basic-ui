@@ -24,7 +24,7 @@ sbf-sdk可能不在上述确切位置，但如果你按照[如何构建](#how-to
 
 首先设置环境：
 
-- 从https://rustup.rs安装最新的Rust稳定版
+- 从 https://rustup.rs 安装最新的Rust稳定版
 - 安装最新的[Solana命令行工具](https://docs.solanalabs.com/cli/install)
 
 然后使用make进行构建：
@@ -54,7 +54,7 @@ Solana使用[Criterion](https://github.com/Snaipe/Criterion)测试框架，每�
 extern uint64_t entrypoint(const uint8_t *input)
 ```
 
-这个入口点接受一个通用的字节数组，其中包含序列化的程序参数（程序ID、账户、指令数据等）。要反序列化参数，每个加载器都有自己的[辅助函数](#serialization)。
+这个入口点接受传入一个通用的字节数组参数，其中包含序列化的程序参数（程序ID、账户、指令数据等）。要反序列化参数，每个加载器都有自己的[辅助函数](#serialization)。
 
 ### 序列化
 
@@ -63,7 +63,7 @@ extern uint64_t entrypoint(const uint8_t *input)
 - [SBF Loader反序列化](https://github.com/solana-labs/solana/blob/d2ee9db2143859fa5dc26b15ee6da9c25cc0429c/sdk/sbf/c/inc/solana_sdk.h#L304)
 - [SBF Loader deprecated反序列化](https://github.com/solana-labs/solana/blob/8415c22b593f164020adc7afe782e8041d756ddf/sdk/sbf/c/inc/deserialize_deprecated.h#L25)
 
-一些程序可能希望自己进行反序列化，它们可以通过提供自己的[原始入口点](#program-entrypoint)实现。请注意，提供的反序列化函数会保留对程序允许修改的变量（lamports、账户数据）的序列化字节数组的引用。这样做的原因是返回时加载器会读取这些修改，以便提交。如果程序实现了自己的反序列化函数，则需要确保程序希望提交的任何修改都必须写回输入字节数组。
+一些程序可能希望自己进行反序列化，它们可以通过提供自己的[原始入口点](#program-entrypoint)实现。请注意，提供的反序列化函数会保留对程序允许修改的变量（lamports、账户数据）的序列化字节数组的引用。这样做的原因是返回时加载器会读取这些修改，以便于提交。如果程序实现了自己的反序列化函数，则需要确保程序希望提交的任何修改都必须写回输入字节数组。
 
 有关加载器如何序列化程序输入的详细信息，请参见[输入参数序列化](https://solana.com/docs/programs/faq#input-parameter-serialization)文档。
 
