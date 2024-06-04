@@ -2,39 +2,39 @@
 
 Solana 维护着几个不同用途的集群。
 
-在开始之前，请确保您 [已安装 Solana 命令行工具](https://docs.solanalabs.com/cli/install)。
+在开始之前，请确保您 [已安装了 Solana 命令行工具](https://docs.solanalabs.com/cli/install)。
 
-浏览器：
+区块链浏览器：
 
 - <http://explorer.solana.com/>
 - <http://solanabeach.io/>
 
-## Devnet（开发网）
+## 开发网
 
-- Devnet 是一个供任何人测试 Solana 的游乐场，无论是用户、代币持有者、应用开发者还是验证者。
-- 应用开发者应以 Devnet 为目标。
-- 潜在的验证者应首先以 Devnet 为目标。
-- Devnet 和 Mainnet Beta（主网测试版）之间的主要区别：
-  - Devnet 代币不是真实的
-  - Devnet 包含用于应用测试的空投代币水龙头
-  - Devnet 可能会进行账本重置
-  - Devnet 通常运行与 Mainnet Beta 相同的软件发布分支版本，但可能会运行比 Mainnet Beta 新的次要版本。
-- Devnet 的 Gossip 入口点：`entrypoint.devnet.solana.com:8001`
-- Devnet 的指标环境变量：
+- 开发网是一个供任何人测试 Solana 的场地，无论是用户、代币持有者、应用开发者还是验证者。
+- 应用开发者应以开发网为目标。
+- 潜在的验证者应首先以开发网为目标。
+- 开发网和主网Beta版之间的主要区别：
+  - 开发网代币不是真实的
+  - 开发网包含用于应用测试的空投代币水龙头
+  - 开发网的账本可能会重置
+  - 开发网通常运行与主网Beta版相同的软件版本，但可能会运行比主网Beta版更加新的小版本。
+- 开发网的 Gossip 入口点：`entrypoint.devnet.solana.com:8001`
+- 开发网的性能指标环境变量：
 
 ``` shell
 export SOLANA_METRICS_CONFIG="host=<https://metrics.solana.com:8086,db=devnet,u=scratch_writer,p=topsecret>"
 ```
 
-- Devnet 的 RPC URL：`https://api.devnet.solana.com`
+- 开发网的 RPC URL：`https://api.devnet.solana.com`
 
-`Solana` 命令行配置示例：
+### `Solana` 命令行配置示例：
 
 ``` shell
 solana config set --url https://api.devnet.solana.com
 ```
 
-`Solana` 验证者命令行示例：
+### `Solana` 验证者命令行示例：
 
 ``` shell
 $ solana-validator \
@@ -58,31 +58,31 @@ $ solana-validator \
     --limit-ledger-size
 ```
 
-这些 [`--known-validator`](https://docs.solanalabs.com/operations/guides/validator-start#known-validators) 由 Solana Labs 运营。
+这些 [`--known-validator`](https://docs.solanalabs.com/operations/guides/validator-start#known-validators) 由 Solana Labs 操作。
 
-## Testnet（测试网）
+## 测试网
 
-- Testnet 是 Solana 核心贡献者在实际集群上对最近发布的功能进行压力测试的地方，特别关注网络性能、稳定性和验证者行为。
-- Testnet 代币不是真实的
-- Testnet 可能会进行账本重置
-- Testnet 包含用于应用测试的空投代币水龙头
-- Testnet 通常运行比 Devnet 和 Mainnet Beta 更新的软件发布分支
-- Testnet 的 Gossip 入口点：entrypoint.testnet.solana.com:8001
-- Testnet 的指标环境变量：
+- 测试网是 Solana 核心贡献者在实际集群上对最新发布的功能进行压力测试的地方，特别关注网络性能、稳定性和验证者行为。
+- 测试网代币不是真实的
+- 测试网账本可能会重置
+- 测试网包含用于应用测试的空投代币水龙头
+- 测试网通常运行比开发网和主网Beta版更加新的版本
+- 测试网的 Gossip 入口点：entrypoint.testnet.solana.com:8001
+- 测试网的性能指标环境变量：
 
 ``` shell
 export SOLANA_METRICS_CONFIG="host=<https://metrics.solana.com:8086,db=tds,u=testnet_write,p=c4fa841aa918bf8274e3e2a44d77568d9861b3ea>"
 ```
 
-- Testnet 的 RPC URL：`https://api.testnet.solana.com`
+- 测试网 的 RPC URL：`https://api.testnet.solana.com`
 
-`Solana` 命令行配置示例：
+### `Solana` 命令行配置示例：
 
 ``` shell
 solana config set --url https://api.testnet.solana.com
 ```
 
-`Solana` 验证者命令行示例：
+### `Solana` 验证者命令行示例：
 
 ``` shell
 $ solana-validator \
@@ -105,27 +105,27 @@ $ solana-validator \
     --limit-ledger-size
 ```
 
-这些 `[--known-validator](https://docs.solanalabs.com/operations/guides/validator-start#known-validators)` 的身份为：
+这些[`--known-validator`s](https://docs.solanalabs.com/operations/guides/validator-start#known-validators)的身份是：
 
 - `5D1fNXzvv5NjV1ysLjirC4WY92RNsVH18vjmcszZd8on` - Solana Labs
 - `dDzy5SR3AXdYWVqbDEkVFdvSPCtS9ihF5kJkHCtXoFs` - MonkeDAO
 - `Ft5fbkqNa76vnsjYNwjDZUXoTWpP7VYm3mtsaQckQADN` - Certus One
 - `eoKpUABi59aT4rR9HGS3LcMecfut9x7zJyodWWP43YQ` - SerGo
 - `9QxCLckBiJc783jnMvXZubK4wH86Eqqvashtrwvcsgkv` - Algo|Stake
-  
-## Mainnet Beta（主网测试版）
+
+## 主网Beta版
 
 一个为 Solana 用户、构建者、验证者和代币持有者提供的无许可的持久集群。
 
-- 在 Mainnet Beta 上发行的代币是真实的 SOL
-- Mainnet Beta 的 Gossip 入口点：`entrypoint.mainnet-beta.solana.com:8001`
-- Mainnet Beta 的指标环境变量：
+- 在主网Beta版上发行的代币是真实的 SOL
+- 主网Beta版的 Gossip 入口点：`entrypoint.mainnet-beta.solana.com:8001`
+- 主网Beta版的性能指标环境变量：
 
 ```shell
 export SOLANA_METRICS_CONFIG="host=https://metrics.solana.com:8086,db=mainnet-beta,u=mainnet-beta_write,p=password"
 ```
 
-- Mainnet Beta 的 RPC URL：`https://api.mainnet-beta.solana.com`
+- 主网Beta版的 RPC URL：`https://api.mainnet-beta.solana.com`
 
 `Solana` 命令行配置示例：
 
@@ -157,3 +157,8 @@ $ solana-validator \
     --wal-recovery-mode skip_any_corrupted_record \
     --limit-ledger-size
 ```
+
+::: tip INFO
+以上四个 [`--known-validator`s](https://docs.solanalabs.com/operations/guides/validator-start#known-validators) 由 Solana Labs 运营
+:::
+
