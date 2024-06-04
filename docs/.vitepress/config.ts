@@ -141,6 +141,7 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
           text: "命令行CLI工具",
           collapsed: false,
           items: [
+            { text: "概述", link: "cli/cli" },
             {
               text: "命令行钱包",
               collapsed: false,
