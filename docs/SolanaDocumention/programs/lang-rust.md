@@ -6,7 +6,7 @@ Solana支持使用[Rust](https://www.rust-lang.org/)编程语言编写链上程�
 
 要快速开始Solana开发并构建你的第一个Rust程序，请查看这些详细的快速入门指南：
 
-- [使用浏览器构建和部署你的第一个Solana程序](/content/guides/getstarted/hello-world-in-your-browser.md)。无需安装。
+- [使用浏览器构建和部署你的第一个Solana程序](/content/guides/getstarted/hello-world-in-your-browser.md)。无需安装IDE。
 - [设置本地环境](/content/guides/getstarted/setup-local-development.md)并使用本地测试验证器。
 
 </Callout>
@@ -32,7 +32,7 @@ Solana Rust程序可能直接依赖于其他程序，以便在进行[跨程序�
 
 ## 项目依赖
 
-至少，Solana Rust程序必须引入[`solana-program`](https://crates.io/crates/solana-program) crate。
+所有的Solana Rust程序必须引入[`solana-program`](https://crates.io/crates/solana-program) crate。
 
 Solana SBF程序有一些[限制](#restrictions)，可能会阻止某些crate作为依赖项的引入或需要特殊处理。
 
@@ -46,10 +46,10 @@ Solana SBF程序有一些[限制](#restrictions)，可能会阻止某些crate作
 
 首先设置环境：
 
-- 从https://rustup.rs/安装最新的Rust稳定版
+- 从 https://rustup.rs/ 安装最新的Rust稳定版本
 - 安装最新的[Solana命令行工具](https://docs.solanalabs.com/cli/install)
 
-可以使用普通的cargo build在主机上构建程序，用于单元测试：
+也可以使用普通的cargo build在主机上构建程序，用于单元测试：
 
 ```shell
 cargo build
