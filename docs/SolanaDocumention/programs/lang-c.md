@@ -98,7 +98,7 @@ C程序可以通过系统调用[`calloc`](https://github.com/solana-labs/solana/
 
 ## 日志记录
 
-运行时提供了两个系统调用，它们接受数据并将其记录到程序日志中。
+运行时提供了两个系统调用，它们可以接受数据并将其记录到程序日志中。
 
 - [`sol_log(const char*)`](https://github.com/solana-labs/solana/blob/d2ee9db2143859fa5dc26b15ee6da9c25cc0429c/sdk/sbf/c/inc/solana_sdk.h#L128)
 - [`sol_log_64(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t)`](https://github.com/solana-labs/solana/blob/d2ee9db2143859fa5dc26b15ee6da9c25cc0429c/sdk/sbf/c/inc/solana_sdk.h#L134)
