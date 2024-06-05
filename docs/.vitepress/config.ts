@@ -109,7 +109,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       items: [
         { text: "概述", link: "programs/overview" },
         { text: "调试程序", link: "programs/debugging" },
-        // { text: "部署程序", link: "deploying" },
+        { text: "部署程序", link: "programs/deploying" },
         // { text: "程序示例", link: "examples" },
         // { text: "常见问题", link: "faq" },
         // { text: "使用C语言开发", link: "lang-c" },
