@@ -3,19 +3,24 @@ import { defineConfig, type DefaultTheme } from "vitepress";
 function nav(): DefaultTheme.NavItem[] {
   return [
     {
-      text: "Solana中文文档",
-      link: "/SolanaDocumention/home",
-      activeMatch: "/SolanaDocumention/",
-    },
-    {
-      text: "Solana验证器文档",
-      link: "/SolanaValidatorDocumentation/home",
-      activeMatch: "/SolanaValidatorDocumentation/",
-    },
-    {
-      text: "Solana程序库",
-      link: "/SolanaProgramLibrary/home",
-      activeMatch: "/SolanaProgramLibrary/",
+      text: "官方文档",
+      items: [
+        {
+          text: "Solana中文文档",
+          link: "/SolanaDocumention/home",
+          activeMatch: "/SolanaDocumention/",
+        },
+        {
+          text: "Solana验证器文档",
+          link: "/SolanaValidatorDocumentation/home",
+          activeMatch: "/SolanaValidatorDocumentation/",
+        },
+        {
+          text: "Solana程序库",
+          link: "/SolanaProgramLibrary/home",
+          activeMatch: "/SolanaProgramLibrary/",
+        },
+      ],
     },
   ];
 }
@@ -251,7 +256,7 @@ export default defineConfig({
 
   themeConfig: {
     nav: nav(),
-
+    logo: "/solanaLogoMark.svg",
     sidebar: {
       "/SolanaDocumention/": {
         base: "/SolanaDocumention/",
