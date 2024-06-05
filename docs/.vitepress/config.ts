@@ -186,6 +186,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   text: "质押",
                   link: "cli/examples/delegate-staking",
                 },
+                {
+                  text: "部署程序",
+                  link: "cli/examples/deploy-a-program",
+                },
               ],
             },
           ],
