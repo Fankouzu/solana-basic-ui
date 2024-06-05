@@ -8,7 +8,7 @@
 
 在Solana区块链上开发程序有一些固有的限制。以下是你可能会遇到的一些常见限制。
 
-详见[开发程序的限制](/docs/programs/limitations.md)
+详见[开发程序的限制](https://solana.com/docs/programs/limitations.md)
 
 ## Berkeley Packet Filter (BPF)
 
@@ -47,11 +47,11 @@ Solana SBF程序使用的虚拟地址内存映射是固定的，布局如下：
 
 ## `rand` Rust依赖导致编译失败
 
-详见[Rust项目依赖](/docs/programs/lang-rust.md#project-dependencies)
+详见[Rust项目依赖](https://solana.com/docs/programs/lang-rust.md#project-dependencies)
 
 ## Rust限制
 
-详见[Rust限制](/docs/programs/lang-rust.md#restrictions)
+详见[Rust限制](https://solana.com/docs/programs/lang-rust.md#restrictions)
 
 ## 堆栈
 
@@ -89,8 +89,8 @@ SBF堆栈帧占用从`0x200000000`开始的虚拟地址范围。
 技术层面来讲，程序可以访问从虚拟地址 0x300000000 开始的 32KB 内存区域，并根据程序的特定需求实现自定义的堆分配器。
 
 
-- [Rust程序堆使用](/docs/programs/lang-rust.md#heap)
-- [C程序堆使用](/docs/programs/lang-c.md#heap)
+- [Rust程序堆使用](https://solana.com/docs/programs/lang-rust.md#heap)
+- [C程序堆使用](https://solana.com/docs/programs/lang-c.md#heap)
 
 ## 加载器
 
@@ -105,8 +105,8 @@ SBF堆栈帧占用从`0x200000000`开始的虚拟地址范围。
 
 有关为特定加载器实现程序的语言特定信息，请参见：
 
-- [Rust程序入口点](/docs/programs/lang-rust.md#program-entrypoint)
-- [C程序入口点](/docs/programs/lang-c.md#program-entrypoint)
+- [Rust程序入口点](https://solana.com/docs/programs/lang-rust.md#program-entrypoint)
+- [C程序入口点](https://solana.com/docs/programs/lang-c.md#program-entrypoint)
 
 ### 部署
 
@@ -114,7 +114,7 @@ SBF程序部署是将BPF共享对象上传到程序账户的数据中并将账�
 
 当指令指向可执行的SBF程序时，加载器配置程序的执行环境，序列化程序的输入参数，调用程序的入口点，并报告遇到的任何错误。
 
-有关更多信息，请参见[部署程序](/docs/programs/deploying.md)。
+有关更多信息，请参见[部署程序](https://solana.com/docs/programs/deploying.md)。
 
 ### 输入参数序列化
 
@@ -122,8 +122,8 @@ SBF加载器将程序输入参数序列化为字节数组，然后传递给程�
 
 有关序列化的语言特定信息，请参见：
 
-- [Rust程序参数反序列化](/docs/programs/lang-rust.md#parameter-deserialization)
-- [C程序参数反序列化](/docs/programs/lang-c.md#parameter-deserialization)
+- [Rust程序参数反序列化](https://solana.com/docs/programs/lang-rust.md#parameter-deserialization)
+- [C程序参数反序列化](https://solana.com/docs/programs/lang-c.md#parameter-deserialization)
 
 最新的加载器按如下方式序列化程序输入参数（所有编码为小端）：
 
