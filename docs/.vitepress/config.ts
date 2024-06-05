@@ -194,6 +194,17 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
           text: "架构",
           collapsed: false,
           items: [
+            { text: "概述", link: "architecture" },
+            {
+              text: "集群",
+              collapsed: false,
+              items: [
+                { text: "概述", link: "clusters/clusters" },
+                { text: "Solana可用集群", link: "clusters/availiable" },
+                { text: "集群性能基准测试", link: "clusters/benchmark" },
+                { text: "集群性能指标", link: "clusters/metrics" },
+              ],
+            },
             {
               text: "共识",
               collapsed: false,
