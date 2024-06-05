@@ -141,6 +141,7 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
           text: "命令行CLI工具",
           collapsed: false,
           items: [
+            { text: "概述", link: "cli/cli" },
             {
               text: "命令行钱包",
               collapsed: false,
@@ -185,6 +186,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   text: "质押",
                   link: "cli/examples/delegate-staking",
                 },
+                {
+                  text: "部署程序",
+                  link: "cli/examples/deploy-a-program",
+                },
               ],
             },
           ],
@@ -193,6 +198,17 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
           text: "架构",
           collapsed: false,
           items: [
+            { text: "概述", link: "architecture" },
+            {
+              text: "集群",
+              collapsed: false,
+              items: [
+                { text: "概述", link: "clusters/clusters" },
+                { text: "Solana可用集群", link: "clusters/availiable" },
+                { text: "集群性能基准测试", link: "clusters/benchmark" },
+                { text: "集群性能指标", link: "clusters/metrics" },
+              ],
+            },
             {
               text: "共识",
               collapsed: false,
