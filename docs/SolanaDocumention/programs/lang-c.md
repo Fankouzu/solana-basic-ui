@@ -41,7 +41,7 @@ Solana使用[Criterion](https://github.com/Snaipe/Criterion)测试框架，每�
 
 ## 程序入口点
 
-程序导出一个已知的入口点符号，Solana运行时在调用程序时会查找并调用该符号。Solana支持多个版本的SBF加载器，入口点可能因版本而异。程序必须为相同的加载器编写和部署。有关更多详细信息，请参见[加载器FAQ部分](/docs/programs/faq.md#loaders)。
+程序导出一个已知的入口点符号，Solana运行时在调用程序时会查找并调用该符号。Solana支持多个版本的SBF加载器，入口点可能因版本而异。程序必须为相同的加载器编写和部署。有关更多详细信息，请参见[加载器FAQ部分](https://solana.com/docs/programs/faq.md#loaders)。
 
 目前有两个支持的加载器：
 [SBF Loader](https://github.com/solana-labs/solana/blob/7ddf10e602d2ed87a9e3737aa8c32f1db9f909d8/sdk/program/src/bpf_loader.rs#L17)
@@ -88,7 +88,7 @@ typedef struct {
 
 `SolAccountInfo`结构的成员是只读的，除了`lamports`和`data`。程序可以根据“运行时执行政策”修改这两个成员。当指令多次引用同一个账户时，数组中可能会有重复的`SolAccountInfo`条目，但它们都指向原始输入字节数组。程序应谨慎处理这些情况，以避免对同一缓冲区的重叠读/写。如果程序实现了自己的反序列化函数，应小心处理重复账户。
 
-`data`是指令正在处理的[指令数据](/docs/core/transactions.md#instruction)的通用字节数组。
+`data`是指令正在处理的[指令数据](https://solana.com/docs/core/transactions.md#instruction)的通用字节数组。
 
 `program_id`是当前执行程序的公钥。
 
@@ -103,7 +103,7 @@ C程序可以通过系统调用[`calloc`](https://github.com/solana-labs/solana/
 - [`sol_log(const char*)`](https://github.com/solana-labs/solana/blob/d2ee9db2143859fa5dc26b15ee6da9c25cc0429c/sdk/sbf/c/inc/solana_sdk.h#L128)
 - [`sol_log_64(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t)`](https://github.com/solana-labs/solana/blob/d2ee9db2143859fa5dc26b15ee6da9c25cc0429c/sdk/sbf/c/inc/solana_sdk.h#L134)
 
-[调试](/docs/programs/debugging.md#logging)部分有更多关于使用程序日志的信息。
+[调试](https://solana.com/docs/programs/debugging.md#logging)部分有更多关于使用程序日志的信息。
 
 ## 计算预算
 
@@ -111,7 +111,7 @@ C程序可以通过系统调用[`calloc`](https://github.com/solana-labs/solana/
 
 使用系统调用[`sol_log_compute_units()`](https://github.com/solana-labs/solana/blob/d3a3a7548c857f26ec2cb10e270da72d373020ec/sdk/sbf/c/inc/solana_sdk.h#L140)记录一条消息，包含程序在执行停止前可以消耗的剩余计算单元数。
 
-有关更多信息，请参见[计算预算](/docs/core/fees.md#compute-budget)文档。
+有关更多信息，请参见[计算预算](https://solana.com/docs/core/fees.md#compute-budget)文档。
 
 ## ELF转储
 
