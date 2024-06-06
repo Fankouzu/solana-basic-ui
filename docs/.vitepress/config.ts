@@ -22,9 +22,29 @@ function nav(): DefaultTheme.NavItem[] {
         },
       ],
     },
+    {
+      text: "社区教程",
+      items: [
+        {
+          text: "Solana Basic",
+          link: "/SolanaBasic/home",
+          activeMatch: "/SolanaBasic/",
+        },
+      ],
+    },
   ];
 }
 
+function sidebarSolanaBasic(): DefaultTheme.SidebarItem[] {
+  return [
+    { text: "首页", link: "home" },
+    { text: "客户端安装", link: "001" },
+    { text: "代币基础", link: "002" },
+    { text: "创建代币", link: "003" },
+    { text: "发送代币", link: "004" },
+    { text: "非同质化代币", link: "005" },
+  ];
+}
 function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
   return [
     {
@@ -269,6 +289,10 @@ export default defineConfig({
       "/SolanaProgramLibrary/": {
         base: "/SolanaProgramLibrary/",
         items: sidebarSolanaProgramLibrary(),
+      },
+      "/SolanaBasic/": {
+        base: "/SolanaBasic/",
+        items: sidebarSolanaBasic(),
       },
     },
     footer: {
