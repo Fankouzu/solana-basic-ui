@@ -1,14 +1,30 @@
 {
-  "private": true,
-  "type": "module",
+  "name": "solana-cn",
+  "version": "0.0.1",
+  "description": "由崔棉大师@MasterCui和捕鲸船社区小伙伴共建的Solana学习社区.",
   "scripts": {
-    "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs",
-    "deploy": "vitepress build docs && npx surge ./docs/.vitepress/dist solana-basic.surge.sh"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fankouzu/solana-basic-ui.git"
+  },
+  "author": "Master Cui <g@fankouzu>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fankouzu/solana-basic-ui/issues"
+  },
+  "dependencies": {
+    "next": "^13.0.6",
+    "nextra": "latest",
+    "nextra-theme-docs": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "surge": "^0.23.1",
-    "vitepress": "^1.2.2"
+    "@types/node": "18.11.10",
+    "typescript": "^4.9.3"
   }
 }
