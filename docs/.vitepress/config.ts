@@ -3,19 +3,24 @@ import { defineConfig, type DefaultTheme } from "vitepress";
 function nav(): DefaultTheme.NavItem[] {
   return [
     {
-      text: "Solana中文文档",
-      link: "/SolanaDocumention/home",
-      activeMatch: "/SolanaDocumention/",
-    },
-    {
-      text: "Solana验证器文档",
-      link: "/SolanaValidatorDocumentation/home",
-      activeMatch: "/SolanaValidatorDocumentation/",
-    },
-    {
-      text: "Solana程序库",
-      link: "/SolanaProgramLibrary/home",
-      activeMatch: "/SolanaProgramLibrary/",
+      text: "官方文档",
+      items: [
+        {
+          text: "Solana中文文档",
+          link: "/SolanaDocumention/home",
+          activeMatch: "/SolanaDocumention/",
+        },
+        {
+          text: "Solana验证器文档",
+          link: "/SolanaValidatorDocumentation/home",
+          activeMatch: "/SolanaValidatorDocumentation/",
+        },
+        {
+          text: "Solana程序库",
+          link: "/SolanaProgramLibrary/home",
+          activeMatch: "/SolanaProgramLibrary/",
+        },
+      ],
     },
   ];
 }
@@ -104,7 +109,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       items: [
         { text: "概述", link: "programs/overview" },
         { text: "调试程序", link: "programs/debugging" },
-        // { text: "部署程序", link: "deploying" },
+        { text: "部署程序", link: "programs/deploying" },
         // { text: "程序示例", link: "examples" },
         // { text: "常见问题", link: "faq" },
         // { text: "使用C语言开发", link: "lang-c" },
@@ -251,7 +256,7 @@ export default defineConfig({
 
   themeConfig: {
     nav: nav(),
-
+    logo: "/solanaLogoMark.svg",
     sidebar: {
       "/SolanaDocumention/": {
         base: "/SolanaDocumention/",
