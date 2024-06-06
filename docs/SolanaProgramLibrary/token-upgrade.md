@@ -1,8 +1,8 @@
 # 代币升级程序
 
-代币升级程序是一种无状态协议，用于永久性地将代币从一种铸币转换到另一种铸币。
+代币升级程序提供了一种无状态协议，用于将代币从一个铸币地址永久转换为另一个铸币地址。
 
-该程序提供了一种简易机制，用于销毁原始代币，并从受程序控制的托管账户中接收等量的新代币。这种机制确保了转换过程的安全与高效，同时维持了代币总量的一致性。
+该程序提供了一种简单的机制，用于烧毁原始代币并从由程序控制的托管账户中接收相同数量的新代币。
 
 ## 审计
 
@@ -11,19 +11,19 @@
 
 ## 背景
 
-Token-2022 包含了许多新功能，使铸币所有者能够定制其代币的行为。关于 Token-2022 及其扩展的完整信息，您可以在[文档](https://spl.solana.com/token-2022)中找到。
+Token-2022 包含许多新功能，供铸币地址所有者自定义其代币的行为。您可以在[文档](https://spl.solana.com/token-2022)中找到有关 Token-2022 及其扩展的完整信息。
 
-铸币所有者可能希望利用新功能来提升用户体验，但目前没有自动将 Token 转换至 Token-2022 的方法。
+铸币地址所有者可能希望为其用户利用这些新功能，但无法自动将代币从 Token 转换为 Token-2022。
 
-代币升级程序定义了一个托管权限，这是一个从两个地址（原铸币和新铸币）派生出的程序地址。任何由该托管权限拥有或被委派的新代币账户都可作为托管账户使用。
+代币升级程序定义了一个托管授权，这是由两个地址（原始铸币地址和新铸币地址）派生出的程序地址。任何由该托管授权拥有或委托的新代币账户都可以用作托管账户。
 
-持有原代币的用户需提供其原始代币账户、一个新代币账户以及托管账户。如果托管账户中的代币数量足够，协议将销毁原代币，并将相同数量的新代币转移至用户的新开账户。
+原始代币持有者提供他们的原始代币账户、新代币账户和托管账户。如果托管账户中有足够的代币，协议将烧毁原始代币并将相同数量的新代币转移到用户的新账户。
 
-程序会确保原铸币与新铸币的小数位数相同，若两者小数位数不同，则升级将失败。
+该程序确保两个铸币地址的小数位数相同，因此如果铸币地址的小数位数不同，升级将失败。
 
-该程序完全无状态且实现简单，所以铸币所有者可以添加额外功能进行定制。例如，如果他们希望在小数位数不同的铸币间进行升级，可以自定义如何按需求扩大或缩小转移的数量。
+该程序完全无状态且实现简单因此铸币地址所有者可以根据需要添加额外功能。例如，如果他们想在具有不同小数位数的铸币地址之间进行升级，可以定义如何按需缩放转移的数量。
 
-**注意**：代币升级程序同样支持在同一程序下，但不同铸币之间的代币交换。例如，铸币所有者可在两个 Token-2022 铸币之间提供升级。这对于铸币所有者想要为其铸币增添新功能时非常有用。
+**注意**：代币升级程序也可以交换属于同一程序但不同铸币地址的代币。例如，铸币地址所有者可以在两个 Token-2022 铸币地址之间提供升级。如果铸币地址所有者希望为其铸币地址添加新功能，这将非常有用。
 
 
 ## 源代码
@@ -36,31 +36,31 @@ Token-2022 包含了许多新功能，使铸币所有者能够定制其代币的
 
 ## 命令行工具
 
-`spl-token-upgrade` 命令行工具可用于管理代币升级。一旦你已经安装了[Rust](https://rustup.rs/)，运行以下命令：
+`spl-token-upgrade` 命令行工具可用于管理代币升级。如果你已经安装了[Rust](https://rustup.rs/)，运行以下命令：
 
 ```sh
 $ cargo install spl-token-upgrade-cli
 ```
 
-运行 `spl-token-upgrade --help` 来获取所有可用命令的完整描述。这将帮助你了解如何使用此工具执行各种与代币升级相关的操作。
+运行 `spl-token-upgrade --help` 获取可用命令的完整说明。
 
 ### 配置
 
-`spl-token-upgrade` 与 `solana` 命令行工具共享配置文件.
+`spl-token-upgrade` 配置与 `solana` 命令行工具共享。
 
 ## 代币升级流程
 
-本节将介绍铸币所有者及代币持有者如何将代币从Token标准升级到Token-2022标准的过程。
+本节描述了铸币地址所有者和代币持有者如何将代币从Token标准升级到Token-2022的过程。
 
 本指南还将使用`spl-token`命令行工具。更多详情，请参阅完整的[Token文档](https://spl.solana.com/token)。
 
 ### 准备工作
 
-一名铸币所有者拥有一枚与Token程序关联的铸币，其地址为`o1d5Jt8z8vszx4FJ2gNJ3FZH34cer9sbparg7GVt7qm`，他们希望`o1d`代币持有者能将其代币升级到与Token-2022标准相关联的`NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ`代币。
+一名铸币所有者拥有一枚与Token程序关联的铸币，其地址为`o1d5Jt8z8vszx4FJ2gNJ3FZH34cer9sbparg7GVt7qm`，他们希望`o1d`代币持有者能将其代币升级到与Token-2022标准关联的`NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ`代币。
 
 ### 创建代币托管账户
 
-通过给定的原铸币和新铸币地址，任何人可使用命令行工具创建一个新的代币账户，该账户具有托管权限：
+命令行工具允许任何人创建一个由托管授权拥有的新代币账户，给定原始和新铸币地址：
 
 ```sh
 $ spl-token-upgrade create-escrow o1d5Jt8z8vszx4FJ2gNJ3FZH34cer9sbparg7GVt7qm NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ
@@ -70,11 +70,11 @@ Creating escrow account 2mW9oGUbaJiCHtkhN5TNTaucY2ziJmAdcJtp5Ud6m4Jy owned by es
 Signature: 4tuJffE4DTrsXb7AM3UWNjd286vyAQcvhQaSKPVThaZMzaBiptKCKudaMWjbbygTUEaho87Ar288Mih5Hx6PpKke
 ```
 
-**注意**：命令行工具会为托管权限创建关联的代币账户，但是任何`NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ`的代币账户都可以用于升级，只要该账户归托管权限所有或被委托给托管权限即可。
+**注意**：命令行工具为托管授权创建关联的代币账户，但任何由托管授权拥有或委托的 `NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ` 代币账户都可以用于升级。
 
-### 向托管账户添加代币
+### 将代币添加到托管账户
 
-创建了托管账户后，铸币所有者现在必须向该账户添加代币。可以通过铸造新的代币或转移现有的代币来完成这一操作。
+创建了托管账户后，铸币地址所有者必须向该账户添加代币。他们可以通过铸造新代币或转移现有代币来完成此操作。
 
 ```sh
 $ spl-token mint NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ 1000 2mW9oGUbaJiCHtkhN5TNTaucY2ziJmAdcJtp5Ud6m4Jy
@@ -88,9 +88,9 @@ $ spl-token transfer NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ 1000 2mW9oGUbaJ
 
 ### 将原始代币升级为新代币
 
-当所有账户准备就绪后，任何原始代币持有人都可以在他们想要的任何时候兑换新代币。
+准备好所有账户后，任何原始代币持有者可以随时兑换新代币。
 
-首先，他们必须创建一个新的代币账户以接收这些代币。
+首先，他们必须创建一个新代币账户以接收代币：
 
 ```sh
 $ spl-token create-account NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ
@@ -106,7 +106,7 @@ Burning tokens from account 4YfpfMzHYCCYVBJqvTG9VtTPLMuPzVBi77aMRxVB4TDg, receiv
 Signature: 3Zs1PtMV7XyRpfX9k7cPg7Hd43URvBD3aYEnd6hb5deKvSWXrEW5yoRaCuqtYJSsoa2WtkdprTsHEh3VLYWEGhkb
 ```
 
-该工具默认情况下会使用与用户关联的代币账户，包括原始代币铸币、新代币铸币以及新代币上的托管授权。不过，你也可以选择分别指定每一个账户：
+该工具默认使用用户在原始和新铸币地址上的关联代币账户，以及托管授权在新铸币地址上的账户。也可以单独指定这些账户：
 
 ```sh
 $ spl-token-upgrade exchange o1d5Jt8z8vszx4FJ2gNJ3FZH34cer9sbparg7GVt7qm NewnQeoDG4BbHRCodgjscuypfXdiixcWDPyLiseziQZ --burn-from 4YfpfMzHYCCYVBJqvTG9VtTPLMuPzVBi77aMRxVB4TDg --destination JCaWYSvLZkja51RbToWBaV4kp1PhfddX64cTLUqpdMzE --escrow 2mW9oGUbaJiCHtkhN5TNTaucY2ziJmAdcJtp5Ud6m4Jy
@@ -115,7 +115,8 @@ Burning tokens from account 4YfpfMzHYCCYVBJqvTG9VtTPLMuPzVBi77aMRxVB4TDg, receiv
 
 Signature: 3P4o4Fxnm4yvB9i6jQzyniqNUqnNLsaQZmCw5q5n5J8nwv9wxJ73ZRYH3XNFT4ferDbCXMqc5egCkhZEkyfCxhgC
 ```
-升级后，用户可以清理旧的代币账户，以便回收租金。
+
+升级后，用户可以清理旧代币账户以回收用作租金的 lamports。
 
 ```sh
 $ spl-token close o1d5Jt8z8vszx4FJ2gNJ3FZH34cer9sbparg7GVt7qm
