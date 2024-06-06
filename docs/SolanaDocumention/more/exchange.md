@@ -4,21 +4,21 @@
 
 ## 节点设置
 
-我们强烈建议在高性能计算机/云实例上设置至少两个节点，及时升级到新版本，并使用捆绑的监控工具密切关注服务运行情况。
+我们强烈建议在高性能计算机或云实例上至少设置两个节点，及时升级到新版本，并使用捆绑的监控工具监控服务运行情况。
 
 这种设置使您能够:
 
-- 拥有一个自行管理的网关，连接到 Solana 主网 beta 版集群，以获取数据并提交提款交易。
-- 拥有对保留多少历史区块数据的完全控制权。
-- 即使一个节点失败，也能维持您的服务可用性。
+- 自行管理连接到 Solana 主网Beta版 集群的网关，以获取数据并提交提现交易
+- 完全控制保留的历史区块数据量
+- 即使一个节点故障也能保持服务可用性
 
-Solana 节点需要相对较高的计算能力来处理我们快速的区块和高 TPS。对于具体要求，请看
+Solana 节点需要相对较高的计算能力来处理快速的区块和高 TPS。具体要求请查看
 [硬件推荐](https://docs.solanalabs.com/operations/requirements).
 
-运行一个 API 节点:
+运行 API 节点:
 
 1. [安装 Solana 命令行工具套件](https://docs.solanalabs.com/cli/install)
-2. 以至少以下参数启动验证者:
+2. 使用以下参数启动验证者：
 
 ```shell
 solana-validator \
@@ -34,12 +34,12 @@ solana-validator \
   --only-known-rpc
 ```
 
-将 `--ledger` 自定义为您希望的账本存储位置，并设置 `--rpc-port` 为您想要公开的端口。
+自定义 `--ledger` 到你所需的账本存储位置，并将 `--rpc-port` 设置为你想要暴露的端口。
 
 `--entrypoint` 和 `--expected-genesis-hash` 参数都是针对你要加入的集群而定的。
 [当前主网参数](https://docs.solanalabs.com/clusters/available#example-solana-validator-command-line-2)
 
-`--limit-ledger-size` 参数允许你指定节点在磁盘上保留多少账本分片（shreds）。如果不包括此参数，验证者将保留整个账本，直到磁盘空间耗尽。默认值尝试将账本磁盘使用量保持在500GB以下。可以通过为 `--limit-ledger-size` 添加参数来请求更多或更少的磁盘使用量。如果需要，请查看 `solana-validator --help` 以获取 `--limit-ledger-size` 使用的默认限制值。有关选择自定义限制值的更多信息，请参阅[此处](https://github.com/solana-labs/solana/blob/583cec922b6107e0f85c7e14cb5e642bc7dfb340/core/src/ledger_cleanup_service.rs#L15-L26)
+`--limit-ledger-size` 参数允许你指定节点在磁盘上保留多少账本分片（shreds）。如果不包括此参数，验证者将保留整个账本，直到磁盘空间耗尽。默认值会尝试将账本磁盘使用量保持在500GB以下。可以通过为 `--limit-ledger-size` 添加参数来请求更多或更少的磁盘使用量。如果需要，请查看 `solana-validator --help` 以获取 `--limit-ledger-size` 使用的默认限制值。有关选择自定义限制值的更多信息，请参阅[此处](https://github.com/solana-labs/solana/blob/583cec922b6107e0f85c7e14cb5e642bc7dfb340/core/src/ledger_cleanup_service.rs#L15-L26)
 
 指定一个或多个 `--known-validator` 参数可以保护您免受从恶意快照启动的风险。
 [关于使用已知验证者启动的参数值的更多信息](https://docs.solanalabs.com/operations/guides/validator-start#known-validators)
@@ -55,49 +55,49 @@ solana-validator \
 
 用于监控，我们提供
 [`solana-watchtower`](https://github.com/solana-labs/solana/blob/master/watchtower/README.md),
-它可以监视您的验证器并检测 `solana-validator` 进程是否不健康。它可以直接配置为通过 Slack、Telegram、Discord 或 Twilio 向您发送警报。有关详细信息，请运行 `solana-watchtower --help`。
+对于监控，我们提供 solana-watchtower，可以监控你的验证者并检测 solana-validator 进程是否不健康。它可以直接配置为通过 Slack、Telegram、Discord 或 Twilio 向你发出警报。详细信息请运行 `solana-watchtower --help`。
 
 ```shell
 solana-watchtower --validator-identity <YOUR VALIDATOR IDENTITY>
 ```
 
-> 您可以在文档中找到更多关于
-> [Solana Watchwer 的最佳实践](https://docs.solanalabs.com/operations/best-practices/monitoring#solana-watchtower)
-> 的相关信息。
+::: tip INFO
+更多关于[Solana Watchwer 的最佳实践](https://docs.solanalabs.com/operations/best-practices/monitoring#solana-watchtower)信息，请参见文档。
+:::
 
 #### 新软件发布公告
 
-我们频繁发布新软件（大约每周发布一次）。有时新版本包括不兼容的协议变更，这需要及时更新软件以避免在处理区块时出现错误。
+我们频繁发布新软件（大约每周 1 次）。有时更新版本会包含不兼容的协议更改，因此需要及时更新软件以避免处理区块时出错。
 
-我们的官方发布公告，包括普通和安全方面的发布，都是通过一个名为 `#mb-announcement` 的 [Discord](https://solana.com/discord) 频道进行沟通的（`mb` 代表 `mainnet-beta`）。
+我们所有发布类型的官方公告（正常和安全）通过名为 `#mb-announcement`（`mb` 代表 `mainnet-beta`）的 [Discord](https://solana.com/discord) 频道进行沟通的。
 
-像质押的验证器一样，我们期望任何交易所运营的验证器在正常发布公告后的一两个工作日内尽快更新。对于与安全相关的发布，可能需要采取更紧急的措施。
+像质押的验证者一样，我们期望任何交易所运营的验证者在正常发布公告后的一两个工作日内尽快更新。对于与安全相关的发布，可能需要采取更紧急的措施。
 
 ### 账本连续性
 
 默认情况下，你的每个节点都会从你的已知验证者之一提供的快照启动。这个快照反映了链的当前状态，但不包含完整的历史账本。如果其中一个节点退出并从新的快照启动，该节点上的账本可能会出现缺口。为了防止此问题，可以在 `solana-validator` 命令中添加 `--no-snapshot-fetch` 参数，以接收历史账本数据而不是快照。
 
-不要在初始启动时传递 `--no-snapshot-fetch` 参数，因为无法从创世区块完全启动节点。相反，首先从快照启动，然后重新启动时添加 `--no-snapshot-fetch` 参数。
+不要在初始启动时传递 `--no-snapshot-fetch` 参数，因为无法从创世区块完全启动节点。相反，先从快照启动，然后重新启动时添加 `--no-snapshot-fetch` 参数。
 
-需要注意的是，您的节点在任何时候能够从网络其余部分获得的历史账本数量是有限的。一旦运营，如果您的验证器出现显著的停机时间，它们可能无法赶上网络，将需要从已知验证器下载新的快照。这样做的话，您的验证器现在在其历史账本数据中将有一个无法填补的缺口。
+需要注意的是，您的节点在任何时候能够从网络其余部分获得的历史账本数量是有限的。一旦运行，如果您的验证者出现明显的停机时间，那它们可能无法赶现有上网络，将需要从已知验证者节点下载新的快照。这时，您的验证者现在在其历史账本数据中将有一个无法填补的缺口。
 
-### 最小化验证器端口暴露
+### 最小化验证者端口暴露
 
-验证器需要为来自所有其他 Solana 验证器的入站流量开放各种 UDP 和 TCP 端口。虽然这是最高效的操作模式，并且强烈推荐这样做，但可以将验证器限制为仅需要来自另一个 Solana 验证器的入站流量。
+验证者需要打开各种 UDP 和 TCP 端口以接收来自所有其他 Solana 验证者的入站流量。虽然这是最有效的操作模式，并且强烈推荐，但也可以限制验证者只接收来自另一个 Solana 验证者的入站流量。
 
-首先添加 `--restricted-repair-only-mode` 参数。这将使验证器在一个受限模式下运行，它不会从其他验证器接收推送，而是需要不断地从其他验证器轮询区块。验证器将仅使用 **Gossip** 和 **ServeR**（"提供修复"）端口向其他验证器传输 UDP 数据包，并且只在其 **Gossip** 和 **Repair** 端口接收 UDP 数据包。
+首先添加 `--restricted-repair-only-mode` 参数。这将使验证者在一个受限模式下运行，它不会从其他验证者接收推送，而是需要不断地从其他验证者轮询区块。验证者将仅使用 **Gossip** 和 **ServeR**（"提供修复"）端口向其他验证者传输 UDP 数据包，并且只在其 **Gossip** 和 **Repair** 端口接收 UDP 数据包。
 
-**Gossip** 端口是双向的，允许您的验证器与集群的其余部分保持联系。您的验证器通过 **ServeR** 发送数据，以便向其他网络节点发出修复请求，以获取新区块，因为 Turbine 现在已被禁用。然后，您的验证器将在 **Repair** 端口从其他验证器接收修复响应。
+**Gossip** 端口是双向的，允许您的验证者与集群的其余部分保持联系。您的验证者通过 **ServeR** 发送数据，以便向其他网络节点发出修复请求，以获取新区块，因为 Turbine 现在已被禁用。然后，您的验证者将在 **Repair** 端口从其他验证者接收修复响应。
 
-为了进一步限制验证器仅从一个或多个验证器请求区块，首先确定该验证器的身份公钥，然后为每个 PUBKEY 添加 `--gossip-pull-validator PUBKEY --repair-validator PUBKEY` 参数。这将导致您的验证器成为您添加的每个验证器的资源负担，因此请谨慎操作，并在与目标验证器协商后再进行此操作。
+为了进一步限制验证者仅从一个或多个验证者请求区块，首先确定该验证者的身份公钥，然后为每个 PUBKEY 添加 `--gossip-pull-validator PUBKEY --repair-validator PUBKEY` 参数。这将导致你的验证者成为每个添加的验证者的资源消耗，因此请谨慎使用，并在与目标验证者协商后才这样做。
 
-您的验证器现在应该只与明确列出的验证器通信，并且仅通过 **Gossip**、**Repair** 和 **ServeR** 端口。
+您的验证者现在应该只与明确列出的验证者通信，并且只在 **Gossip**、**Repair** 和 **ServeR** 端口上进行通信。
 
 ## 设置存款账户
 
 Solana 账户不需要任何链上初始化；一旦它们包含一些 SOL，它们就存在了。要为您的交易所设置存款账户，只需使用我们的任何[钱包工具](https://docs.solanalabs.com/cli/wallets)生成一个 Solana 密钥对。
 
-我们建议为每个用户提供一个独特的存款账户。
+我们建议为每个用户提供一个唯一的存款账户。
 
 Solana 账户必须通过包含足够两年的 [租金](https://solana.com/zh/docs/core/fees.md#rent) 的 SOL 来免除租金。为了找到您的存款账户的最小免租金余额，请查询 [`getMinimumBalanceForRentExemption` 端点](https://solana.com/zh/docs/rpc/http/getMinimumBalanceForRentExemption.mdx)：
 
@@ -110,7 +110,7 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 }'
 ```
 
-#### 结果
+#### 返回结果
 
 ```json
 { "jsonrpc": "2.0", "result": 890880, "id": 1 }
@@ -122,7 +122,7 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 
 ## 监听存款
 
-当用户想要将 SOL 存入您的交易所时，请指示他们将转账发送到相应的存款地址。
+当用户想要将 SOL 存入你的交易所时，指示他们将转账发送到相应的存款地址。
 
 ### 版本化交易迁移
 
@@ -130,7 +130,7 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 
 - `{"maxSupportedTransactionVersion": 0}`
 
-  必须在 `getBlock` 和 `getTransaction` 请求中添加 `maxSupportedTransactionVersion` 参数，以避免存款检测中断。最新的交易版本是 `0`，应该被指定为支持的最大交易版本值。
+  必须将 `maxSupportedTransactionVersion` `getBlock` 参数添加到`getBlock`和 `getTransaction` 请求中，以避免对存款检测造成中断。最新的事务版本是 `0` 并且应该指定为支持的最大事务版本值。
 
 理解版本化交易的重要性在于，它允许用户创建使用从链上地址查找表加载的另一组账户密钥的交易。
 
@@ -142,9 +142,9 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 
 ### 轮询区块
 
-为了跟踪您的交易所的所有存款账户，请使用您的Solana API节点的JSON-RPC服务，轮询每个已确认的区块，并检查感兴趣的地址。
+要跟踪交易所的所有存款账户，请使用 Solana API 节点的 JSON-RPC 服务轮询每个已确认的区块并检查感兴趣的地址。
 
-- 为了确定哪些区块可用，请发送一个 [`getBlocks`](https://solana.com/zh/docs/rpc/http/getBlocks.mdx) 请求，将您已经处理过的最后一个区块作为起始插槽参数传递：
+- 为了确定哪些区块可用，请发送一个 [`getBlocks`](https://solana.com/zh/docs/rpc/http/getBlocks.mdx) 请求，将您已经处理过的最后一个区块作为起始插槽（ start-slot ）参数传递：
 
 ```shell
 curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -d '{
@@ -155,7 +155,7 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 }'
 ```
 
-##### 结果
+##### 返回结果
 
 ```json
 {
@@ -198,7 +198,7 @@ curl https://api.devnet.solana.com -X POST -H 'Content-Type: application/json' -
 }'
 ```
 
-##### 结果
+##### 返回结果
 
 ```json
 {
@@ -274,8 +274,7 @@ curl https://api.devnet.solana.com -X POST -H 'Content-Type: application/json' -
 您也可以查询特定地址的交易历史。通常来说，这并**不是**追踪所有槽位上您的存款地址的有效方法，但对于在特定时间段内检查几个账户而言，可能是有用的。
 
 
-- 发送一个 [`getSignaturesForAddress`](https://solana.com/zh/docs/rpc/http/getSignaturesForAddress.mdx)
-  请求到 API 节点:  
+- 发送[`getSignaturesForAddress`](https://solana.com/zh/docs/rpc/http/getSignaturesForAddress.mdx)请求到 API 节点:  
 
 ```shell
 curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -d '{
@@ -291,7 +290,7 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 }'
 ```
 
-##### 结果
+##### 返回结果
 
 ```json
 {
@@ -326,7 +325,8 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 }
 ```
 
-- 对于返回的每个签名，通过发送一个 [`getTransaction`](https://solana.com/zh/docs/rpc/http/getTransaction.mdx) 请求来获取交易详情：
+- 对于返回的每个签名，通过发送[`getTransaction`](https://solana.com/zh/docs/rpc/http/getTransaction.mdx) 请求来获取交易详情：
+
 ```shell
 curl https://api.devnet.solana.com -X POST -H 'Content-Type: application/json' -d '{
   "jsonrpc":"2.0",
@@ -342,7 +342,7 @@ curl https://api.devnet.solana.com -X POST -H 'Content-Type: application/json' -
 }'
 ```
 
-##### 结果
+##### 返回结果
 
 ```json
 {
@@ -430,7 +430,7 @@ curl https://api.devnet.solana.com -X POST -H 'Content-Type: application/json' -
 
 向 Solana 集群发送同步转账可以轻松确保转账成功并获得集群的最终确认。
 
-Solana的命令行工具提供了一个简单的命令 `solana transfer`，用于生成、提交和确认转账交易。默认情况下，此方法会等待并跟踪stderr上进度，直到交易被集群最终确认。如果交易失败，它将报告任何交易错误。
+Solana的命令行工具提供了一个简单的命令 `solana transfer`，用于生成、提交和确认转账交易。默认情况下，此方法会等待并跟踪stderr上进度，直到交易被集群最终确认。如果交易失败，它将报告所有交易错误。
 
 ```shell
 solana transfer <USER_ADDRESS> <AMOUNT> --allow-unfunded-recipient --keypair <KEYPAIR> --url http://localhost:8899
@@ -442,7 +442,7 @@ solana transfer <USER_ADDRESS> <AMOUNT> --allow-unfunded-recipient --keypair <KE
 
 为了更大的灵活性，您可以异步提交提款转账。在这些情况下，您有责任验证交易是否成功并获得集群的最终确认。
 
-**注意：** 每个交易都包含一个 [recent blockhash](https://solana.com/zh/docs/core/transactions.md#recent-blockhash) 以表明其活跃性。在重试一个似乎没有被集群确认或最终确定的提款转账之前，等待这个区块哈希过期是 **至关重要** 的。否则，您将面临双重支付的风险。有关 [区块哈希过期](#blockhash-expiration) 的更多信息，请参见下文。
+**注意：** 每个交易都包含一个 [recent blockhash](https://solana.com/zh/docs/core/transactions.md#recent-blockhash) 以表明其生存时间。在重试一个似乎没有被集群确认或最终确定的提款转账之前，**必须**等待该区块哈希过期。否则，您将面临双重支付的风险。有关 [区块哈希过期](#blockhash-expiration) 的更多信息，请参见下文。
 
 首先，使用[`getFees`](https://solana.com/zh/docs/rpc/deprecated/getFees.mdx) 端点或 CLI 命令获取最近的区块哈希：
 
@@ -456,12 +456,11 @@ solana fees --url http://localhost:8899
 solana transfer <USER_ADDRESS> <AMOUNT> --no-wait --allow-unfunded-recipient --blockhash <RECENT_BLOCKHASH> --keypair <KEYPAIR> --url http://localhost:8899
 ```
 
-[`sendTransaction`](https://solana.com/zh/docs/rpc/http/sendTransaction.mdx) endpoint.
-您也可以手动构建、签名并序列化交易，然后通过JSON-RPC的[`sendTransaction`](https://solana.com/zh/docs/rpc/http/sendTransaction.mdx) 端点将其发送到集群。
+你还可以手动构建、签名和序列化交易，并使用 JSON-RPC `sendTransaction` 端点将其发送到集群。
 
 #### 交易确认和最终性
 
-使用[`getSignatureStatuses`](https://solana.com/zh/docs/rpc/http/getSignatureStatuses.mdx) JSON-RPC 端点来获取一批交易的状态。`confirmations`字段报告了自从交易被处理以来有多少个[已确认块](https://solana.com/zh/docs/terminology.md#confirmed-block)已经过去。如果`confirmations: null`，则表示该交易已被[最终确认](https://solana.com/zh/docs/terminology.md#finality)。
+使用 `getSignatureStatuses` JSON-RPC 端点获取一批交易的状态。`confirmations` 字段报告自交易处理以来经过的[已确认的](https://solana.com/zh/docs/terminology.md#confirmed-block)区块数。如果 `confirmations: null`，则表示已[最终确认](https://solana.com/zh/docs/terminology.md#finality)。。
 
 ```shell
 curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -d '{
@@ -477,7 +476,7 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 }'
 ```
 
-##### 结果
+##### 返回结果
 
 ```json
 {
@@ -525,19 +524,19 @@ Solana 地址是一个32字节的数组，使用比特币 base58 字母表进行
 [1-9A-HJ-NP-Za-km-z]{32,44}
 ```
 
-仅此检查是不够的，因为Solana地址未经`校验和`处理，所以无法检测到输入错误。为了进一步验证用户的输入，可以解码该字符串，并确认解码后字节数组长度为32。然而，即便存在输入错误，如单个字符缺失、字符顺序颠倒或大小写未区分等情况，某些地址仍能解码为32字节。
+仅此检查是不够的，因为Solana地址未经`校验和`处理，所以无法检测到输入错误为了进一步验证用户的输入，可以解码字符串并确认结果字节数组的长度为 32。然而，一些地址在存在拼写错误（例如缺少字符、字符反转或忽略大小写）的情况下仍然可以解码为 32 字节。
 
 #### 高级验证
 
-针对上述提及的易受输入错误影响的问题，建议对候选的提币地址查询其余额。如果发现非零余额，则应提示用户确认其意图。这样做可以防止因误输入地址而导致资产误转至他人账户的风险，增强交易安全性。
+针对上述提及的易受输入错误影响的问题，建议对候选的提款地址查询其余额。如果发现非零余额，则应提示用户确认其意图。这样做可以防止因误输入地址而导致资产误转至他人账户的风险，增强交易安全性。
 
-#### 有效的 ed25519 公钥检查
+#### 验证有效的 ed25519 公钥
 
-Solana 中普通账户的地址是256位 ed25519 公钥的 Base58 编码字符串。并非所有的位模式都是 ed25519 曲线的有效公钥，因此可以确保用户提供的账户地址至少是正确的 ed25519 公钥。
+在 Solana 中，普通账户的地址是 256 位 ed25519 公钥的 Base58 编码字符串。并非所有位模式都是 ed25519 曲线的有效公钥，因此可以确保用户提供的账户地址至少是正确的 ed25519 公钥。
 
-#### Java
+#### Java示例
 
-以下是一个Java示例，用于验证用户提供的地址是否为有效的ed25519公钥：
+以下是验证用户提供的地址是否为有效 ed25519 公钥的 Java 示例：
 
 以下代码示例假设您正在使用Maven作为项目管理工具。
 
@@ -594,9 +593,9 @@ public class PubkeyValidator
 
 ## 最小存款和提款金额
 
-每笔 SOL 的存款和提款都必须大于或等于钱包地址账户的最小免租金余额（一个不持有数据的基本 SOL 账户），目前为：0.000890880 SOL
+每笔 SOL 的存款和提现必须大于或等于钱包地址账户的最低免租余额（一个不包含数据的基本 SOL 账户），当前为：0.000890880 SOL
 
-类似地，每个存款账户必须至少包含这个余额。
+同样，每个存款账户必须至少包含此余额。
 
 ```shell
 curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -d '{
@@ -607,7 +606,7 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 }'
 ```
 
-##### 结果
+##### 返回结果
 
 ```json
 { "jsonrpc": "2.0", "result": 890880, "id": 1 }
@@ -615,21 +614,19 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 
 ## 优先费和计算单元
 
-在高需求时期，如果验证器选择了具有更高经济价值的其他交易，可能会导致交易在被包含在区块之前过期。如果没有正确实施优先费，Solana 上的有效交易可能会被延迟或丢弃。
+在需求高峰期，如果验证者选择了具有更高经济价值的其他交易，可能会导致交易在被包含在区块之前过期。如果没有正确实施优先费，可能会导致有效交易被延迟或丢弃。
 
-[优先费](https://solana.com/zh/docs/terminology.md#prioritization-fee)是在[基础交易费](https://solana.com/zh/docs/core/fees.md#transaction-fees)之上可以添加的额外费用，以确保交易被包含在区块中，并在这些情况下帮助确保可交付性。
+[优先费](https://solana.com/zh/docs/terminology.md#prioritization-fee)是在[基础交易费](https://solana.com/zh/docs/core/fees.md#transaction-fees)之上可以添加的额外费用，以确保交易被包含在区块中，并在这些情况下帮助确保交付。
 
 这些优先费通过添加一个特殊的计算预算指令来添加到交易中，该指令设置了要支付的期望优先费。
 
-<Callout type="caution" title="Important Note">
-
-未能实施这些指令可能会导致网络中断和交易失败。强烈建议每个支持Solana的交易所使用优先费以避免中断。
-
-</Callout>
+::: warning IMPORTANT NOTE
+未能实现这些指令可能会导致网络中断和交易丢弃。强烈建议每个支持 Solana 的交易所使用优先费以避免中断。
+:::
 
 ### 什么是优先费？
 
-优先费以每计算单元的微拉姆波特(micro-lamports) 价格（例如，少量的SOL）来定价，它们被添加到交易中，使交易在经济上对验证节点具有吸引力，从而被包含在网络的区块中。
+优先费以每计算单位的micro-lamports（例如少量 SOL）为单位定价，预先添加到交易中，使其在经济上对验证者节点具有吸引力，以包含在网络的区块中。
 
 ### 优先费应该是多少？
 
@@ -647,14 +644,14 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 
 ### 如何实现优先费
 
-在交易中添加优先费，包括在一个给定交易上前置的两个计算预算指令：
+在交易中添加优先费用，包括在给定交易上预先添加两个计算预算指令：
 
 - 一个用于设置计算单元价格，
 - 另一个用于设置计算单元限制
 
-> 在这里，您还可以找到一份更详细的开发者
-> [指南，介绍如何使用优先费](https://solana.com/zh/developers/guides/advanced/how-to-use-priority-fees)
-> 其中包含了更多关于实现优先费的信息。
+::: tip INFO
+在这里，您还可以找到有关[如何使用优先权费](https://solana.com/zh/developers/guides/advanced/how-to-use-priority-fees)的更详细的开发人员指南，其中包括有关实施优先权费的更多信息。
+:::
 
 创建一个 `setComputeUnitPrice` 指令，在基础交易费（5,000 Lamports）之上添加优先费。
 
@@ -663,7 +660,7 @@ curl https://api.devnet.solana.com -X POST -H "Content-Type: application/json" -
 ComputeBudgetProgram.setComputeUnitPrice({ microLamports: number });
 ```
 
-所提供的微拉姆波特（micro-lamports）值将乘以计算单元（CU）预算，以确定以拉姆波特（micro-lamports）计的优先费。例如，如果你的 CU 预算是1百万 CU，并且你添加了`1微波特/CU`，那么优先费将是1拉姆波特（100万 * 0.0001）。总费用则为5001拉姆波特。
+所提供的micro-lamports值将乘以计算单元（CU）预算，以确定以micro-lamports计的优先费。例如，如果你的 CU 预算是1百万 CU，并且你添加了`1 micro-lamports/CU`，那么优先费将是1拉姆波特（100万 * 0.0001）。总费用则为5001拉姆波特。
 
 为了给交易设置一个新的计算单元预算，创建一个`setComputeUnitLimit`指令。
 
@@ -674,13 +671,12 @@ ComputeBudgetProgram.setComputeUnitLimit({ units: number });
 
 提供的`units`值将替换 Solana 运行时的默认计算预算值。
 
-<Callout type="caution" title="Set the lowest CU required for the transaction">
-
-交易应该请求执行所需的最小计算单元（CU）数量，以最大化吞吐量并最小化总体费用。
+::: warning SET THE LOWEST CU REQUIRED FOR THE TRANSACTION
+交易应请求执行所需的最小计算单元 （CU） 数量，以最大限度地提高吞吐量并最小化总体费用。
 
 您可以通过在不同的 Solana 集群上发送交易来获取交易消耗的 CU。例如，一个[简单的代币转账](https://explorer.solana.com/tx/5scDyuiiEbLxjLUww3APE9X7i8LE3H63unzonUwMG7s2htpoAGG17sgRsNAhR1zVs6NQAnZeRVemVbkAct5myi17) 需要300 CU。
 
-</Callout>
+:::
 
 ```typescript
 // import { ... } from "@solana/web3.js"
@@ -708,13 +704,13 @@ const transaction = new Transaction()
 
 ### 优先费和持久化Nonce
 
-若你的设置中采用了持久化 Nonce 交易（Durable Nonce），恰当地结合持久化 Nonce 实施优先费（Prioritization Fees）以确保交易成功至关重要。未能如此操作，将导致该交易将无法被识别为持久化交易类型。
+如果你的设置中采用了持久化 Nonce 交易（Durable Nonce），恰当地结合持久化 Nonce 实施优先费（Prioritization Fees）以确保交易成功。否则，将导致该交易将无法被识别为持久化交易类型。
 
 如果您正在使用持久化交易 Nonce，那么在指令列表中必须首先指定`AdvanceNonceAccount`指令，即使使用计算预算指令来指定优先费也是如此。
 
 你可以在本开发人员指南中的[使用持久化 Nonce 和优先费结合的特定代码示例](https://solana.com/zh/developers/guides/advanced/how-to-use-priority-fees#special-considerations)找到详细信息。
 
-## 支持中的SPL代币标准
+## 支持SPL代币标准
 
 [SPL 代币](https://spl.solana.com/token) 是在 Solana 区块链上创建和交换包装/合成代币的标准。
 
@@ -734,13 +730,13 @@ SPL 代币的工作流程与原生 SOL 代币类似，但有一些差异，将�
 cargo install spl-token-cli
 ```
 
-您可以随后检查已安装的版本以进行验证。
+随后您可以检查已安装的版本以进行验证。
 
 ```shell
 spl-token --version
 ```
 
-这应该会得到类似于以下结果：
+这应该会得到类似于以下的结果：
 
 ```text
 spl-token-cli 2.0.1
@@ -748,9 +744,9 @@ spl-token-cli 2.0.1
 
 ### 账户创建
 
-SPL Token 账户有一些额外的要求，这是原生系统程序账户所没有的：
+SPL Token 账户的要求比原生系统程序账户更多：
 
-1. SPL 代币账户在可以存入代币之前必须被创建。代币账户可以通过`spl-token create-account`命令显式创建，或者通过`spl-token transfer --fund-recipient ...`命令隐式创建。
+1. SPL Token 账户必须在可以存入代币之前创建。可以使用 `spl-token create-account` 命令显式创建代币账户，或通过 `spl-token transfer --fund-recipient ...` 命令隐式创建。
 1. SPL代币账户在其存在期间必须保持[免租金](https://solana.com/zh/docs/core/fees.md#rent-exempt)状态，因此需要在账户创建时存入少量的原生 SOL 代币。对于SPL代币账户，这个金额是0.00203928 SOL（2,039,280 个 lamports）。
 
 #### 命令行
@@ -854,7 +850,7 @@ Signature: 3R6tsog17QM8KfzbcbdP4aoMfwgo6hBggJDVy7dZPVmH2xbCWjEj31JKD53NzMrf25ChF
 
 在执行提现[转账](#token-transfers)之前，交易所应该如[上文所述](#validating-user-supplied-account-addresses-for-withdrawals)检查地址。此外，此地址必须由系统程序所有，并且没有任何账户数据。如果地址上没有 SOL 余额，在继续提现之前应获得用户确认。所有其他提现地址都必须被拒绝。
 
-从提款地址，可以推导出正确的铸造账户的[关联代币账户](https://spl.solana.com/associated-token-account)（ATA），然后通过 [TransferChecked](https://github.com/solana-labs/solana-program-library/blob/fc0d6a2db79bd6499f04b9be7ead0c400283845e/token/program/src/instruction.rs#L268) 指令将转账指令发布到该账户。请注意，有可能 ATA 地址尚不存在，在这种情况下，交易所应代表用户资助该账户。对于 SPL 代币账户，资助提现账户将需要 0.00203928 SOL（2,039,280个 lamports）
+从提款地址，可以推导出正确的铸造账户的[关联代币账户](https://spl.solana.com/associated-token-account)（ATA），然后通过 [TransferChecked](https://github.com/solana-labs/solana-program-library/blob/fc0d6a2db79bd6499f04b9be7ead0c400283845e/token/program/src/instruction.rs#L268) 指令将转账指令发布到该账户。请注意，有可能 ATA 地址尚不存在，在这种情况下，交易所应代表用户为账户提供资金。对于 SPL 代币账户，为提现账户提供资金需要 0.00203928 SOL（2,039,280 lamports）。
 
 `spl-token transfer` 命令模板用于提款：
 
@@ -888,7 +884,7 @@ spl-token transfer --fund-recipient <exchange token account> <withdrawal amount>
 
 ### 扩展特定考虑因素
 
-前一节概述了对SPL Token-2022最基本的支持。由于扩展功能会改变代币的行为，交易所可能需要改变处理代币的方式。
+上一节概述了对 SPL Token-2022 的最基本支持。由于扩展修改了代币的行为，交易所可能需要更改处理代币的方式。
 
 可以查看铸币或代币账户上的所有扩展：
 
@@ -898,11 +894,11 @@ spl-token display <account address>
 
 #### 转账费用
 
-代币可以设置转账费，这意味着在转账过程中，一部分代币会被预留在目的地，用于未来的收集。
+代币可以设置转账费，这意味着在转账过程中，一部分代币会被预留在目标地址，用于未来的收集。
 
-如果您的交易所转移这些代币，请小心，不是所有的代币都会到达目的地，因为有部分会被预留。
+如果你的交易所转移这些代币，请注意它们可能不会全部到达目的地址，因为有扣留的部分。
 
-在转账时可以指定预期的费用，以避免任何意外：
+可以在转账期间指定预期费用以避免任何意外：
 
 ```shell
 spl-token transfer --expected-fee <fee amount> --fund-recipient <exchange token account> <withdrawal amount> <withdrawal address>
@@ -910,11 +906,11 @@ spl-token transfer --expected-fee <fee amount> --fund-recipient <exchange token 
 
 #### 关闭铸造权限
 
-通过这个扩展，代币创建者可以在代币供应量为零的情况下关闭铸造。
+使用此扩展，代币创建者可以在代币供应量为零时关闭铸币。
 
-当铸造被关闭时，可能仍然存在空的代币账户，并且它们将不再与有效的铸造相关联。
+当铸币关闭时，可能仍然存在空的代币账户，它们将不再与有效铸币关联。
 
-关闭这些代币账户是安全的：
+可以安全地关闭这些代币账户：
 
 ```shell
 spl-token close --address <account address>
@@ -922,11 +918,11 @@ spl-token close --address <account address>
 
 #### 保密转账
 
-铸造可以配置为保密转账，这样代币数额就被加密了，但账户所有者仍然是公开的。
+铸币可以配置保密转账，以便代币金额被加密，但账户所有者仍然公开。
 
-交易所可以配置代币账户以发送和接收保密转账，以隐藏用户金额。在代币账户上启用保密转账不是必需的，因此交易所可以强制用户以非保密方式发送代币。
+交易所可以配置代币账户以发送和接收保密转账，以隐藏用户金额。不要求在代币账户上启用保密转账，因此交易所可以强制用户公开发送代币。
 
-要启用保密转账，账户必须进行相应配置：
+要启用保密转账，必须为账户配置：
 
 ```shell
 spl-token configure-confidential-transfer-account --address <account address>
@@ -938,7 +934,7 @@ spl-token configure-confidential-transfer-account --address <account address>
 spl-token transfer --confidential <exchange token account> <withdrawal amount> <withdrawal address>
 ```
 
-在进行保密转账时，`preTokenBalance` 和 `postTokenBalance` 字段将显示没有变化。为了清空存款账户，您必须解密新余额以提取代币：
+在进行保密转账时，`preTokenBalance` 和 `postTokenBalance` 字段将不会显示变化。为了清空存款账户，您必须解密新余额以提取代币：
 
 ```shell
 spl-token apply-pending-balance --address <account address>
@@ -947,7 +943,7 @@ spl-token withdraw-confidential-tokens --address <account address> <amount or AL
 
 #### 默认账户状态
 
-铸造可以配置默认的账户状态，这样所有新创建的代币账户默认都是冻结的。这些代币创建者可能要求用户通过一个单独的流程来解冻账户。
+铸造可以配置默认账户状态，使所有新代币账户默认冻结。这些代币创建者可能要求用户通过一个单独的流程来解冻账户。
 
 #### 不可转让
 
@@ -957,7 +953,7 @@ spl-token withdraw-confidential-tokens --address <account address> <amount or AL
 
 代币创建者可以为他们的所有代币指定一个永久委托人。这个永久委托人可以从任何账户转移或销毁代币，有可能盗取资金。
 
-在某些司法管辖区，这对于稳定币是法律要求，或者可用于代币回收计划。
+这是某些司法管辖区对稳定币的法律要求，或者可以用于代币回收计划。
 
 请注意，这些代币可能会在您的交易所不知情的情况下被转让。
 
@@ -973,7 +969,7 @@ CLI和指令创建工具（如`createTransferCheckedWithTransferHookInstruction`
 spl-token transfer --transfer-hook-account <pubkey:role> --transfer-hook-account <pubkey:role> ...
 ```
 
-#### 转账时需要的备忘（Memo）
+#### 转账时需要的备忘信息（Memo）
 
 用户可以配置他们的代币账户，在转账时需要附上一条备忘（memo）信息。
 
@@ -985,4 +981,4 @@ spl-token transfer --with-memo <memo text> <exchange token account> <withdrawal 
 
 ## 测试集成
 
-在将系统迁移到主网 beta 版进行生产之前，请确保在Solana 开发网（Devnet）和测试网（testnet）[集群](https://solana.com/zh/docs/core/clusters.md)上测试您的完整工作流程。开发网是最开放和灵活的，非常适合初始开发，而测试网提供更现实的集群配置。开发网和测试网都支持水龙头服务，运行`solana airdrop 1`以获取一些开发网和测试网 SOL 用于开发和测试。
+在将系统迁移到 mainnet-beta 上的生产环境之前，请确保在Solana开发网和测试网[集群](https://solana.com/zh/docs/core/clusters.md)上测试您的完整工作流程。开发网是最开放和灵活的，非常适合初始开发，而测试网提供更现实的集群配置。开发网和测试网都支持水龙头服务，运行`solana airdrop 1`以获取一些开发网和测试网 SOL 用于开发和测试。
