@@ -117,6 +117,14 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         // { text: "Solana的局限性", link: "limitations" },
       ],
     },
+    {
+      text: "更多",
+      collapsed: false,
+      base: "/SolanaDocumention/more/",
+      items: [
+        { text: "将 Solana 添加到您的交易所", link: "exchange" },
+      ],
+    },
   ];
 }
 
