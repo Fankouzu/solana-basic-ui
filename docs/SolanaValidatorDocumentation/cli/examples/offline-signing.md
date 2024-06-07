@@ -143,7 +143,6 @@ solana@online$ solana transfer Fdri24WUGtrCXZ55nXiewAj6RM18hRHPGAjZk3o6vBut 10 \
 ohGKvpRC46jAduwU9NW8tP91JkCT5r8Mo67Ysnid4zc76tiiV1Ho6jv3BKFSbBcr2NcPPCarmfTLSkTHsJCtdYi
 ```
 
-### 延长签名时间
+## 延长签名时间
 
 通常，Solana 交易必须在其 `recent_blockhash` 字段中的区块哈希对应的一定数量的插槽内（截至本文编写时约为 1 分钟）签名并被网络接受。如果您的签名过程需要更长时间，可以使用[持久化交易随机数](https://docs.solanalabs.com/cli/examples/durable-nonce)（Durable Transaction Nonce）来获得所需的额外时间。
-
