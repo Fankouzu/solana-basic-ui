@@ -223,6 +223,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   text: "部署程序",
                   link: "cli/examples/deploy-a-program",
                 },
+                {
+                  text: "离线交易签名",
+                  link: "cli/examples/offline-signing",
+                },
               ],
             },
           ],
@@ -274,6 +278,17 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
       ],
     },
     { text: "Token 兑换程序", link: "token-swap" },
+    { text: "代币升级程序", link: "token-upgrade" },
+    { text: "备忘录程序", link: "memo" },
+    { text: "域名服务", link: "name-service" },
+    { text: "共享内存程序", link: "shared-memory" },
+    {
+      text: "质押池",
+      collapsed: false,
+      items: [
+        { text: "质押池介绍", link: "stake-pool/stake-pool" },
+      ],
+    },
   ];
 }
 // refer https://vitepress.dev/reference/site-config for details
