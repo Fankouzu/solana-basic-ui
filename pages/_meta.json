@@ -1,15 +1,16 @@
 {
-  "index": "Introduction",
-  "another": "Another Page",
-  "advanced": "Advanced (A Folder)",
+  "index": {
+    "title": "index",
+    "type": "page"
+  },
   "about": {
     "title": "About",
     "type": "page"
   },
   "contact": {
     "title": "Contact ↗",
-    "type": "page",
-    "href": "https://twitter.com/shuding_",
-    "newWindow": true
+    "href": "https://x.com/MasterCui",
+    "newWindow": true,
+    "type": "page"
   }
 }
