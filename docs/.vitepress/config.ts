@@ -258,6 +258,7 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
       ],
     },
     { text: "Token 兑换程序", link: "token-swap" },
+
     { text: "代币升级程序", link: "token-upgrade" },
     { text: "备忘录程序", link: "memo" },
     { text: "域名服务", link: "name-service" },
@@ -268,6 +269,15 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
       items: [
         { text: "质押池介绍", link: "stake-pool/stake-pool" },
       ],
+    },
+    { text: "转账钩子接口",
+    collapsed: false,
+    items: [
+      { text: "介绍", link: "transfer-hook-interface" },
+      { text: "规范", link: "transfer-hook-interface/specification" },
+      { text: "配置额外账户", link: "transfer-hook-interface/configuring-extra-accounts" },
+      { text: "示例", link: "transfer-hook-interface/examples" },
+    ]
     },
   ];
 }
