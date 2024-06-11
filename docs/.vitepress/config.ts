@@ -52,7 +52,10 @@ function sidebarSolanaBasic(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [
         { text: "账户", link: "004" },
-        { text: "创建代币", link: "005" },
+        { text: "版本化交易", link: "005" },
+        { text: "包装SOL", link: "006" },
+        { text: "创建代币", link: "007" },
+        { text: "非同质化代币", link: "008" },
       ],
     },
   ];
