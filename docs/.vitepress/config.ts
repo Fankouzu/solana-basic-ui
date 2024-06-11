@@ -27,7 +27,7 @@ function nav(): DefaultTheme.NavItem[] {
       items: [
         {
           text: "Solana Basic",
-          link: "/SolanaBasic/home",
+          link: "/SolanaBasic/000",
           activeMatch: "/SolanaBasic/",
         },
       ],
@@ -37,12 +37,24 @@ function nav(): DefaultTheme.NavItem[] {
 
 function sidebarSolanaBasic(): DefaultTheme.SidebarItem[] {
   return [
-    { text: "首页", link: "home" },
-    { text: "客户端安装", link: "001" },
-    { text: "代币基础", link: "002" },
-    { text: "创建代币", link: "003" },
-    { text: "发送代币", link: "004" },
-    { text: "非同质化代币", link: "005" },
+    {
+      text: "第一阶段：账户与代币",
+      collapsed: false,
+      items: [
+        { text: "核心概念", link: "000" },
+        { text: "客户端安装", link: "001" },
+        { text: "代币基础", link: "002" },
+        { text: "非同质化代币", link: "003" },
+      ],
+    },
+    {
+      text: "第二阶段：脚本互动",
+      collapsed: false,
+      items: [
+        { text: "账户", link: "004" },
+        { text: "创建代币", link: "005" },
+      ],
+    },
   ];
 }
 function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
@@ -141,9 +153,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       text: "更多",
       collapsed: false,
       base: "/SolanaDocumention/more/",
-      items: [
-        { text: "将 Solana 添加到您的交易所", link: "exchange" },
-      ],
+      items: [{ text: "将 Solana 添加到您的交易所", link: "exchange" }],
     },
   ];
 }
@@ -285,9 +295,7 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
     {
       text: "质押池",
       collapsed: false,
-      items: [
-        { text: "质押池介绍", link: "stake-pool/stake-pool" },
-      ],
+      items: [{ text: "质押池介绍", link: "stake-pool/stake-pool" }],
     },
   ];
 }

@@ -8,7 +8,13 @@
     "deploy": "vitepress build docs && npx surge ./docs/.vitepress/dist solana-basic.surge.sh"
   },
   "devDependencies": {
+    "@types/node": "^20.14.2",
     "surge": "^0.23.1",
     "vitepress": "^1.2.2"
+  },
+  "dependencies": {
+    "@solana/spl-token": "^0.4.6",
+    "@solana/web3.js": "^1.92.3",
+    "dotenv": "^16.4.5"
   }
 }
