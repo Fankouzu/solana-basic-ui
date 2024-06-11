@@ -131,7 +131,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "调试程序", link: "programs/debugging" },
         { text: "部署程序", link: "programs/deploying" },
         { text: "程序示例", link: "programs/examples" },
-        // { text: "常见问题", link: "faq" },
+        { text: "常见问题", link: "programs/faq" },
         // { text: "使用C语言开发", link: "lang-c" },
         // { text: "使用Rust语言开发", link: "lang-rust" },
         // { text: "Solana的局限性", link: "limitations" },
