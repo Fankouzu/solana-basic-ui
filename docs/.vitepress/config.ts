@@ -121,9 +121,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       text: "更多",
       collapsed: false,
       base: "/SolanaDocumention/more/",
-      items: [
-        { text: "将 Solana 添加到您的交易所", link: "exchange" },
-      ],
+      items: [{ text: "将 Solana 添加到您的交易所", link: "exchange" }],
     },
   ];
 }
@@ -204,6 +202,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   link: "cli/examples/deploy-a-program",
                 },
                 {
+                  text: "持久化交易随机数",
+                  link: "cli/examples/durable-nonce",
+                },
+                {
                   text: "离线交易签名",
                   link: "cli/examples/offline-signing",
                 },
@@ -265,9 +267,7 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
     {
       text: "质押池",
       collapsed: false,
-      items: [
-        { text: "质押池介绍", link: "stake-pool/stake-pool" },
-      ],
+      items: [{ text: "质押池介绍", link: "stake-pool/stake-pool" }],
     },
   ];
 }
