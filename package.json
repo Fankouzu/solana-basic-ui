@@ -1,7 +1,6 @@
 {
-  "private": true,
-  "type": "module",
   "scripts": {
+    "demo": "npx ts-node",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:serve": "vitepress serve docs",
@@ -13,8 +12,13 @@
     "vitepress": "^1.2.2"
   },
   "dependencies": {
+    "@metaplex-foundation/mpl-bubblegum": "^4.1.0",
+    "@metaplex-foundation/mpl-token-metadata": "^3.2.1",
+    "@metaplex-foundation/umi": "^0.9.1",
+    "@metaplex-foundation/umi-bundle-defaults": "^0.9.1",
     "@solana/spl-token": "^0.4.6",
     "@solana/web3.js": "^1.92.3",
+    "bs58": "^5.0.0",
     "dotenv": "^16.4.5"
   }
 }

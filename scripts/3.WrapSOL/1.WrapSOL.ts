@@ -23,6 +23,9 @@ import { Transfer } from "../2.VersionedTx/Transfer";
     // 第二个交易，创建SyncNative指令
     CreateSyncNativeIx(associatedTokenAccount)
   );
+  // 计算交易费
+  const fees = await solTransferTransaction.getEstimatedFee(connection);
+  console.log(`Estimated SOL transfer cost: ${fees} lamports`);
   // 发送和确认交易
   await SendAndConfirmTx(connection, solTransferTransaction, [payer]);
   // 获取账户信息
