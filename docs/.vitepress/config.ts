@@ -255,6 +255,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   text: "离线交易签名",
                   link: "cli/examples/offline-signing",
                 },
+                {
+                  text: "链下消息签名",
+                  link: "cli/examples/sign-offchain-message",
+                },
               ],
             },
           ],
