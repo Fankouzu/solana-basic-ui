@@ -6,3 +6,5 @@ cache
 package-lock.json
 .idea
 .next
+.env
+.local_keys
