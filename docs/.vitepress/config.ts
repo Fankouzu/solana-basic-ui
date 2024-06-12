@@ -3,19 +3,24 @@ import { defineConfig, type DefaultTheme } from "vitepress";
 function nav(): DefaultTheme.NavItem[] {
   return [
     {
-      text: "Solana中文文档",
-      link: "/SolanaDocumention/home",
-      activeMatch: "/SolanaDocumention/",
-    },
-    {
-      text: "Solana验证器文档",
-      link: "/SolanaValidatorDocumentation/home",
-      activeMatch: "/SolanaValidatorDocumentation/",
-    },
-    {
-      text: "Solana程序库",
-      link: "/SolanaProgramLibrary/home",
-      activeMatch: "/SolanaProgramLibrary/",
+      text: "官方文档",
+      items: [
+        {
+          text: "Solana中文文档",
+          link: "/SolanaDocumention/home",
+          activeMatch: "/SolanaDocumention/",
+        },
+        {
+          text: "Solana验证器文档",
+          link: "/SolanaValidatorDocumentation/home",
+          activeMatch: "/SolanaValidatorDocumentation/",
+        },
+        {
+          text: "Solana程序库",
+          link: "/SolanaProgramLibrary/home",
+          activeMatch: "/SolanaProgramLibrary/",
+        },
+      ],
     },
   ];
 }
@@ -104,13 +109,19 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
       items: [
         { text: "概述", link: "programs/overview" },
         { text: "调试程序", link: "programs/debugging" },
-        // { text: "部署程序", link: "deploying" },
-        // { text: "程序示例", link: "examples" },
-        // { text: "常见问题", link: "faq" },
-        // { text: "使用C语言开发", link: "lang-c" },
+        { text: "部署程序", link: "programs/deploying" },
+        { text: "程序示例", link: "programs/examples" },
+        { text: "常见问题", link: "programs/faq" },
+        { text: "使用C语言开发", link: "programs/lang-c" },
         // { text: "使用Rust语言开发", link: "lang-rust" },
         // { text: "Solana的局限性", link: "limitations" },
       ],
+    },
+    {
+      text: "更多",
+      collapsed: false,
+      base: "/SolanaDocumention/more/",
+      items: [{ text: "将 Solana 添加到您的交易所", link: "exchange" }],
     },
   ];
 }
@@ -190,6 +201,14 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   text: "部署程序",
                   link: "cli/examples/deploy-a-program",
                 },
+                {
+                  text: "持久化交易随机数",
+                  link: "cli/examples/durable-nonce",
+                },
+                {
+                  text: "离线交易签名",
+                  link: "cli/examples/offline-signing",
+                },
               ],
             },
           ],
@@ -241,6 +260,15 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
       ],
     },
     { text: "Token 兑换程序", link: "token-swap" },
+    { text: "代币升级程序", link: "token-upgrade" },
+    { text: "备忘录程序", link: "memo" },
+    { text: "域名服务", link: "name-service" },
+    { text: "共享内存程序", link: "shared-memory" },
+    {
+      text: "质押池",
+      collapsed: false,
+      items: [{ text: "质押池介绍", link: "stake-pool/stake-pool" }],
+    },
   ];
 }
 // refer https://vitepress.dev/reference/site-config for details
@@ -251,7 +279,7 @@ export default defineConfig({
 
   themeConfig: {
     nav: nav(),
-
+    logo: "/solanaLogoMark.svg",
     sidebar: {
       "/SolanaDocumention/": {
         base: "/SolanaDocumention/",
