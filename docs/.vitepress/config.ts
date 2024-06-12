@@ -147,7 +147,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "部署程序", link: "programs/deploying" },
         { text: "程序示例", link: "programs/examples" },
         { text: "常见问题", link: "programs/faq" },
-        // { text: "使用C语言开发", link: "lang-c" },
+        { text: "使用C语言开发", link: "programs/lang-c" },
         // { text: "使用Rust语言开发", link: "lang-rust" },
         // { text: "Solana的局限性", link: "limitations" },
       ],
@@ -235,6 +235,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                 {
                   text: "部署程序",
                   link: "cli/examples/deploy-a-program",
+                },
+                {
+                  text: "持久化交易随机数",
+                  link: "cli/examples/durable-nonce",
                 },
                 {
                   text: "离线交易签名",
