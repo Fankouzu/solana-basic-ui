@@ -213,6 +213,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   text: "链下消息签名",
                   link: "cli/examples/sign-offchain-message",
                 },
+                {
+                  text: "测试验证器",
+                  link: "cli/examples/test-validator",
+                },
               ],
             },
           ],
