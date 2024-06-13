@@ -1,11 +1,5 @@
 import { Keypair, SystemProgram } from "@solana/web3.js";
-import {
-  payer,
-  connection,
-  STATIC_PUBLICKEY,
-  FgGreen,
-  FgYellow,
-} from "../libs/vars";
+import { payer, connection, STATIC_PUBLICKEY, Log } from "../libs/helpers";
 import { CreateAccountIx } from "./CreateAccountIx";
 import { Transfer } from "./Transfer";
 import { CreateVersionedTx } from "./CreateVersionedTx";
@@ -13,12 +7,10 @@ import { SignTx } from "./SignTx";
 import { SendVersionedTx } from "./SendVersionedTx";
 // 创建账户Ix，两个发送交易
 (async () => {
-  console.log(
-    `${FgGreen}Payer address: ${FgYellow + payer.publicKey.toBase58()}`
-  );
+  Log("Payer address", payer.publicKey.toBase58());
   // 随机计算一个地址的keypair
   let to = Keypair.generate();
-  console.log(`${FgGreen}to address: ${FgYellow + to.publicKey.toBase58()}`);
+  Log("to address", to.publicKey.toBase58());
   // 创建账户的指令IX
   let createAccountIx = await CreateAccountIx(
     payer,

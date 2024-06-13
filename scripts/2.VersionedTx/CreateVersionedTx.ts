@@ -5,7 +5,7 @@ import {
   TransactionInstruction,
   Connection,
 } from "@solana/web3.js";
-import { FgGreen, FgYellow } from "../libs/vars";
+import { Log } from "../libs/helpers";
 // 创建版本化交易
 export async function CreateVersionedTx(
   payerKey: PublicKey, // 支付账户的公钥
@@ -26,6 +26,6 @@ export async function CreateVersionedTx(
 
   // 用消息创建版本化交易
   const tx = new VersionedTransaction(message);
-  console.log(`${FgGreen}tx.version: ${FgYellow + tx.version}`);
+  Log("tx.version", tx.version);
   return tx;
 }

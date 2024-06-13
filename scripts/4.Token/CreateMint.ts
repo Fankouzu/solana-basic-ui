@@ -1,7 +1,6 @@
 import { createMint, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { Connection, Keypair, PublicKey, Signer } from "@solana/web3.js";
-import { savePublicKeyToFile } from "../libs/helpers";
-import { FgGreen, FgYellow } from "../libs/vars";
+import { savePublicKeyToFile, Log } from "../libs/helpers";
 // 创建mint账户
 export async function CreateMint(
   connection: Connection,
@@ -26,8 +25,8 @@ export async function CreateMint(
     undefined, // 确认交易的选项
     programId // SPL Token程序账户
   );
-  console.log(`${FgGreen}Mint地址： ${FgYellow + mint.toBase58()}`);
+  Log("Mint地址", mint.toBase58());
   // 保存Token账户地址
-  savePublicKeyToFile(symble, mint);
+  savePublicKeyToFile(symble, mint.toString());
   return mint;
 }

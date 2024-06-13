@@ -1,6 +1,6 @@
 import { NATIVE_MINT, getAccount } from "@solana/spl-token";
-import { LAMPORTS_PER_SOL, SystemProgram } from "@solana/web3.js";
-import { connection, payer, FgGreen, FgYellow } from "../libs/vars";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { connection, payer, FgGreen, FgYellow } from "../libs/helpers";
 import { Ata } from "./ATA";
 import { AddTransaction } from "./AddTransaction";
 import { SendAndConfirmTx } from "./SendAndConfirmTx";

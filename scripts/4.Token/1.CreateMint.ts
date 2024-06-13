@@ -1,5 +1,5 @@
 import { getMint } from "@solana/spl-token";
-import { connection, payer } from "../libs/vars";
+import { Log, connection, payer } from "../libs/helpers";
 import { CreateMint } from "./CreateMint";
 // 创建mint账户
 (async () => {
@@ -13,5 +13,5 @@ import { CreateMint } from "./CreateMint";
   );
   // 获取铸造详情
   const mintInfo = await getMint(connection, mint);
-  console.log(mintInfo);
+  Log("mintInfo", mintInfo);
 })();

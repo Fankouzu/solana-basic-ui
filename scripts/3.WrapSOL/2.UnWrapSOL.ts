@@ -1,5 +1,5 @@
 import { NATIVE_MINT } from "@solana/spl-token";
-import { connection, payer } from "../libs/vars";
+import { connection, payer } from "../libs/helpers";
 import { Ata } from "./ATA";
 import { CloseAccount } from "./CloseAccount";
 // 包装SOL

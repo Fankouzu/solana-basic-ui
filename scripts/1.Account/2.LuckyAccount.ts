@@ -1,5 +1,5 @@
 import { Keypair } from "@solana/web3.js";
-import { FgGreen, FgRed, FgYellow } from "../libs/vars";
+import { Log, FgRed } from "../libs/helpers";
 
 // 幸运账号
 const luckyStr = "Cui"; // 自定义前缀
@@ -13,10 +13,8 @@ const luckyStr = "Cui"; // 自定义前缀
     if (keypair.publicKey.toString().startsWith(luckyStr)) {
       process.stdout.clearLine(0);
       process.stdout.cursorTo(0);
-      console.log(
-        `${FgGreen}Found 公钥/地址: ${FgYellow + keypair.publicKey.toBase58()}`
-      );
-      console.log(`${FgGreen}Found 私钥: ${FgYellow}[${keypair.secretKey}]`);
+      Log("publicKey 公钥/地址", keypair.publicKey.toBase58());
+      Log("secretKey 私钥", keypair.secretKey);
       count++;
     } else {
       process.stdout.clearLine(0);

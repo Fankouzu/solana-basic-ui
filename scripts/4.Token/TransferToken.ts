@@ -1,7 +1,6 @@
 import { transfer } from "@solana/spl-token";
 import { Connection, PublicKey, Signer } from "@solana/web3.js";
-import { explorerURL } from "../libs/helpers";
-import { FgGreen, FgYellow } from "../libs/vars";
+import { explorerURL, Log } from "../libs/helpers";
 // 发送Token
 export async function TransferToken(
   connection: Connection,
@@ -19,6 +18,5 @@ export async function TransferToken(
     owner, // Token的拥有者地址
     amount // 发送数量
   );
-  console.log(`${FgGreen}交易完成.`);
-  console.log(FgYellow + explorerURL({ txSignature: signature }));
+  Log("交易完成", explorerURL({ txSignature: signature }));
 }

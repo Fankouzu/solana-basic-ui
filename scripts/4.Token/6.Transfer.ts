@@ -1,4 +1,4 @@
-import { connection, payer, FgGreen, FgYellow, TokenMint } from "../libs/vars";
+import { connection, payer, Log, LoadPublicKey } from "../libs/helpers";
 import { Keypair } from "@solana/web3.js";
 import { TransferToken } from "./TransferToken";
 import { Ata } from "../3.WrapSOL/ATA";
@@ -7,12 +7,10 @@ import { getAccount } from "@solana/spl-token";
 (async () => {
   // 随机计算接收地址
   const toKeypair = Keypair.generate();
-  console.log(
-    `${FgGreen}To 公钥/地址: ${FgYellow + toKeypair.publicKey.toBase58()}`
-  );
-
+  Log("Payer address", payer.publicKey.toBase58());
+  Log("To 公钥/地址", toKeypair.publicKey.toBase58());
   // 读取保存的Token地址
-  let tokenMint = TokenMint("Token");
+  let tokenMint = LoadPublicKey("Token");
 
   // 获取或创建From ATA
   const fromTokenAccount = await Ata(
@@ -31,12 +29,8 @@ import { getAccount } from "@solana/spl-token";
 
   const fromBalanceBefore = await getAccount(connection, fromTokenAccount);
   const toBalanceBefore = await getAccount(connection, toTokenAccount);
-  console.log(
-    `${FgGreen}from Balance before: ${FgYellow + fromBalanceBefore.amount}`
-  );
-  console.log(
-    `${FgGreen}to   Balance before: ${FgYellow + toBalanceBefore.amount}`
-  );
+  Log("from Balance before", fromBalanceBefore.amount);
+  Log("to   Balance before", toBalanceBefore.amount);
 
   // 发送Token
   await TransferToken(
@@ -50,10 +44,6 @@ import { getAccount } from "@solana/spl-token";
 
   const fromBalanceAfter = await getAccount(connection, fromTokenAccount);
   const toBalanceAfter = await getAccount(connection, toTokenAccount);
-  console.log(
-    `${FgGreen}from Balance after: ${FgYellow + fromBalanceAfter.amount}`
-  );
-  console.log(
-    `${FgGreen}to   Balance after: ${FgYellow + toBalanceAfter.amount}`
-  );
+  Log("from Balance after", fromBalanceAfter.amount);
+  Log("to   Balance after", toBalanceAfter.amount);
 })();

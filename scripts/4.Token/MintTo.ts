@@ -1,7 +1,6 @@
 import { mintTo } from "@solana/spl-token";
 import { Connection, PublicKey, Signer } from "@solana/web3.js";
-import { explorerURL } from "../libs/helpers";
-import { FgGreen, FgYellow } from "../libs/vars";
+import { explorerURL, Log } from "../libs/helpers";
 // 铸造Token
 export async function MintTo(
   connection: Connection,
@@ -12,7 +11,6 @@ export async function MintTo(
   amount: number | bigint
 ) {
   // 铸造一些数量的Token到Ata账户
-  console.log(FgGreen + "Minting some tokens to the ata...");
   const mintSig = await mintTo(
     connection, // 网络链接
     payer, // 支付账户
@@ -22,6 +20,5 @@ export async function MintTo(
     amount // 数量
   );
 
-  console.log(`${FgGreen}交易完成.`);
-  console.log(FgYellow + explorerURL({ txSignature: mintSig }));
+  Log("交易完成", explorerURL({ txSignature: mintSig }));
 }

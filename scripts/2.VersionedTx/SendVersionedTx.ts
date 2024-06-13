@@ -1,6 +1,8 @@
 import { VersionedTransaction } from "@solana/web3.js";
-import { connection, FgGreen, FgYellow, FgRed } from "../libs/vars";
 import {
+  connection,
+  Log,
+  FgRed,
   explorerURL,
   extractSignatureFromFailedTransaction,
   printConsoleSeparator,
@@ -14,8 +16,7 @@ export async function SendVersionedTx(
     // 实际发送交易
     const sig = await connection.sendTransaction(tx);
     // 输出浏览器链接
-    console.log(`${FgGreen}交易完成.`);
-    console.log(FgYellow + explorerURL({ txSignature: sig }));
+    Log("交易完成", explorerURL({ txSignature: sig }));
   } catch (err) {
     console.error(FgRed + "发送失败:");
     // 尝试从失败的交易中提取签名
@@ -24,11 +25,7 @@ export async function SendVersionedTx(
       err
     );
     if (failedSig)
-      console.log(
-        `${FgRed}Failed signature: ${
-          FgYellow + explorerURL({ txSignature: failedSig })
-        }`
-      );
+      Log("Failed signature", explorerURL({ txSignature: failedSig }));
 
     throw err;
   }

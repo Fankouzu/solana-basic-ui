@@ -1,3 +1,4 @@
+import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import {
@@ -5,16 +6,43 @@ import {
   Keypair,
   LAMPORTS_PER_SOL,
   PublicKey,
-  TransactionInstruction,
-  TransactionMessage,
-  VersionedTransaction,
+  clusterApiUrl,
 } from "@solana/web3.js";
 import { fromWeb3JsKeypair } from "@metaplex-foundation/umi-web3js-adapters";
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults";
+import {
+  createSignerFromKeypair,
+  signerIdentity,
+} from "@metaplex-foundation/umi";
+import { mplTokenMetadata } from "@metaplex-foundation/mpl-token-metadata";
+import base58 from "bs58";
+import { mplCandyMachine } from "@metaplex-foundation/mpl-candy-machine";
+// load the env variables from file
+dotenv.config();
 
 // define some default locations
 const DEFAULT_KEY_DIR_NAME = ".local_keys";
 const DEFAULT_PUBLIC_KEY_FILE = "keys.json";
+const DEFAULT_SIGNATURE_FILE = "sigs.json";
 const DEFAULT_DEMO_DATA_FILE = "demo.json";
+
+export const FgGreen = "\x1b[32m";
+export const FgRed = "\x1b[31m";
+export const FgYellow = "\x1b[33m";
+/**
+ * Load the `payer` keypair from the local file system, or load/generate a new
+ * one and storing it within the local directory
+ */
+export const payer = loadOrGenerateKeypair("Payer");
+
+// generate a new Keypair for testing, named `wallet`
+export const testWallet = loadOrGenerateKeypair("testWallet");
+
+// load the env variables and store the cluster RPC url
+export const CLUSTER_URL = process.env.RPC_URL ?? clusterApiUrl("devnet");
+
+// create a new rpc connection
+export const connection = new Connection(CLUSTER_URL, "confirmed");
 
 /**
  * Load locally stored PublicKey addresses
@@ -29,7 +57,6 @@ export function loadPublicKeysFromFile(
     // load the public keys from the file
     const data =
       JSON.parse(fs.readFileSync(absPath, { encoding: "utf-8" })) || {};
-
     // convert all loaded keyed values into valid public keys
     for (const [key, value] of Object.entries(data)) {
       data[key] = new PublicKey(value as string) ?? "";
@@ -43,34 +70,25 @@ export function loadPublicKeysFromFile(
   return {};
 }
 
-/*
-  Locally save a demo data to the filesystem for later retrieval
-*/
-export function saveDemoDataToFile(
-  name: string,
-  newData: any,
-  absPath: string = `${DEFAULT_KEY_DIR_NAME}/${DEFAULT_DEMO_DATA_FILE}`
+export function loadSignaturesFromFile(
+  absPath: string = `${DEFAULT_KEY_DIR_NAME}/${DEFAULT_SIGNATURE_FILE}`
 ) {
   try {
-    let data: object = {};
+    if (!absPath) throw Error("No path provided");
+    if (!fs.existsSync(absPath)) throw Error("File does not exist.");
 
-    // fetch all the current values, when the storage file exists
-    if (fs.existsSync(absPath))
-      data = JSON.parse(fs.readFileSync(absPath, { encoding: "utf-8" })) || {};
-
-    data = { ...data, [name]: newData };
-
-    // actually save the data to the file
-    fs.writeFileSync(absPath, JSON.stringify(data), {
-      encoding: "utf-8",
-    });
+    // load the signatures from the file
+    const data =
+      JSON.parse(fs.readFileSync(absPath, { encoding: "utf-8" })) || {};
+    // convert all loaded keyed values into valid signatures
+    for (const [key, value] of Object.entries(data)) {
+      data[key] = value ?? "";
+    }
 
     return data;
   } catch (err) {
-    console.warn("Unable to save to file");
-    // console.warn(err);
+    // console.warn("Unable to load local file");
   }
-
   // always return an object
   return {};
 }
@@ -80,7 +98,7 @@ export function saveDemoDataToFile(
 */
 export function savePublicKeyToFile(
   name: string,
-  publicKey: PublicKey,
+  publicKey: string,
   absPath: string = `${DEFAULT_KEY_DIR_NAME}/${DEFAULT_PUBLIC_KEY_FILE}`
 ) {
   try {
@@ -94,7 +112,7 @@ export function savePublicKeyToFile(
     for (const [key, value] of Object.entries(data)) {
       data[key as any] = (value as PublicKey).toBase58();
     }
-    data = { ...data, [name]: publicKey.toBase58() };
+    data = { ...data, [name]: publicKey };
 
     // actually save the data to the file
     fs.writeFileSync(absPath, JSON.stringify(data), {
@@ -103,6 +121,43 @@ export function savePublicKeyToFile(
 
     // reload the keys for sanity
     data = loadPublicKeysFromFile(absPath);
+
+    return data;
+  } catch (err) {
+    console.warn("Unable to save to file");
+  }
+  // always return an object
+  return {};
+}
+
+/*
+  Locally save a PublicKey addresses to the filesystem for later retrieval
+*/
+export function saveSignatureToFile(
+  name: string,
+  signature: Uint8Array,
+  absPath: string = `${DEFAULT_KEY_DIR_NAME}/${DEFAULT_SIGNATURE_FILE}`
+) {
+  try {
+    // if (!absPath) throw Error("No path provided");
+    // if (!fs.existsSync(absPath)) throw Error("File does not exist.");
+
+    // fetch all the current values
+    let data: any = loadSignaturesFromFile(absPath);
+
+    // convert all loaded keyed values from PublicKeys to strings
+    for (const [key, value] of Object.entries(data)) {
+      data[key as any] = base58.encode(value as Uint8Array);
+    }
+    data = { ...data, [name]: base58.encode(signature) };
+
+    // actually save the data to the file
+    fs.writeFileSync(absPath, JSON.stringify(data), {
+      encoding: "utf-8",
+    });
+
+    // reload the sigs for sanity
+    data = loadSignaturesFromFile(absPath);
 
     return data;
   } catch (err) {
@@ -296,6 +351,7 @@ export function numberFormatter(num: number, forceDecimals = false) {
   }).format(num);
 }
 
+
 /*
   Display a separator in the console, with our without a message
 */
@@ -303,37 +359,6 @@ export function printConsoleSeparator(message?: string) {
   console.log("\n===============================================");
   console.log("===============================================\n");
   if (message) console.log(message);
-}
-
-/**
- * Helper function to build a signed transaction
- */
-export async function buildTransaction({
-  connection,
-  payer,
-  signers,
-  instructions,
-}: {
-  connection: Connection;
-  payer: PublicKey;
-  signers: Keypair[];
-  instructions: TransactionInstruction[];
-}): Promise<VersionedTransaction> {
-  let blockhash = await connection
-    .getLatestBlockhash()
-    .then((res) => res.blockhash);
-
-  const messageV0 = new TransactionMessage({
-    payerKey: payer,
-    recentBlockhash: blockhash,
-    instructions,
-  }).compileToV0Message();
-
-  const tx = new VersionedTransaction(messageV0);
-
-  signers.forEach((s) => tx.sign([s]));
-
-  return tx;
 }
 
 export function UmiKeypair(
@@ -355,3 +380,49 @@ export function UmiKeypair(
 }
 
 export const umiPayer = UmiKeypair("payer");
+
+export function initUmi() {
+  const umi = createUmi(CLUSTER_URL);
+  const signer = createSignerFromKeypair(umi, umiPayer);
+  umi.use(signerIdentity(signer, true));
+  umi.use(mplTokenMetadata());
+  umi.use(mplCandyMachine());
+  return { umi,signer };
+}
+
+export function LoadPublicKey(symble: string) {
+  // load the stored PublicKeys for ease of use
+  let localKeys = loadPublicKeysFromFile();
+
+  const pubkey: PublicKey = localKeys[symble];
+
+  console.log(FgGreen + "==== Local PublicKeys loaded ====");
+  console.log(`${FgGreen}PublicKeys: ${FgYellow + pubkey}`);
+  console.log(FgYellow + explorerURL({ address: pubkey.toString() }));
+  return pubkey;
+}
+
+export function LoadSignature(symble: string) {
+  // load the stored PublicKeys for ease of use
+  let sigs = loadSignaturesFromFile();
+
+  const sig: string = sigs[symble];
+
+  console.log(FgGreen + "==== Local Signature loaded ====");
+  console.log(`${FgGreen}Signature: ${FgYellow + sig}`);
+  console.log(FgYellow + explorerURL({ txSignature: sig }));
+  return base58.decode(sig);
+}
+
+export function txExplorer(signature: Uint8Array) {
+  console.log(
+    FgYellow + explorerURL({ txSignature: base58.encode(signature) })
+  );
+}
+export function pubkeyExplorer(pubkey: string) {
+  console.log(FgYellow + explorerURL({ address: pubkey }));
+}
+
+export function Log(message: string, value: any) {
+  console.log(`${FgGreen + message}: ${FgYellow}`, value);
+}

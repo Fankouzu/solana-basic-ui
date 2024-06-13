@@ -10,7 +10,7 @@ import {
   TOKEN_PROGRAM_ID,
   getOrCreateAssociatedTokenAccount,
 } from "@solana/spl-token";
-import { FgGreen, FgYellow } from "../libs/vars";
+import { Log } from "../libs/helpers";
 
 /**
  * SPL 代币是使用一种特殊关系来拥有的，
@@ -44,6 +44,6 @@ export async function Ata(
     programId, // SPL Token 计划账户
     associatedTokenProgramId // 关联Token程序账户
   ).then((ata) => ata.address);
-  console.log(`${FgGreen}Ata address: ${FgYellow + tokenAccount}`);
+  Log("Ata address", tokenAccount);
   return tokenAccount;
 }

@@ -1,6 +1,6 @@
 import { closeAccount } from "@solana/spl-token";
 import { Connection, PublicKey, Signer } from "@solana/web3.js";
-import { FgGreen, FgYellow } from "../libs/vars";
+import { Log } from "../libs/helpers";
 // 关闭账户
 export async function CloseAccount(
   connection: Connection,
@@ -11,9 +11,7 @@ export async function CloseAccount(
 ) {
   // 获取余额
   const walletBalance = await connection.getBalance(payer.publicKey);
-  console.log(
-    `${FgGreen}Balance before unwrapping 1 WSOL: ${FgYellow + walletBalance}`
-  );
+  Log("Balance before unwrapping 1 WSOL", walletBalance);
   // 关闭账户
   await closeAccount(
     connection, // 链接
@@ -24,9 +22,5 @@ export async function CloseAccount(
   );
   // 获取新余额
   const walletBalancePostClose = await connection.getBalance(payer.publicKey);
-  console.log(
-    `${FgGreen}Balance after unwrapping 1 WSOL: ${
-      FgYellow + walletBalancePostClose
-    }`
-  );
+  Log("Balance after unwrapping 1 WSOL", walletBalancePostClose);
 }

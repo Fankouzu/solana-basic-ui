@@ -1,7 +1,6 @@
 import { burn } from "@solana/spl-token";
 import { Connection, PublicKey, Signer } from "@solana/web3.js";
-import { explorerURL } from "../libs/helpers";
-import { FgGreen, FgYellow } from "../libs/vars";
+import { explorerURL,Log } from "../libs/helpers";
 // 销毁Token
 export async function Burn(
   connection: Connection,
@@ -20,6 +19,5 @@ export async function Burn(
     amount // 数量
   );
 
-  console.log(`${FgGreen}交易完成.`);
-  console.log(FgYellow + explorerURL({ txSignature: mintSig }));
+  Log("交易完成", explorerURL({ txSignature: mintSig }));
 }

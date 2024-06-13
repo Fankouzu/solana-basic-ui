@@ -12,7 +12,7 @@
     "vitepress": "^1.2.2"
   },
   "dependencies": {
-    "@metaplex-foundation/mpl-bubblegum": "^4.1.0",
+    "@metaplex-foundation/mpl-candy-machine": "^6.0.1",
     "@metaplex-foundation/mpl-token-metadata": "^3.2.1",
     "@metaplex-foundation/umi": "^0.9.1",
     "@metaplex-foundation/umi-bundle-defaults": "^0.9.1",
