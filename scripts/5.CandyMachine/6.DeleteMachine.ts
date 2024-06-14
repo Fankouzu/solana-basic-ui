@@ -11,9 +11,9 @@ import { initUmi, txExplorer, LoadPublicKey } from "../libs/helpers";
   const { umi } = initUmi();
   // 读取candyMachine地址
   const candyMachineAddress = publicKey(LoadPublicKey("candyMachine"));
-
+  // 获取糖果机
   const candyMachine = await fetchCandyMachine(umi, candyMachineAddress);
-
+  // 删除糖果机
   await deleteCandyMachine(umi, {
     candyMachine: candyMachine.publicKey,
   })
@@ -21,7 +21,7 @@ import { initUmi, txExplorer, LoadPublicKey } from "../libs/helpers";
     .then(({ signature }) => {
       txExplorer(signature);
     });
-
+  // 删除Guard
   await deleteCandyGuard(umi, {
     candyGuard: candyMachine.mintAuthority,
   })

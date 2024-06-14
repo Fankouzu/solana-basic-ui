@@ -4,13 +4,14 @@ import { createNft } from "@metaplex-foundation/mpl-token-metadata";
 
 (async () => {
   // 初始化umi
-  const { umi } = initUmi();
+  const { umi, signer } = initUmi();
   // 随机创建collection mint账户keypair
   const collectionMint = generateSigner(umi);
   Log("Collection Mint address", collectionMint.publicKey);
   // 创建collection
   await createNft(umi, {
     mint: collectionMint,
+    authority: signer,
     name: "My Collection",
     uri: "https://example.com/my-collection.json",
     sellerFeeBasisPoints: percentAmount(5.5), // 5.5%
