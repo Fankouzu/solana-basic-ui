@@ -159,7 +159,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "程序示例", link: "programs/examples" },
         { text: "常见问题", link: "programs/faq" },
         { text: "使用C语言开发", link: "programs/lang-c" },
-        // { text: "使用Rust语言开发", link: "lang-rust" },
+        { text: "使用Rust语言开发", link: "programs/lang-rust" },
         // { text: "Solana的局限性", link: "limitations" },
       ],
     },
@@ -258,6 +258,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                 {
                   text: "链下消息签名",
                   link: "cli/examples/sign-offchain-message",
+                },
+                {
+                  text: "测试验证器",
+                  link: "cli/examples/test-validator",
                 },
               ],
             },
