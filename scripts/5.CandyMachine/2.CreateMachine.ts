@@ -1,9 +1,11 @@
 import { TokenStandard } from "@metaplex-foundation/mpl-token-metadata";
 import { create } from "@metaplex-foundation/mpl-candy-machine";
 import {
+  dateTime,
   generateSigner,
   percentAmount,
   publicKey,
+  sol,
   some,
 } from "@metaplex-foundation/umi";
 import {
@@ -47,6 +49,11 @@ import {
         uriLength: 43, // URI长度
         isSequential: false, // 随机排序
       }),
+      guards: {
+        botTax: some({ lamports: sol(0.01), lastInstruction: true }),
+        solPayment: some({ lamports: sol(1.5), destination: signer.publicKey }),
+        startDate: some({ date: dateTime("2024-07-01T00:00:00Z") }),
+      },
     })
   )
     .sendAndConfirm(umi)
