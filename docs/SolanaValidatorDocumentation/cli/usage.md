@@ -4,7 +4,7 @@
 
 ## 例子
 
-### 获取公钥
+### 获取公钥（Get Pubkey）
 
 ```bash
 // Command
@@ -14,7 +14,7 @@ $ solana-keygen pubkey
 <PUBKEY>
 ```
 
-### 空投 SOL/Lamports
+### 空投SOL/Lamports
 
 ```bash
 // Command
@@ -24,7 +24,7 @@ $ solana airdrop 1
 "1 SOL"
 ```
 
-### Get Balance
+### 获取余额（Get Balance）
 
 ```bash
 // Command
@@ -34,7 +34,7 @@ $ solana balance
 "3.00050001 SOL"
 ```
 
-### 确认交易
+### 确认交易（Confirm Transaction）
 
 ```bash
 // Command
@@ -44,7 +44,7 @@ $ solana confirm <TX_SIGNATURE>
 "Confirmed" / "Not found" / "Transaction failed with error <ERR>"
 ```
 
-### 部署程序
+### 部署程序（Deploy program）
 
 ```bash
 // Command
@@ -58,7 +58,7 @@ $ solana program deploy <PATH>
 
 ### solana-cli
 
-```text
+```bash
 solana-cli 1.18.16 (src:bfacaf61; feat:4215500110, client:SolanaLabs)
 Blockchain, Rebuilt for Scale
 
@@ -176,9 +176,9 @@ SUBCOMMANDS:
     withdraw-stake                       Withdraw the unstaked SOL from the stake account
 ```
 
-### solana账户
+### solana-account
 
-```text
+```bash
 solana-account
 Show the contents of an account
 
@@ -217,9 +217,9 @@ ARGS:
                            * a hardware wallet keypair URL (i.e. usb:~~ledger)
 ```
 
-### solana地址
+### solana-address
 
-```text
+```bash
 solana-address
 Get your public key
 
@@ -249,9 +249,9 @@ OPTIONS:
         --ws <URL>                         WebSocket URL for the solana cluster
 ```
 
-### solana地址查找表
+### solana-address-lookup-table
 
-```text
+```bash
 solana-address-lookup-table
 Address lookup table management
 
@@ -291,7 +291,7 @@ SUBCOMMANDS:
 
 ### Solana-airdrop
 
-```text
+```bash
 solana-airdrop
 Request SOL from a faucet
 
@@ -331,7 +331,7 @@ ARGS:
 
 ### solana-authorize-nonce-account
 
-```text
+```bash
 solana-authorize-nonce-account
 Assign account authority to a new entity
 
@@ -388,7 +388,7 @@ ARGS:
 
 ### solana-balance
 
-```text
+```bash
 solana-balance
 Get your balance
 
@@ -428,7 +428,7 @@ ARGS:
 
 ### solana-block
 
-```text
+```bash
 solana-block
 Get a confirmed block
 
@@ -462,7 +462,7 @@ ARGS:
 
 ### solana-block-height
 
-```text
+```bash
 solana-block-height
 Get current block height
 
@@ -493,7 +493,7 @@ OPTIONS:
 
 ### solana-block-production
 
-```text
+```bash
 solana-block-production
 Show information about block production
 
@@ -527,7 +527,7 @@ OPTIONS:
 
 ### solana-block-time
 
-```text
+```bash
 solana-block-time
 Get estimated production time of a block
 
@@ -561,7 +561,7 @@ ARGS:
 
 ### solana-catchup
 
-```text
+```bash
 solana-catchup
 Wait for a validator to catch up to the cluster
 
@@ -605,7 +605,7 @@ ARGS:
 
 ### solana-close-vote-account
 
-```text
+```bash
 solana-close-vote-account
 Close a vote account and withdraw all funds remaining
 
@@ -664,7 +664,7 @@ ARGS:
 
 ### solana-cluster-date
 
-```text
+```bash
 solana-cluster-date
 Get current cluster date, computed from genesis creation time and network time
 
@@ -695,7 +695,7 @@ OPTIONS:
 
 ### solana-cluster-version
 
-```text
+```bash
 solana-cluster-version
 Get the version of the cluster entrypoint
 
@@ -726,7 +726,7 @@ OPTIONS:
 
 ### solana-completion
 
-```text
+```bash
 solana-completion
 Generate completion scripts for various shells
 
@@ -758,7 +758,7 @@ OPTIONS:
 
 ### solana-config
 
-```text
+```bash
 solana-config
 Solana command-line tool configuration settings
 
@@ -796,7 +796,7 @@ SUBCOMMANDS:
 
 ### solana-confirm
 
-```text
+```bash
 solana-confirm
 Confirm transaction by signature
 
@@ -839,7 +839,7 @@ Account modes:
 
 ### solana-create-address-with-seed
 
-```text
+```bash
 solana-create-address-with-seed
 Generate a derived account address with a seed. For program derived addresses (PDAs), use the find-program-derived-
 address command instead
@@ -882,7 +882,7 @@ ARGS:
 
 ### solana-create-nonce-account
 
-```text
+```bash
 solana-create-nonce-account
 Create a nonce account
 
@@ -936,7 +936,7 @@ ARGS:
 
 ### solana-create-stake-account
 
-```text
+```bash
 solana-create-stake-account
 Create a stake account
 
@@ -1015,7 +1015,7 @@ ARGS:
 
 ### solana-create-stake-account-checked
 
-```text
+```bash
 solana-create-stake-account-checked
 Create a stake account, checking the withdraw authority as a signer
 
@@ -1081,7 +1081,7 @@ ARGS:
 
 ### solana-create-vote-account
 
-```text
+```bash
 solana-create-vote-account
 Create a vote account
 
@@ -1163,7 +1163,7 @@ ARGS:
 
 ### solana-deactivate-stake
 
-```text
+```bash
 solana-deactivate-stake
 Deactivate the delegated stake from the stake account
 
@@ -1234,7 +1234,7 @@ ARGS:
 
 ### solana-decode-transaction
 
-```text
+```bash
 solana-decode-transaction
 Decode a serialized transaction
 
@@ -1269,7 +1269,7 @@ ARGS:
 
 ### solana-delegate-stake
 
-```text
+```bash
 solana-delegate-stake
 Delegate stake to a vote account
 
@@ -1340,7 +1340,7 @@ ARGS:
 
 ### solana-epoch
 
-```text
+```bash
 solana-epoch
 Get current epoch
 
@@ -1371,7 +1371,7 @@ OPTIONS:
 
 ### solana-epoch-info
 
-```text
+```bash
 solana-epoch-info
 Get information about the current epoch
 
@@ -1402,7 +1402,7 @@ OPTIONS:
 
 ### solana-feature
 
-```text
+```bash
 solana-feature
 Runtime feature management
 
@@ -1438,7 +1438,7 @@ SUBCOMMANDS:
 
 ### solana-fees
 
-```text
+```bash
 solana-fees
 Display current cluster fees (Deprecated in v1.8.0)
 
@@ -1470,7 +1470,7 @@ OPTIONS:
 
 ### solana-find-program-derived-address
 
-```text
+```bash
 solana-find-program-derived-address
 Generate a program derived account address with a seed
 
@@ -1512,7 +1512,7 @@ ARGS:
 
 ### solana-first-available-block
 
-```text
+```bash
 solana-first-available-block
 Get the first available block in the storage
 
@@ -1543,7 +1543,7 @@ OPTIONS:
 
 ### solana-genesis-hash
 
-```text
+```bash
 solana-genesis-hash
 Get the genesis hash
 
@@ -1574,7 +1574,7 @@ OPTIONS:
 
 ### solana-gossip
 
-```text
+```bash
 solana-gossip
 Show the current gossip network nodes
 
@@ -1605,7 +1605,7 @@ OPTIONS:
 
 ### solana-help
 
-```text
+```bash
 solana-help
 Prints this message or the help of the given subcommand(s)
 
@@ -1618,7 +1618,7 @@ ARGS:
 
 ### solana-inflation
 
-```text
+```bash
 solana-inflation
 Show inflation information
 
@@ -1653,7 +1653,7 @@ SUBCOMMANDS:
 
 ### solana-largest-accounts
 
-```text
+```bash
 solana-largest-accounts
 Get addresses of largest cluster accounts
 
@@ -1686,7 +1686,7 @@ OPTIONS:
 
 ### solana-leader-schedule
 
-```text
+```bash
 solana-leader-schedule
 Display leader schedule
 
@@ -1718,7 +1718,7 @@ OPTIONS:
 
 ### solana-live-slots
 
-```text
+```bash
 solana-live-slots
 Show information about the current slot progression
 
@@ -1749,7 +1749,7 @@ OPTIONS:
 
 ### solana-logs
 
-```text
+```bash
 solana-logs
 Stream transaction logs
 
@@ -1789,7 +1789,7 @@ ARGS:
 
 ### solana-merge-stake
 
-```text
+```bash
 solana-merge-stake
 Merges one stake account into another
 
@@ -1861,7 +1861,7 @@ ARGS:
 
 ### solana-new-nonce
 
-```text
+```bash
 solana-new-nonce
 Generate a new nonce, rendering the existing nonce useless
 
@@ -1912,7 +1912,7 @@ ARGS:
 
 ### solana-nonce
 
-```text
+```bash
 solana-nonce
 Get the current nonce value
 
@@ -1951,7 +1951,7 @@ ARGS:
 
 ### solana-nonce-account
 
-```text
+```bash
 solana-nonce-account
 Show the contents of a nonce account
 
@@ -1991,7 +1991,7 @@ ARGS:
 
 ### solana-ping
 
-```text
+```bash
 solana-ping
 Submit transactions sequentially
 
@@ -2039,7 +2039,7 @@ OPTIONS:
 
 ### solana-program
 
-```text
+```bash
 solana-program
 Program management
 
@@ -2082,7 +2082,7 @@ SUBCOMMANDS:
 
 ### solana-program-v4
 
-```text
+```bash
 solana-program-v4
 Program V4 management
 
@@ -2122,7 +2122,7 @@ SUBCOMMANDS:
 
 ### solana-redelegate-stake
 
-```text
+```bash
 solana-redelegate-stake
 Redelegate active stake to another vote account
 
@@ -2187,7 +2187,7 @@ ARGS:
 
 ### solana-rent
 
-```text
+```bash
 solana-rent
 Calculate rent-exempt-minimum value for a given account data field length.
 
@@ -2223,7 +2223,7 @@ ARGS:
 
 ### solana-resolve-signer
 
-```text
+```bash
 solana-resolve-signer
 Checks that a signer is valid, and returns its specific path; useful for signers that may be specified generally, eg.
 usb:~~ledger
@@ -2258,7 +2258,7 @@ ARGS:
 
 ### solana-sign-offchain-message
 
-```text
+```bash
 solana-sign-offchain-message
 Sign off-chain message
 
@@ -2287,12 +2287,12 @@ OPTIONS:
         --ws <URL>                         WebSocket URL for the solana cluster
 
 ARGS:
-    <STRING>    The message text to be signed
+    <STRING>    The message bash to be signed
 ```
 
 ### solana-slot
 
-```text
+```bash
 solana-slot
 Get current slot
 
@@ -2323,7 +2323,7 @@ OPTIONS:
 
 ### solana-split-stake
 
-```text
+```bash
 solana-split-stake
 Duplicate a stake account, splitting the tokens between the two
 
@@ -2397,7 +2397,7 @@ ARGS:
 
 ### solana-stake-account
 
-```text
+```bash
 solana-stake-account
 Show the contents of a stake account
 
@@ -2440,7 +2440,7 @@ ARGS:
 
 ### solana-stake-authorize
 
-```text
+```bash
 solana-stake-authorize
 Authorize a new signing keypair for the given stake account
 
@@ -2523,7 +2523,7 @@ ARGS:
 
 ### solana-stake-authorize-checked
 
-```text
+```bash
 solana-stake-authorize-checked
 Authorize a new signing keypair for the given stake account, checking the authority as a signer
 
@@ -2594,7 +2594,7 @@ ARGS:
 
 ### solana-stake-history
 
-```text
+```bash
 solana-stake-history
 Show the stake history
 
@@ -2619,7 +2619,7 @@ OPTIONS:
     -u, --url <URL_OR_MONIKER>             URL for Solana's JSON RPC or moniker (or their first letter): [mainnet-beta,
                                            testnet, devnet, localhost]
     -k, --keypair <KEYPAIR>                Filepath or URL to a keypair
-        --limit <NUM>                      Display NUM recent epochs worth of stake history in text mode. 0 for all
+        --limit <NUM>                      Display NUM recent epochs worth of stake history in bash mode. 0 for all
                                            [default: 10]
         --output <FORMAT>                  Return information in specified output format [possible values: json, json-
                                            compact]
@@ -2628,7 +2628,7 @@ OPTIONS:
 
 ### solana-stake-minimum-delegation
 
-```text
+```bash
 solana-stake-minimum-delegation
 Get the stake minimum delegation amount
 
@@ -2660,7 +2660,7 @@ OPTIONS:
 
 ### solana-stake-set-lockup
 
-```text
+```bash
 solana-stake-set-lockup
 Set Lockup for the stake account
 
@@ -2738,7 +2738,7 @@ ARGS:
 
 ### solana-stake-set-lockup-checked
 
-```text
+```bash
 solana-stake-set-lockup-checked
 Set Lockup for the stake account, checking the new authority as a signer
 
@@ -2810,7 +2810,7 @@ ARGS:
 
 ### solana-stakes
 
-```text
+```bash
 solana-stakes
 Show stake account information
 
@@ -2857,7 +2857,7 @@ ARGS:
 
 ### solana-supply
 
-```text
+```bash
 solana-supply
 Get information about the cluster supply of SOL
 
@@ -2889,7 +2889,7 @@ OPTIONS:
 
 ### solana-transaction-count
 
-```text
+```bash
 solana-transaction-count
 Get current transaction count
 
@@ -2920,7 +2920,7 @@ OPTIONS:
 
 ### solana-transaction-history
 
-```text
+```bash
 solana-transaction-history
 Show historical transactions affecting the given address from newest to oldest
 
@@ -2963,7 +2963,7 @@ ARGS:
 
 ### solana-transfer
 
-```text
+```bash
 solana-transfer
 Transfer funds between system accounts
 
@@ -3038,7 +3038,7 @@ ARGS:
 
 ### solana-upgrade-nonce-account
 
-```text
+```bash
 solana-upgrade-nonce-account
 One-time idempotent upgrade of legacy nonce versions in order to bump them out of chain blockhash domain.
 
@@ -3086,7 +3086,7 @@ ARGS:
 
 ### solana-validator-info
 
-```text
+```bash
 solana-validator-info
 Publish~get Validator info on Solana
 
@@ -3122,7 +3122,7 @@ SUBCOMMANDS:
 
 ### solana-validators
 
-```text
+```bash
 solana-validators
 Show summary information about the current validators
 
@@ -3168,7 +3168,7 @@ OPTIONS:
 
 ### solana-verify-offchain-signature
 
-```text
+```bash
 solana-verify-offchain-signature
 Verify off-chain message signature
 
@@ -3203,13 +3203,13 @@ OPTIONS:
         --ws <URL>                         WebSocket URL for the solana cluster
 
 ARGS:
-    <STRING>       The text of the original message
+    <STRING>       The bash of the original message
     <SIGNATURE>    The message signature to verify
 ```
 
 ### solana-vote-account
 
-```text
+```bash
 solana-vote-account
 Show the contents of a vote account
 
@@ -3252,7 +3252,7 @@ ARGS:
 
 ### solana-vote-authorize-voter
 
-```text
+```bash
 solana-vote-authorize-voter
 Authorize a new vote signing keypair for the given vote account
 
@@ -3323,7 +3323,7 @@ ARGS:
 
 ### solana-vote-authorize-voter-checked
 
-```text
+```bash
 solana-vote-authorize-voter-checked
 Authorize a new vote signing keypair for the given vote account, checking the new authority as a signer
 
@@ -3389,7 +3389,7 @@ ARGS:
 
 ### solana-vote-authorize-withdrawer
 
-```text
+```bash
 solana-vote-authorize-withdrawer
 Authorize a new withdraw signing keypair for the given vote account
 
@@ -3460,7 +3460,7 @@ ARGS:
 
 ### solana-vote-authorize-withdrawer-checked
 
-```text
+```bash
 solana-vote-authorize-withdrawer-checked
 Authorize a new withdraw signing keypair for the given vote account, checking the new authority as a signer
 
@@ -3526,7 +3526,7 @@ ARGS:
 
 ### solana-vote-update-commission
 
-```text
+```bash
 solana-vote-update-commission
 Update the vote account's commission
 
@@ -3592,7 +3592,7 @@ ARGS:
 
 ### solana-vote-update-validator
 
-```text
+```bash
 solana-vote-update-validator
 Update the vote account's validator identity
 
@@ -3658,7 +3658,7 @@ ARGS:
 
 ### solana-wait-for-max-stake
 
-```text
+```bash
 solana-wait-for-max-stake
 Wait for the max stake of any one node to drop below a percentage of total.
 
@@ -3692,7 +3692,7 @@ ARGS:
 
 ### solana-withdraw-from-nonce-account
 
-```text
+```bash
 solana-withdraw-from-nonce-account
 Withdraw SOL from the nonce account
 
@@ -3750,7 +3750,7 @@ ARGS:
 
 ### solana-withdraw-from-vote-account
 
-```text
+```bash
 solana-withdraw-from-vote-account
 Withdraw lamports from a vote account into a specified account
 
@@ -3823,7 +3823,7 @@ ARGS:
 
 ### solana-withdraw-stake
 
-```text
+```bash
 solana-withdraw-stake
 Withdraw the unstaked SOL from the stake account
 
@@ -3897,6 +3897,3 @@ ARGS:
                                  * a hardware wallet keypair URL (i.e. usb:~~ledger)
     <AMOUNT>                   The amount to withdraw from the stake account, in SOL; accepts keyword ALL
 ```
-
-
-
