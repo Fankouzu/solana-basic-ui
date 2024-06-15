@@ -18,12 +18,10 @@
 sh -c "$(curl -sSfL https://release.solana.com/v1.18.15/install)"
 ```
 
-
-
-- 您可以 `v1.18.15` 替换为与所需版本的软件版本匹配的版本标记，也可以使用以下任一符号通道名称： `stable` 、 `beta` 或 `edge` 。
+- 您可以将 `v1.18.16` 替换为与所需版本的软件版本匹配的版本标记，也可以使用以下任一标记渠道名称： `stable` 、 `beta` 或 `edge` 。
 - 以下输出表示更新成功：
 
-```text
+```bash
 downloading v1.18.15 installer
 Configuration: /home/solana/.config/solana/install/config.yml
 Active release directory: /home/solana/.local/share/solana/install/active_release
@@ -32,15 +30,11 @@ Active release directory: /home/solana/.local/share/solana/install/active_releas
 Update successful
 ```
 
-
-
 - 根据不同系统，安装程序消息的末尾可能会提示您
 
 ```bash
 Please update your PATH environment variable to include the solana programs:
 ```
-
-
 
 - 如果收到上述消息，请将建议的命令复制并粘贴到其下方进行更新`PATH`
 - 通过运行以下命令确认您已安装所需的版本`solana`：
@@ -48,8 +42,6 @@ Please update your PATH environment variable to include the solana programs:
 ```bash
 solana --version
 ```
-
-
 
 - 安装成功后， `solana-install update`可用于随时将 Solana 软件进行版本更新。
 
@@ -88,7 +80,7 @@ solana --version
 
 ### Linux
 
-在https://github.com/solana-labs/solana/releases/latest下载二进制文件**solana-release-x86_64-unknown-linux-gnu.tar.bz2**,然后提取存档：
+在https://github.com/solana-labs/solana/releases/latest下载二进制文件**solana-release-x86_64-unknown-linux-gnu.tar.bz2**,然后解压归档文件：
 
 ```bash
 tar jxf solana-release-x86_64-unknown-linux-gnu.tar.bz2
@@ -98,7 +90,7 @@ export PATH=$PWD/bin:$PATH
 
 ### MacOS
 
-在https://github.com/solana-labs/solana/releases/latest下载二进制文件**solana-release-x86_64-apple-darwin.tar.bz2**,然后解压并存档：
+在https://github.com/solana-labs/solana/releases/latest下载二进制文件**solana-release-x86_64-apple-darwin.tar.bz2**,然后解压归档文件：
 
 ```bash
 tar jxf solana-release-x86_64-apple-darwin.tar.bz2
@@ -109,16 +101,16 @@ export PATH=$PWD/bin:$PATH
 ### Windows
 
 - 在https://github.com/solana-labs/solana/releases/latest, 下载二进制文件**solana-release-x86_64-pc-windows-msvc.tar.bz2**, 然后使用Winzip或类似工具提取存档：
-- 打开命令提示符，并导航到原二进制文件解压到的目录运行：
+- 打开命令提示符并导航到解压二进制文件的目录，然后运行：
 
 ```bash
 cd solana-release/
 set PATH=%cd%/bin;%PATH%
 ```
 
-## 从源代码构建
+## 从源代码开始构建
 
-如果您无法使用预构建的二进制文件，或者希望从源代码自行构建它，确保您在系统上安装了必要的必备组件，并按照以下步骤操作。
+如果您无法使用预构建的二进制文件，或者更喜欢从源代码构建，请按照以下步骤操作，确保您的系统已安装必要的前提条件。
 
 ### 前提条件
 
@@ -146,8 +138,6 @@ apt-get install \
     libudev-dev llvm libclang-dev \
     protobuf-compiler
 ```
-
-
 
 #### 对于其他 Linux 发行版：
 
@@ -179,29 +169,28 @@ Rust语言：在 https://www.rust-lang.org/tools/install 选中“安装 Rust”
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-
-
 - 在[Visual Studio downloads page](https://visualstudio.microsoft.com/downloads/)下载并安装适用于 Visual Studio 的生成工具（2019 或更高版本）。请确保安装中包含 C++ 生成工具。 
-- 
-  安装 LLVM：在[official LLVM download page](https://releases.llvm.org/download.html)下载并安装 LLVM。
+- 安装 LLVM：在[official LLVM download page](https://releases.llvm.org/download.html)下载并安装 LLVM。
 - 安装 Protocol Buffers Compiler （protoc）：在 [GitHub releases page of Protocol Buffers](https://github.com/protocolbuffers/protobuf/releases)下载`protoc` ，并将其添加到 `PATH` .
 
-INFO：
+::: tip INFO
 
 Windows 10 或 11 上的用户可能需要安装适用于 Linux 的 Windows 子系统 （WSL） 才能从源代码生成。WSL 提供现有 Windows 安装中运行的 Linux 环境。这样，您可以运行常规 Linux 软件，包括 Solana CLI 的 Linux 版本。
 
 安装后，在 Windows 终端运行 `wsl` ，然后继续执行上面的 Debian 和其他 Linux 发行版。
 
+:::
+
 ### 从源代码构建
 
-安装必备组件后，继续从源代码构建 Solana，在[Solana's GitHub releases page](https://github.com/solana-labs/solana/releases/latest)下载源代码存档。提取代码并使用以下命令构建二进制文件：
+安装好必备必备条件后，继续从源代码构建 Solana，在[Solana's GitHub releases page](https://github.com/solana-labs/solana/releases/latest)下载源代码文件。解压代码并使用以下命令构建二进制文件：
 
 ```bash
 ./scripts/cargo-install-all.sh .
 export PATH=$PWD/bin:$PATH
 ```
 
-然后，您可以运行以下命令来获得与预生成二进制文件相同的结果：
+然后，您可以运行以下命令以获得与预构建二进制文件相同的结果：
 
 ```bash
 solana-install init
@@ -215,7 +204,7 @@ solana-install init
 
 - 按照以下说明进行操作： https://formulae.brew.sh/formula/solana
 
-[Homebrew formulae](https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/solana.rb) 在每次`solana`发布后都会更新，但 Homebrew 版本可能已经过时。
+[Homebrew formulae](https://github.com/Homebrew/homebrew-core/blob/HEAD/Formula/solana.rb) 在每次`solana`发布后都会更新，但也可能存在 Homebrew 版本过时的情况。
 
 - 通过输入以下命令确认您已 `solana` 安装所需的版本：
 
