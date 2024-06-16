@@ -251,6 +251,18 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
             },
           ],
         },
+        {
+          text: "运行验证器",
+          collapsed: false,
+          items: [
+            { text: "运行验证器", link: "operations/operations" },
+            {
+              text: "验证者节点 vs RPC节点",
+              link: "operations/validator-or-rpc-node",
+            },
+            { text: "准备工作", link: "operations/prerequisites" },
+          ],
+        },
       ],
     },
   ];
