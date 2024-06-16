@@ -217,6 +217,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   text: "测试验证器",
                   link: "cli/examples/test-validator",
                 },
+                {
+                  text: "发送与接收代币",
+                  link: "cli/examples/transfer-tokens",
+                },
               ],
             },
           ],
