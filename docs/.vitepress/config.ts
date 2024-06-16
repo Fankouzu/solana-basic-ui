@@ -153,6 +153,9 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
           collapsed: false,
           items: [
             { text: "概述", link: "cli/cli" },
+            { text: "安装 Solana CLI", link: "cli/install" },
+            { text: "Solana CLI介绍", link: "cli/intro" },
+            { text: "参考和用法", link: "cli/usage" },
             {
               text: "命令行钱包",
               collapsed: false,
