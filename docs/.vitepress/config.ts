@@ -246,6 +246,7 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
               items: [
                 { text: "Solana承诺状态", link: "consensus/commitments" },
                 { text: "分叉生成", link: "consensus/fork-generation" },
+                { text: "管理分叉", link: "consensus/managing-forks" },
               ],
             },
           ],
