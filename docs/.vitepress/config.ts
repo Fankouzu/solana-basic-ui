@@ -160,7 +160,7 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "常见问题", link: "programs/faq" },
         { text: "使用C语言开发", link: "programs/lang-c" },
         { text: "使用Rust语言开发", link: "programs/lang-rust" },
-        // { text: "Solana的局限性", link: "limitations" },
+        { text: "局限性", link: "programs/limitations" },
       ],
     },
     {
@@ -199,6 +199,9 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
           collapsed: false,
           items: [
             { text: "概述", link: "cli/cli" },
+            { text: "安装 Solana CLI", link: "cli/install" },
+            { text: "Solana CLI介绍", link: "cli/intro" },
+            { text: "参考和用法", link: "cli/usage" },
             {
               text: "命令行钱包",
               collapsed: false,
@@ -263,6 +266,10 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   text: "测试验证器",
                   link: "cli/examples/test-validator",
                 },
+                {
+                  text: "发送与接收代币",
+                  link: "cli/examples/transfer-tokens",
+                },
               ],
             },
           ],
@@ -288,8 +295,21 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
               items: [
                 { text: "Solana承诺状态", link: "consensus/commitments" },
                 { text: "分叉生成", link: "consensus/fork-generation" },
+                { text: "管理分叉", link: "consensus/managing-forks" },
               ],
             },
+          ],
+        },
+        {
+          text: "运行验证器",
+          collapsed: false,
+          items: [
+            { text: "运行验证器", link: "operations/operations" },
+            {
+              text: "验证者节点 vs RPC节点",
+              link: "operations/validator-or-rpc-node",
+            },
+            { text: "准备工作", link: "operations/prerequisites" },
           ],
         },
       ],
