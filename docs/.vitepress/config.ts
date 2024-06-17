@@ -62,11 +62,13 @@ function sidebarSolanaBasic(): DefaultTheme.SidebarItem[] {
       text: "第三阶段：",
       collapsed: false,
       items: [
-        { text: "账户", link: "004" },
-        { text: "版本化交易", link: "005" },
-        { text: "包装SOL", link: "006" },
-        { text: "创建代币", link: "007" },
-        { text: "非同质化代币", link: "008" },
+        { text: "糖果机概述", link: "009" },
+        { text: "配置糖果机", link: "010" },
+        { text: "管理糖果机", link: "011" },
+        { text: "插入项目", link: "012" },
+        { text: "糖果卫士", link: "013" },
+        { text: "卫士组", link: "014" },
+        { text: "铸造", link: "015" },
       ],
     },
   ];

@@ -11,7 +11,6 @@ import {
 } from "@metaplex-foundation/umi";
 import {
   initUmi,
-  loadOrGenerateKeypair,
   LoadPublicKey,
   txExplorer,
 } from "../libs/helpers";
