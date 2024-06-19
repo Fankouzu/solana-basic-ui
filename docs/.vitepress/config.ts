@@ -22,9 +22,57 @@ function nav(): DefaultTheme.NavItem[] {
         },
       ],
     },
+    {
+      text: "社区教程",
+      items: [
+        {
+          text: "Solana Basic",
+          link: "/SolanaBasic/000",
+          activeMatch: "/SolanaBasic/",
+        },
+      ],
+    },
   ];
 }
 
+function sidebarSolanaBasic(): DefaultTheme.SidebarItem[] {
+  return [
+    {
+      text: "第一阶段：账户与代币",
+      collapsed: false,
+      items: [
+        { text: "核心概念", link: "000" },
+        { text: "客户端安装", link: "001" },
+        { text: "代币基础", link: "002" },
+        { text: "非同质化代币", link: "003" },
+      ],
+    },
+    {
+      text: "第二阶段：脚本互动",
+      collapsed: false,
+      items: [
+        { text: "账户", link: "004" },
+        { text: "版本化交易", link: "005" },
+        { text: "包装SOL", link: "006" },
+        { text: "创建代币", link: "007" },
+        { text: "非同质化代币", link: "008" },
+      ],
+    },
+    {
+      text: "第三阶段：",
+      collapsed: false,
+      items: [
+        { text: "糖果机概述", link: "009" },
+        { text: "配置糖果机", link: "010" },
+        { text: "管理糖果机", link: "011" },
+        { text: "插入项目", link: "012" },
+        { text: "糖果卫士", link: "013" },
+        { text: "卫士组", link: "014" },
+        { text: "铸造", link: "015" },
+      ],
+    },
+  ];
+}
 function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
   return [
     {
@@ -297,6 +345,7 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [{ text: "质押池介绍", link: "stake-pool/stake-pool" }],
     },
+    { text: "单一验证节点质押池", link: "single-pool" },
   ];
 }
 // refer https://vitepress.dev/reference/site-config for details
@@ -320,6 +369,10 @@ export default defineConfig({
       "/SolanaProgramLibrary/": {
         base: "/SolanaProgramLibrary/",
         items: sidebarSolanaProgramLibrary(),
+      },
+      "/SolanaBasic/": {
+        base: "/SolanaBasic/",
+        items: sidebarSolanaBasic(),
       },
     },
     footer: {

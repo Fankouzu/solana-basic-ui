@@ -4,8 +4,7 @@
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
-    "docs:serve": "vitepress serve docs",
-    "deploy": "vitepress build docs && npx surge ./docs/.vitepress/dist solana-basic.surge.sh"
+    "docs:serve": "vitepress serve docs"
   },
   "devDependencies": {
     "surge": "^0.23.1",
