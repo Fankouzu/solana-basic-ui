@@ -345,6 +345,7 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
       collapsed: false,
       items: [{ text: "质押池介绍", link: "stake-pool/stake-pool" }],
     },
+    { text: "单一验证节点质押池", link: "single-pool" },
   ];
 }
 // refer https://vitepress.dev/reference/site-config for details
