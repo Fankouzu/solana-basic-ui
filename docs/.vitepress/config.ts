@@ -347,6 +347,15 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
       items: [{ text: "质押池介绍", link: "stake-pool/stake-pool" }],
     },
     { text: "单一验证节点质押池", link: "single-pool" },
+    { text: "转账钩子接口",
+      collapsed: false,
+      items: [
+        { text: "介绍", link: "transfer-hook-interface" },
+        { text: "规范", link: "transfer-hook-interface/specification" },
+        { text: "配置额外账户", link: "transfer-hook-interface/configuring-extra-accounts" },
+        { text: "示例", link: "transfer-hook-interface/examples" },
+      ]
+      }
   ];
 }
 // refer https://vitepress.dev/reference/site-config for details
