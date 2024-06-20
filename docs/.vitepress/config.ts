@@ -22,9 +22,57 @@ function nav(): DefaultTheme.NavItem[] {
         },
       ],
     },
+    {
+      text: "社区教程",
+      items: [
+        {
+          text: "Solana Basic",
+          link: "/SolanaBasic/000",
+          activeMatch: "/SolanaBasic/",
+        },
+      ],
+    },
   ];
 }
 
+function sidebarSolanaBasic(): DefaultTheme.SidebarItem[] {
+  return [
+    {
+      text: "第一阶段：账户与代币",
+      collapsed: false,
+      items: [
+        { text: "核心概念", link: "000" },
+        { text: "客户端安装", link: "001" },
+        { text: "代币基础", link: "002" },
+        { text: "非同质化代币", link: "003" },
+      ],
+    },
+    {
+      text: "第二阶段：脚本互动",
+      collapsed: false,
+      items: [
+        { text: "账户", link: "004" },
+        { text: "版本化交易", link: "005" },
+        { text: "包装SOL", link: "006" },
+        { text: "创建代币", link: "007" },
+        { text: "非同质化代币", link: "008" },
+      ],
+    },
+    {
+      text: "第三阶段：",
+      collapsed: false,
+      items: [
+        { text: "糖果机概述", link: "009" },
+        { text: "配置糖果机", link: "010" },
+        { text: "管理糖果机", link: "011" },
+        { text: "插入项目", link: "012" },
+        { text: "糖果卫士", link: "013" },
+        { text: "卫士组", link: "014" },
+        { text: "铸造", link: "015" },
+      ],
+    },
+  ];
+}
 function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
   return [
     {
@@ -111,19 +159,17 @@ function sidebarSolanaDocumention(): DefaultTheme.SidebarItem[] {
         { text: "调试程序", link: "programs/debugging" },
         { text: "部署程序", link: "programs/deploying" },
         { text: "程序示例", link: "programs/examples" },
-        // { text: "常见问题", link: "faq" },
-        // { text: "使用C语言开发", link: "lang-c" },
-        // { text: "使用Rust语言开发", link: "lang-rust" },
-        // { text: "Solana的局限性", link: "limitations" },
+        { text: "常见问题", link: "programs/faq" },
+        { text: "使用C语言开发", link: "programs/lang-c" },
+        { text: "使用Rust语言开发", link: "programs/lang-rust" },
+        { text: "局限性", link: "programs/limitations" },
       ],
     },
     {
       text: "更多",
       collapsed: false,
       base: "/SolanaDocumention/more/",
-      items: [
-        { text: "将 Solana 添加到您的交易所", link: "exchange" },
-      ],
+      items: [{ text: "将 Solana 添加到您的交易所", link: "exchange" }],
     },
   ];
 }
@@ -155,6 +201,9 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
           collapsed: false,
           items: [
             { text: "概述", link: "cli/cli" },
+            { text: "安装 Solana CLI", link: "cli/install" },
+            { text: "Solana CLI介绍", link: "cli/intro" },
+            { text: "参考和用法", link: "cli/usage" },
             {
               text: "命令行钱包",
               collapsed: false,
@@ -204,8 +253,24 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
                   link: "cli/examples/deploy-a-program",
                 },
                 {
+                  text: "持久化交易随机数",
+                  link: "cli/examples/durable-nonce",
+                },
+                {
                   text: "离线交易签名",
                   link: "cli/examples/offline-signing",
+                },
+                {
+                  text: "链下消息签名",
+                  link: "cli/examples/sign-offchain-message",
+                },
+                {
+                  text: "测试验证器",
+                  link: "cli/examples/test-validator",
+                },
+                {
+                  text: "发送与接收代币",
+                  link: "cli/examples/transfer-tokens",
                 },
               ],
             },
@@ -232,8 +297,21 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
               items: [
                 { text: "Solana承诺状态", link: "consensus/commitments" },
                 { text: "分叉生成", link: "consensus/fork-generation" },
+                { text: "管理分叉", link: "consensus/managing-forks" },
               ],
             },
+          ],
+        },
+        {
+          text: "运行验证器",
+          collapsed: false,
+          items: [
+            { text: "运行验证器", link: "operations/operations" },
+            {
+              text: "验证者节点 vs RPC节点",
+              link: "operations/validator-or-rpc-node",
+            },
+            { text: "准备工作", link: "operations/prerequisites" },
           ],
         },
       ],
@@ -266,19 +344,9 @@ function sidebarSolanaProgramLibrary(): DefaultTheme.SidebarItem[] {
     {
       text: "质押池",
       collapsed: false,
-      items: [
-        { text: "质押池介绍", link: "stake-pool/stake-pool" },
-      ],
+      items: [{ text: "质押池介绍", link: "stake-pool/stake-pool" }],
     },
-    { text: "转账钩子接口",
-    collapsed: false,
-    items: [
-      { text: "介绍", link: "transfer-hook-interface" },
-      { text: "规范", link: "transfer-hook-interface/specification" },
-      { text: "配置额外账户", link: "transfer-hook-interface/configuring-extra-accounts" },
-      { text: "示例", link: "transfer-hook-interface/examples" },
-    ]
-    },
+    { text: "单一验证节点质押池", link: "single-pool" },
   ];
 }
 // refer https://vitepress.dev/reference/site-config for details
@@ -302,6 +370,10 @@ export default defineConfig({
       "/SolanaProgramLibrary/": {
         base: "/SolanaProgramLibrary/",
         items: sidebarSolanaProgramLibrary(),
+      },
+      "/SolanaBasic/": {
+        base: "/SolanaBasic/",
+        items: sidebarSolanaBasic(),
       },
     },
     footer: {
