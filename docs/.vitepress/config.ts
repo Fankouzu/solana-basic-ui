@@ -32,9 +32,54 @@ function nav(): DefaultTheme.NavItem[] {
         },
       ],
     },
+    {
+      text: "资源导航",
+      items: [
+        {
+          text: "浏览器",
+          link: "/SolanaResources/explorer",
+          activeMatch: "/SolanaResources/explorer",
+        },
+        {
+          text: "基础设施",
+          link: "/SolanaResources/infrastructure",
+          activeMatch: "/SolanaResources/infrastructure",
+        },
+        {
+          text: "信息查询",
+          link: "/SolanaResources/information",
+          activeMatch: "/SolanaResources/information",
+        },
+        {
+          text: "钱包",
+          link: "/SolanaResources/wallets",
+          activeMatch: "/SolanaResources/wallets",
+        },
+        {
+          text: "资产查询",
+          link: "/SolanaResources/assets",
+          activeMatch: "/SolanaResources/assets",
+        },
+        {
+          text: "Defi",
+          link: "/SolanaResources/defi",
+          activeMatch: "/SolanaResources/defi",
+        },
+      ],
+    },
   ];
 }
 
+function sidebarSolanaResources(): DefaultTheme.SidebarItem[] {
+  return [
+    { text: "浏览器", link: "explorer" },
+    { text: "基础设施", link: "infrastructure" },
+    { text: "信息查询", link: "information" },
+    { text: "钱包", link: "wallets" },
+    { text: "资产查询", link: "assets" },
+    { text: "Defi", link: "defi" },
+  ];
+}
 function sidebarSolanaBasic(): DefaultTheme.SidebarItem[] {
   return [
     {
@@ -373,6 +418,10 @@ export default defineConfig({
       "/SolanaBasic/": {
         base: "/SolanaBasic/",
         items: sidebarSolanaBasic(),
+      },
+      "/SolanaResources/": {
+        base: "/SolanaResources/",
+        items: sidebarSolanaResources(),
       },
     },
     footer: {
