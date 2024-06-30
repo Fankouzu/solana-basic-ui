@@ -357,6 +357,15 @@ function sidebarSolanaValidatorDocumentation(): DefaultTheme.SidebarItem[] {
               link: "operations/validator-or-rpc-node",
             },
             { text: "准备工作", link: "operations/prerequisites" },
+            {
+              text: "最佳实践",
+              collapsed: true,
+              items: [
+                { text: "常规操作", link: "operations/best-practices/general.md" },
+                { text: "监控", link: "operations/best-practices/monitoring.md" },
+                { text: "安全", link: "operations/best-practices/security.md" },
+              ],
+            }
           ],
         },
       ],
