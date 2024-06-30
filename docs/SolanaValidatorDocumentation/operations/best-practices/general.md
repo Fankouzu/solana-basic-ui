@@ -1,6 +1,6 @@
-# Solana 验证器操作最佳实践
+# Solana 验证器运维最佳实践
 
-成功设置并启动 [测试网上的验证器](https://docs.solanalabs.com/operations/setup-a-validator)（或您选择的其他集群）后，您将需要熟悉如何在日常基础上操作验证器。在日常中，您将 [监控您的服务器](https://docs.solanalabs.com/operations/best-practices/monitoring)、定期更新软件（Solana 验证器软件和操作系统软件包）以及管理您的投票账户和身份账户。
+成功设置并启动 [测试网上的验证器](https://docs.solanalabs.com/operations/setup-a-validator)（或您选择的其他集群）后，您将需要熟悉如何在日常基础上维护验证器。在日常中，您将 [监控您的服务器](https://docs.solanalabs.com/operations/best-practices/monitoring)、定期更新软件（Solana 验证器软件和操作系统软件包）以及管理您的投票账户和身份账户。
 
 所有这些技能对于实践都至关重要。最大限度地延长验证器的正常运行时间是成为优秀的运维人员的重要组成部分。
 
@@ -9,7 +9,7 @@
 Solana 验证器社区定期举办教育研讨会。您可以通过以下方式观看过去的研讨会。
 [Solana 验证器教育研讨会播放列表](https://www.youtube.com/watch?v=86zySQ5vGW8&list=PLilwLeBwGuK6jKrmn7KOkxRxS9tvbRa5p).
 
-## 辅助验证器命令行操作
+## 辅助验证器命令行运维
 
 在Solana命令行界面中，您可以运行带有`--help`标志的`solana-validator`命令，以更好地了解可用的标志和子命令。
 
@@ -19,7 +19,7 @@ solana-validator --help
 
 ## 重启您的验证节点
 
-您可能出于多种操作原因需要重启您的验证器。作为最佳实践，您应该避免在领导者时段重启。[leader slot](https://solana.com/docs/terminology#leader-schedule) 是您的验证器预期产生区块的时间。为了集群的健康以及您的验证器赚取交易费奖励的能力，您不希望在产生区块的机会期间让验证器处于离线状态。
+您可能出于多种运维原因需要重启您的验证器。作为最佳实践，您应该避免在领导者时段重启。[leader slot](https://solana.com/docs/terminology#leader-schedule) 是您的验证器预期产生区块的时间。为了集群的健康以及您的验证器赚取交易费奖励的能力，您不希望在产生区块的机会期间让验证器处于离线状态。
 
 要查看一个周期的完整领导者日程，请使用以下命令：
 
@@ -80,7 +80,7 @@ grep -B1 'Starting validator with' <path/to/logfile>
 
 ## 快照
 
-没有经历过显著停机（多个小时的停机）的验证器操作者应该避免下载快照。保持本地账本对集群的健康以及您的验证器历史记录非常重要。因此，您不应该在您的验证器离线或遇到问题时下载新快照。下载快照应该只限于您没有本地状态的情况。长时间的停机或新验证器的首次安装是您可能没有本地状态的例子。在其他情况下，比如为了升级而重启，应该避免下载快照。
+没有经历过显著停机（多个小时的停机）的验证器运维人员应该避免下载快照。保持本地账本对集群的健康以及您的验证器历史记录非常重要。因此，您不应该在您的验证器离线或遇到问题时下载新快照。下载快照应该只限于您没有本地状态的情况。长时间的停机或新验证器的首次安装是您可能没有本地状态的例子。在其他情况下，比如为了升级而重启，应该避免下载快照。
 
 为了避免在重启时下载快照，请将以下标志添加到 `solana-validator` 命令中：
 
