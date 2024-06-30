@@ -23,7 +23,7 @@ sudo apt upgrade
 
 以root用户身份运行应用程序可能会让初期设置变得更容易，但这是一种不好的做法。
 
-如果您的系统中存在漏洞，当 Solana 应用程序以`root`用户身份运行时，黑客可能获得完全访问权限。因此，建议您参考[设置说明]([../setup-a-validator.md#sol-user](https://docs.solanalabs.com/operations/setup-a-validator#sol-user))，创建一个名为`sol`的用户，并以`sol`用户身份运行应用程序。这样可以更好地限制潜在的安全风险，提高系统的安全性。
+如果您的系统中存在漏洞，当 Solana 应用程序以`root`用户身份运行时，黑客可能获得完全访问权限。因此，建议您参考[设置说明](https://docs.solanalabs.com/operations/setup-a-validator#sol-user)，创建一个名为`sol`的用户，并以`sol`用户身份运行应用程序。这样可以更好地限制潜在的安全风险，提高系统的安全性。
 
 ## 关闭未使用的端口
 
