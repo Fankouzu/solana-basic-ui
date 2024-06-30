@@ -23,15 +23,15 @@ solana-watchtower --monitor-active-stake --validator-identity \
 
 最佳实践是在与你的验证器分开的服务器上运行 `solana-watchtower` 命令。
 
-如果您将 `solana-watchtower` 运行在与 `solana-validator` 进程相同的计算机上，那么在像停电这样的灾难性事件中，您可能无法意识到问题的存在，因为您的 `solana-watchtower` 进程会在同一时间停止，与您的 `solana-validator` 进程一起。
+如果你将 `solana-watchtower` 运行在与 `solana-validator` 进程相同的计算机上，那么在像停电这样的灾难性事件中，你可能无法意识到问题的存在，因为你的 `solana-watchtower` 进程会在同一时间停止，与你的 `solana-validator` 进程一起。
 
 此外，虽然在终端中手动设置环境变量并运行 `solana-watchtower` 进程是测试命令的一种好方法，但从运行操作角度来看并不可靠，因为该进程不会在终端关闭或系统重启期间重新启动。
 
-相反，您可以将 `solana-watchtower` 命令作为系统进程运行，类似于 `solana-validator`。在系统进程文件中，您可以指定机器人的环境变量。
+相反，你可以将 `solana-watchtower` 命令作为系统进程运行，类似于 `solana-validator`。在系统进程文件中，你可以指定机器人的环境变量。
 
 ### 设置 Telegram 通知
 
-为了将验证器健康状态通知发送到您的Telegram账户，我们需要完成以下几个步骤：
+为了将验证器健康状态通知发送到你的Telegram账户，我们需要完成以下几个步骤：
 
 1. 创建一个用于发送消息的机器人。这个机器人将通过 Telegram上 的 BotFather 来创建。
 2. 给机器人发送一条消息。
@@ -43,33 +43,33 @@ solana-watchtower --monitor-active-stake --validator-identity \
 
 在 Telegram 中搜索 `@BotFather`。向 **BotFather** 发送以下消息：`/newbot`。
 
-现在，您需要为机器人想一个名字。唯一的要求是名字不能包含破折号或空格，并且**必须**以`bot`结尾。很多名字已经被占用，因此您可能需要尝试几个。一旦找到可用的名字，**BotFather**会回复您，其中包括与机器人聊天的链接以及机器人的一个令牌。请记下这个令牌，在设置环境变量时会用到。
+现在，你需要为机器人想一个名字。唯一的要求是名字不能包含破折号或空格，并且**必须**以`bot`结尾。很多名字已经被占用，因此你可能需要尝试几个。一旦找到可用的名字，**BotFather**会回复你，其中包括与机器人聊天的链接以及机器人的一个令牌。请记下这个令牌，在设置环境变量时会用到。
 
 #### 向机器人发送消息
 
-在 Telegram 中找到该机器人并向它发送如下消息：`/start`。向机器人发送消息将在之后帮助您找到机器人聊天室ID。
+在 Telegram 中找到该机器人并向它发送如下消息：`/start`。向机器人发送消息将在之后帮助你找到机器人聊天室ID。
 
 #### 创建 Telegram 群组
 
-在 Telegram 中，点击新消息图标，然后选择创建新群组。找到您新创建的机器人并将其添加到群组中。接下来，为群组起一个你喜欢的名字。
+在 Telegram 中，点击新消息图标，然后选择创建新群组。找到你新创建的机器人并将其添加到群组中。接下来，为群组起一个你喜欢的名字。
 
 #### 为 Watchtower 设置环境变量
 
-既然您已经设置了机器人，接下来需要为该机器人设置环境变量，以便 watchtower 能够发送通知。
+既然你已经设置了机器人，接下来需要为该机器人设置环境变量，以便 watchtower 能够发送通知。
 
-首先，请回顾从**@BotFather**收到的聊天消息。在消息中，有一个用于您机器人的 HTTP API 令牌，格式如下：`389178471:MMTKMrnZB4ErUzJmuFIXTKE6DupLSgoa7h4o`。您将使用此令牌设置`TELEGRAM_BOT_TOKEN`环境变量。在计划运行`solana-watchtower`的终端中，执行以下命令：
+首先，请回顾从**@BotFather**收到的聊天消息。在消息中，有一个用于你机器人的 HTTP API 令牌，格式如下：`389178471:MMTKMrnZB4ErUzJmuFIXTKE6DupLSgoa7h4o`。你将使用此令牌设置`TELEGRAM_BOT_TOKEN`环境变量。在计划运行`solana-watchtower`的终端中，执行以下命令：
 
 ```
 export TELEGRAM_BOT_TOKEN=<HTTP API Token>
 ```
 
-接下来，您需要群组的`chat id`，以便`solana-watchtower`知道应将消息发送到何处。首先，在您创建的聊天群组中向您的机器人发送一条消息，比如 `@newvalidatorbot hello`。
+接下来，你需要群组的`chat id`，以便`solana-watchtower`知道应将消息发送到何处。首先，在你创建的聊天群组中向你的机器人发送一条消息，比如 `@newvalidatorbot hello`。
 
-接下来，在您的浏览器中，访问 `https://api.telegram.org/bot<HTTP_API令牌>/getUpdates`。确保将`<HTTP_API令牌>`替换为您从**@BotFather**消息中获得的API令牌。同时，请确保在 URL 中的 API 令牌前包含单词`bot`。在浏览器中发起这个请求。
+接下来，在你的浏览器中，访问 `https://api.telegram.org/bot<HTTP_API令牌>/getUpdates`。确保将`<HTTP_API令牌>`替换为你从**@BotFather**消息中获得的API令牌。同时，请确保在 URL 中的 API 令牌前包含单词`bot`。在浏览器中发起这个请求。
 
-响应应该是JSON格式的。在JSON中搜索字符串`"chat":`。该`chat`对象下的`id`值就是您的`TELEGRAM_CHAT_ID`。它会是一个负数，比如：`-781559558`。请记住要包含负号！如果您在JSON中找不到`"chat":`，那么您可能需要先将机器人从聊天群组中移除，然后再重新添加一次。
+响应应该是JSON格式的。在JSON中搜索字符串`"chat":`。该`chat`对象下的`id`值就是你的`TELEGRAM_CHAT_ID`。它会是一个负数，比如：`-781559558`。请记住要包含负号！如果你在JSON中找不到`"chat":`，那么你可能需要先将机器人从聊天群组中移除，然后再重新添加一次。
 
-掌握 Telegram `chat id` 后，导出您计划运行 solana-watchtower 的环境变量：
+掌握 Telegram `chat id` 后，导出你计划运行 solana-watchtower 的环境变量：
 
 ```
 export TELEGRAM_CHAT_ID=<negative chat id number>
@@ -77,6 +77,6 @@ export TELEGRAM_CHAT_ID=<negative chat id number>
 
 #### 重启 solana-watchtower
 
-一旦设置了环境变量，接下来请重启 `solana-watchtower`。您应该能看到与验证器相关的输出信息。
+一旦设置了环境变量，接下来请重启 `solana-watchtower`。你应该能看到与验证器相关的输出信息。
 
-为了测试您的Telegram配置是否工作正常，您可以暂时停止验证器，直到其被标记为逾期。一旦验证器处于逾期状态，最多在一分钟后，您应该能在Telegram群组中收到由您的机器人发送的消息。之后再次启动验证器，并确认您能从机器人那里收到另一条消息，这条消息应当显示 `all clear`。
+为了测试你的Telegram配置是否工作正常，你可以暂时停止验证器，直到其被标记为逾期。一旦验证器处于逾期状态，最多在一分钟后，你应该能在Telegram群组中收到由你的机器人发送的消息。之后再次启动验证器，并确认你能从机器人那里收到另一条消息，这条消息应当显示 `all clear`。
