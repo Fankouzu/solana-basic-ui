@@ -30,6 +30,11 @@ function nav(): DefaultTheme.NavItem[] {
           link: "/SolanaBasic/000",
           activeMatch: "/SolanaBasic/",
         },
+        {
+          text: "Solana Action & Blink",
+          link: "/SolanaAction/001",
+          activeMatch: "/SolanaAction/",
+        },
       ],
     },
     {
