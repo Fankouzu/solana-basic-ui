@@ -37,6 +37,13 @@ features:
 # 贡献者
 [![贡献者](https://contrib.rocks/image?repo=fankouzu/solana-basic-ui "contributors")](https://github.com/fankouzu/solana-basic-ui/graphs/contributors&anon=1)
 
+
+<center>
+
+![Solar](/Solar_Logo_horizontal@2x.jpg)
+
+</center>
+
 <style>
 :root {
   --vp-home-hero-name-color: transparent;
