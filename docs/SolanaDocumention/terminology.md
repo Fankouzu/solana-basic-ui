@@ -157,9 +157,9 @@ Solana程序，负责拥有和加载[BPF](https://solana.com/zh/docs/programs/fa
 ## lamport
 价值0.000000001[sol](#sol)的[原生代币](#原生代币)的分量单位。
 
-：：：tips INFO
+:::tip INFO
 在计算预算中，[微lamports](https://github.com/solana-labs/solana/blob/ced8f6a512c61e0dd5308095ae8457add4a39e94/program-runtime/src/prioritization_fee.rs#L1-L2)用于计算[优先费用](#优先费用)。
-：：：
+:::
 
 ## 领导者
 当[验证者](#验证者)将[条目](#条目)附加到[账本](#账本)时的角色。

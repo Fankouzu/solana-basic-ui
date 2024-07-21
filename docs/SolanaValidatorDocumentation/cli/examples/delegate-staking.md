@@ -2,7 +2,7 @@
 
 [收到SOL](https://docs.solanalabs.com/cli/examples/transfer-tokens)后，您可以考虑通过将质押委托给验证者节点来使用它。质押就是我们所说的质押账户中的代币。Solana 根据委托给他们的质押量来衡量验证者节点的投票，这让这些节点在确定区块链中下一个有效的交易块时拥有更大的影响力。然后，Solana 会定期生成新的 SOL 来奖励质押者和验证者节点。您委托的质押越多，您获得的奖励就越多。
 
-:::tips INFO
+:::tip INFO
 要了解有关质押的概述，请首先阅读 [质押和通胀常见问题解答](https://solana.com/staking).
 :::
 
