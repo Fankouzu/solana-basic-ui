@@ -1,26 +1,22 @@
 # 加密
 
-加密扩展程序采用公钥加密方案和认证对称加密方案。其中，公钥加密使用 [twisted ElGamal](https://eprint.iacr.org/2019/319) ，对称加密使用 [AES-GCM-SIV](https://datatracker.ietf.org/doc/html/rfc8452)。
+加密扩展程序采用公钥加密方案和经过身份验证的对称加密方案。对于公钥加密，该程序使用[twisted ElGamal](https://eprint.iacr.org/2019/319)加密方案 ，对称加密则是使用 [AES-GCM-SIV](https://datatracker.ietf.org/doc/html/rfc8452)。
 
 
 ## Twisted ElGamal 加密方案
 
-twisted ElGamal 加密是标准 ElGamal 加密方案的一个简单变体，其中密文被分为两个部分：
+twisted ElGamal 加密是标准 ElGamal 加密方案的一个简单变体，其中密文分为两个部分：
 
-+   加密消息的*Pedersen承诺*，它独立于任何ElGamal公钥。
-+   *解密句柄*，它根据特定的ElGamal公钥编码加密随机性，且独立于加密消息。
++   加密消息的Pedersen承诺。这个组件与公钥无关。
++   一个"解密核心"，它将加密随机性与特定的ElGamal公钥绑定。这个组件与实际加密的消息无关。
 
-twisted ElGamal 密文结构简化了零知识证明系统的设计。由于加密消息被编码为 Pedersen 承诺，许多为 Pedersen 承诺设计的现有零知识证明系统可以直接用于 twisted ElGamal 密文。
+twisted ElGamal 密文的结构简化了某些零知识证明系统的设计。此外，由于加密消息被编码为 Pedersen 承诺，许多专门为 Pedersen 承诺设计的现有零知识证明系统可以直接应用于twisted ElGamal密文。
 
 我们在[注释](https://spl.solana.com/assets/files/twisted_elgamal-2115c6b1e6c62a2bb4516891b8ae9ee0.pdf)中提供了 twisted ElGamal 加密的正式描述。
 
 ### 密文解密
 
-在协议中使用 ElGamal 加密的缺点是解密低效。ElGamal 密文的解密时间随着加密数字的大小呈指数增长。使用现代硬件解密 32 位消息的时间可能在数秒之内，但随着消息大小的增加，这很快就变得不可行。标准的 Token 账户存储的一般是单位为 `u64` 位的余额，但 ElGamal 密文无法解密大于 64 位消息。因此，在账户状态和转账数据中对余额和转账金额的加密和处理方式需要特别注意。
-
-## Account State[​](#account-state "Direct link to Account State")
-
-If the decryption of the twisted ElGamal encryption scheme were fast, then a confidential transfer account and a confidential instruction data could be modeled as follows:
+在协议中使用 ElGamal 加密的缺点是解密低效。ElGamal 密文的解密时间随着加密数字的大小呈指数级增长。使用现代的硬件解密 32 位消息，时间可能在数秒之内，但随着消息大小的增加，这很快就变得不可行。标准的 Token 账户存储的一般是单位为 `u64` 位的余额，但 ElGamal 密文无法解密大于 64 位的消息。因此，在账户状态和转账数据中，对余额和转账金额的加密和处理方式需要特别注意。
 
 ## 账户状态
 
@@ -28,91 +24,88 @@ If the decryption of the twisted ElGamal encryption scheme were fast, then a con
 
 ```rust
 struct ConfidentialTransferAccount {
-  /// `true` if this account has been approved for use. All confidential
-  /// transfer operations for
-  /// the account will fail until approval is granted.
+  /// `true` 表示该账户已被批准使用。在获得批准之前，
+  /// 该账户的所有机密转账操作都将失败。
   approved: PodBool,
 
-  /// The public key associated with ElGamal encryption
+  /// 与 ElGamal 加密相关联的公钥
   encryption_pubkey: ElGamalPubkey,
 
-  /// The pending balance (encrypted by `encryption_pubkey`)
+  /// 待处理余额（由 `encryption_pubkey` 加密）
   pending_balance: ElGamalCiphertext,
 
-  /// The available balance (encrypted by `encryption_pubkey`)
+  /// 可用余额（由 `encryption_pubkey` 加密）
   available_balance: ElGamalCiphertext,
 }
 ```
 
 ```rust
-// Actual cryptographic components are organized in `VerifyTransfer`
-// instruction data
+// 实际的加密组件被组织在 `VerifyTransfer` 指令数据中
 struct ConfidentialTransferInstructionData {
-  /// The transfer amount encrypted under the sender ElGamal public key
+  /// 使用发送方 ElGamal 公钥加密的转账金额
   encrypted_amount_sender: ElGamalCiphertext,
-  /// The transfer amount encrypted under the receiver ElGamal public key
+  /// 使用接收方 ElGamal 公钥加密的转账金额
   encrypted_amount_receiver: ElGamalCiphertext,
 }
 ```
 
-Token 程序在接收到转账指令后将 `encrypted_amount_receiver` 聚合到账户的 `pending_balance` 中。
+Token 程序在接收到转账指令后将 `encrypted_amount_receiver` 结合到账户的 `pending_balance` 中。
 
-由于 `TransferInstructionData` 需要零知识证明组件，这两个组件的实际结构更加复杂。我们将在下一小节详细讨论其数据结构，此处我们专注于 `ConfidentialTransferAccount`。我们从上面的`ConfidentialTransferAccount` 结构开始，逐步修改它以生成最终结构。
+这两个组件的实际结构更加复杂，由于 `TransferInstructionData` 需要零知识证明组件，我们将在下一小节详细讨论其数据结构，此处我们专注于 `ConfidentialTransferAccount`的介绍。我们从上面理想化的`ConfidentialTransferAccount` 结构开始，逐步修改它以生成最终结构。
 
 ### 可用余额
 
-如果以 `u64` 值加密可用余额，那么客户端将无法解密并恢复账户中的确切余额。因此，在 Token 程序中额外使用对称加密方式对可用余额进行加密，得到的密文存储为账户的 `decryptable_balance`，相应的对称密钥应当存储在客户端作为独立密钥，或者从所有者签名密钥中动态派生出来。
+如果可用余额仅作为普通的 `u64` 值进行加密，那么客户端将无法解密并恢复账户中的确切余额。因此，在 Token 程序中，可用余额还使用一种经过认证的对称加密方案进行了额外加密。得到的密文被存储为账户的 `decryptable_balance`，相应的对称密钥应该作为独立的密钥存储在客户端，或者从所有者签名密钥动态派生。
 
 ```rust
 struct ConfidentialTransferAccount {
-  /// `true` if this account has been approved for use. All confidential
-  /// transfer operations for
-  /// the account will fail until approval is granted.
+  /// `true` 表示该账户已被批准使用。在获得批准之前，
+  /// 该账户的所有机密转账操作都将失败。
   approved: PodBool,
 
-  /// The public key associated with ElGamal encryption
+  /// 与 ElGamal 加密相关联的公钥
   encryption_pubkey: ElGamalPubkey,
 
-  /// The pending balance (encrypted by `encryption_pubkey`)
+  /// 待处理余额（由 `encryption_pubkey` 加密）
   pending_balance: ElGamalCiphertext,
 
-  /// The available balance (encrypted by `encryption_pubkey`)
+  /// 可用余额（由 `encryption_pubkey` 加密）
   available_balance: ElGamalCiphertext,
 
-  /// The decryptable available balance
+  /// 可解密的可用余额
   decryptable_available_balance: AeCiphertext,
 }
 ```
+
 `decryptable_available_balance`易于解密，客户通常应利用它来解密账户内的可用余额。而`available_balance`的ElGamal密文则主要用于在创建转账指令时生成零知识证明。
 
 `available_balance`与`decryptable_available_balance`应当对同一笔与账户相关的可用余额进行加密处理。账户中的可用余额仅可能在执行了`ApplyPendingBalance`指令或发起了一笔出账`Transfer`指令后发生变化。这两类指令均需在其指令数据中包含`new_decryptable_available_balance`这一项。
 
 ### 待处理余额
 
-我们可以考虑类似处理可用余额的方式给待处理余额加入一个`decryptable_pending_balance`。然而，可用余额总是由账户所有者（通过`ApplyPendingBalance`和`Transfer`指令）掌控，账户的待处理余额可能因不断接收到转账而频繁变动。由于解密余额密文所需的密钥仅账户所有者知晓，因此`Transfer`指令的发起者无法更新收款方账户的可解密余额。
+与可用余额的情况类似，人们可以考虑为待处理余额添加一个 `decryptable_pending_balance`。然而，虽然可用余额总是由账户所有者掌控（通过`ApplyPendingBalance`和`Transfer`指令），但账户的待处理余额可能会随着传入的转账而不断变化。由于可解密余额密文的相应解密密钥只有账户所有者知道，因此`Transfer`指令的发起者无法更新收款方账户的可解密余额。
 
 因此，针对待处理余额，Token程序会保存两组独立的ElGamal密文，其中一组加密64位待处理余额的低位数，另一组则加密高位数。
 
 ```rust
 struct ConfidentialTransferAccount {
-  /// `true` if this account has been approved for use. All confidential
-  /// transfer operations for
-  /// the account will fail until approval is granted.
+  /// `true` 表示该账户已被批准使用。在获得批准之前，
+  /// 该账户的所有机密转账操作都将失败。
   approved: PodBool,
 
-  /// The public key associated with ElGamal encryption
+  /// 与 ElGamal 加密相关联的公钥
   encryption_pubkey: ElGamalPubkey,
 
-  /// The low-bits of the pending balance (encrypted by `encryption_pubkey`)
+  /// 待处理余额的低位（由 `encryption_pubkey` 加密）
   pending_balance_lo: ElGamalCiphertext,
 
-  /// The high-bits of the pending balance (encrypted by `encryption_pubkey`)
+  /// 待处理余额的高位（由 `encryption_pubkey` 加密）
   pending_balance_hi: ElGamalCiphertext,
 
-  /// The available balance (encrypted by `encryption_pubkey`)
+  /// 可用余额（由 `encryption_pubkey` 加密）
   available_balance: ElGamalCiphertext,
 
-  /// The decryptable available balance
+  /// 可解密的可用余额
   decryptable_available_balance: AeCiphertext,
 }
 ```
@@ -120,16 +113,13 @@ struct ConfidentialTransferAccount {
 我们将转账指令数据中的转账金额密文划分为低位加密和高位加密两部分。
 
 ```rust
-// Actual cryptographic components are organized in `VerifyTransfer`
-// instruction data
+// 实际的加密组件被组织在 `VerifyTransfer` 指令数据中
 struct ConfidentialTransferInstructionData {
-  /// The transfer amount encrypted under the sender ElGamal public key
+  /// 使用发送方 ElGamal 公钥加密的转账金额
   encrypted_amount_sender: ElGamalCiphertext,
-  /// The low-bits of the transfer amount encrypted under the receiver
-  /// ElGamal public key
+  /// 使用接收方 ElGamal 公钥加密的转账金额低位
   encrypted_amount_lo_receiver: ElGamalCiphertext,
-  /// The high-bits of the transfer amount encrypted under the receiver
-  /// ElGamal public key
+  /// 使用接收方 ElGamal 公钥加密的转账金额高位
   encrypted_amount_hi_receiver: ElGamalCiphertext,
 }
 ```
@@ -143,46 +133,40 @@ struct ConfidentialTransferInstructionData {
 为了应对溢出问题，在账户状态中增加以下两个组件。
 
 +   账户状态会追踪自上次`ApplyPendingBalance`指令以来收到的入账转账数量。
-+   账户状态中保存了一个`maximum_pending_balance_credit_counter`组件，用以限制在对账户应用`ApplyPendingBalance`指令前，其能接收的入账转账次数。上限可以通过`ConfigureAccount`进行配置，通常应设置为`2^16`。
-  
-
++   账户状态中保存了一个`maximum_pending_balance_credit_counter`，它限制了在应用 `ApplyPendingBalance` 指令之前可以接收的传入转账数量。上限可以通过`ConfigureAccount`进行配置，通常应设置为`2^16`。
 
 ```rust
 struct ConfidentialTransferAccount {
-  ... // `approved`, `encryption_pubkey`, available balance fields omitted
+  ... // 省略 `approved`、`encryption_pubkey` 和可用余额字段
 
-  /// The low bits of the pending balance (encrypted by `encryption_pubkey`)
+  /// 待处理余额的低位（由 `encryption_pubkey` 加密）
   pending_balance_lo: ElGamalCiphertext,
 
-  /// The high bits of the pending balance (encrypted by `encryption_pubkey`)
+  /// 待处理余额的高位（由 `encryption_pubkey` 加密）
   pending_balance_hi: ElGamalCiphertext,
 
-  /// The maximum number of `Deposit` and `Transfer` instructions that can credit
-  /// `pending_balance` before the `ApplyPendingBalance` instruction is executed
+  /// 在执行 `ApplyPendingBalance` 指令之前，可以对 `pending_balance`
+  /// 进行信用的 `Deposit` 和 `Transfer` 指令的最大数量
   pub maximum_pending_balance_credit_counter: u64,
 
-  /// The number of incoming transfers since the `ApplyPendingBalance` instruction
-  /// was executed
+  /// 自上次执行 `ApplyPendingBalance` 指令以来的传入转账数量
   pub pending_balance_credit_counter: u64,
 }
 ```
 
 我们对转账指令数据做出如下修改：
 
-+   转账金额被限定为一个48位的数字。
-+   转账金额被拆分为16位（`encrypted_amount_lo_receiver`）和32位（`encrypted_amount_hi_receiver`）数字进行加密。
++   转账金额限制为 48 位数字。
++   转账金额被分为 16 位和 32 位数字，并作为两个密文 `encrypted_amount_lo_receiver `和 `encrypted_amount_hi_receiver `进行加密。
 
 ```rust
-// Actual cryptographic components are organized in `VerifyTransfer`
-// instruction data
+// 实际的加密组件被组织在 `VerifyTransfer` 指令数据中
 struct ConfidentialTransferInstructionData {
-  /// The transfer amount encrypted under the sender ElGamal public key
+  /// 使用发送方 ElGamal 公钥加密的转账金额
   encrypted_amount_sender: ElGamalCiphertext,
-  /// The low *16-bits* of the transfer amount encrypted under the receiver
-  /// ElGamal public key
+  /// 使用接收方 ElGamal 公钥加密的转账金额的低 *16 位*
   encrypted_amount_lo_receiver: ElGamalCiphertext,
-  /// The high *32-bits* of the transfer amount encrypted under the receiver
-  /// ElGamal public key
+  /// 使用接收方 ElGamal 公钥加密的转账金额的高 *32 位*
   encrypted_amount_hi_receiver: ElGamalCiphertext,
 }
 ```
@@ -192,8 +176,8 @@ struct ConfidentialTransferInstructionData {
 设想一下当`maximum_pending_balance_credit_counter`被设定为`2^16`的情况。
 
 
-+   `encrypted_amount_lo_receiver`最大加密一个16位数字，即使在经历了`2^16`次入账转账之后，账户中的`pending_balance_lo`密文所加密的余额最多仍是一个32位数。这部分待处理余额能够被高效解密。
-    
-+   `encrypted_amount_hi_receiver`最大加密一个32位数字，在经历`2^16`次入账转账后，`pending_balance_hi`密文加密的余额最多是一个48位数。
-    
-    解密一个48位数字速度较慢。然而，对于大多数应用场景而言，涉及极高交易金额的转账相对较为罕见。账户只有接收大量高金额的交易才会构成48位数字的待处理余额。具有高额代币余额的账户为防止`pending_balance_hi`加密过于庞大的数字，可以通过多次提交`ApplyPendingBalance`指令将待处理余额转入可用余额。
++ `encrypted_amount_lo_receiver`最大加密一个16位数字，即使在经历了`2^16`次入账转账之后，账户中的`pending_balance_lo`密文所加密的余额最多仍是一个32位数。这部分待处理余额能够被高效解密。
+
++ `encrypted_amount_hi_receiver`最大加密一个32位数字，在经历`2^16`次入账转账后，`pending_balance_hi`密文加密的余额最多是一个48位数。
+
+  解密一个大的 48 位数字是十分缓慢的。然而对于大多数应用来说，非常大金额的转账相对较少。要使一个账户持有大的 48 位数字的待处理余额，它必须接收大量的高交易金额。维护高代币余额的客户端可以频繁提交` ApplyPendingBalance` 指令，将待处理余额转入可用余额，以防止 `pending_balance_hi `加密过大的数字。。
