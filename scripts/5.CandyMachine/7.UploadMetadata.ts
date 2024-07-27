@@ -22,7 +22,7 @@ async function uploadImg(umi: Umi, index: number) {
   const filename = index + 1;
   // 读取图像文件
   const fileBuffer = fs.readFileSync(
-    path.join("docs/public/NFTs", filename + ".jpg")
+    path.join("../docs/public/NFTs", filename + ".jpg")
   );
   const file = createGenericFile(fileBuffer, filename + ".jpg", {
     contentType: "image/gif",
