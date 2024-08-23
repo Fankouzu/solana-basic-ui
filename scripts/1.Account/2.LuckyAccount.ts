@@ -2,7 +2,7 @@ import { Keypair } from "@solana/web3.js";
 import { Log, FgRed } from "../libs/helpers";
 
 // 幸运账号
-const luckyStr = "Cui"; // 自定义前缀
+const luckyStr = "Bm3"; // 自定义前缀
 (async () => {
   let count = 0;
   let retry = 0;
