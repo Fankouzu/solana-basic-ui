@@ -1,10 +1,10 @@
 # Solana 验证器监控最佳实践
 
-确保你的验证器配置了监控至关重要。万一你的验证器出现逾期（落后于网络其他节点），你需要立即响应并修复问题。一个非常有用的监控工具是[`solana-watchtower`](https://docs.solanalabs.com/operations/best-practices/monitoring#solana-watchtower)。
+确保你的验证器配置了监控至关重要。万一你的验证器出现滞后（落后于网络其他节点），你需要立即响应并修复问题。一个非常有用的监控工具是[`solana-watchtower`](https://docs.solanalabs.com/operations/best-practices/monitoring#solana-watchtower)。
 
 ## Solana Watchtower
 
-Solana Watchtower是一款极为实用的监控工具，它会定期检查你的验证器健康状况。它能监控你的验证器是否有逾期行为，然后通过你选择的应用程序（如 Slack、Discord、Telegram 或 Twilio）通知你。此外，`solana-watchtower`还能监控整个集群的健康状态，使你能够意识到任何集群范围内的问题，从而确保你能及时响应并维护网络的稳定运行。
+Solana Watchtower是一款极为实用的监控工具，它会定期检查你的验证器健康状况。它能监控你的验证器是否有滞后行为，然后通过你选择的应用程序（如 Slack、Discord、Telegram 或 Twilio）通知你。此外，`solana-watchtower`还能监控整个集群的健康状态，使你能够意识到任何集群范围内的问题，从而确保你能及时响应并维护网络的稳定运行。
 
 ### 入门
 
@@ -79,4 +79,4 @@ export TELEGRAM_CHAT_ID=<negative chat id number>
 
 一旦设置了环境变量，接下来请重启 `solana-watchtower`。你应该能看到与验证器相关的输出信息。
 
-为了测试你的Telegram配置是否工作正常，你可以暂时停止验证器，直到其被标记为逾期。一旦验证器处于逾期状态，最多在一分钟后，你应该能在Telegram群组中收到由你的机器人发送的消息。之后再次启动验证器，并确认你能从机器人那里收到另一条消息，这条消息应当显示 `all clear`。
+为了测试你的Telegram配置是否工作正常，你可以暂时停止验证器，直到其被标记为滞后。一旦验证器处于逾期状态，最多在一分钟后，你应该能在Telegram群组中收到由你的机器人发送的消息。之后再次启动验证器，并确认你能从机器人那里收到另一条消息，这条消息应当显示 `all clear`。
