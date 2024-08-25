@@ -9,7 +9,7 @@
 Solana 验证器社区定期举办教育研讨会。您可以通过以下方式观看过去的研讨会。
 [Solana 验证器教育研讨会播放列表](https://www.youtube.com/watch?v=86zySQ5vGW8&list=PLilwLeBwGuK6jKrmn7KOkxRxS9tvbRa5p).
 
-## 辅助验证器命令行运维
+## 验证者命令行帮助
 
 在Solana命令行界面中，您可以运行带有`--help`标志的`solana-validator`命令，以更好地了解可用的标志和子命令。
 
@@ -19,7 +19,7 @@ solana-validator --help
 
 ## 重启您的验证节点
 
-您可能出于多种运维原因需要重启您的验证器。作为最佳实践，您应该避免在领导者时段重启。[leader slot](https://solana.com/docs/terminology#leader-schedule) 是您的验证器预期产生区块的时间。为了集群的健康以及您的验证器赚取交易费奖励的能力，您不希望在产生区块的机会期间让验证器处于离线状态。
+您可能出于多种运维原因需要重启您的验证器。作为最佳实践，您应该避免在领导者时段重启。[leader slot](https://solana.com/docs/terminology#leader-schedule) 是您的验证器预期产生区块的时间。为了集群的健康以及您的验证器赚取交易费奖励的能力，您不会希望在可产生区块机会的期间让验证器处于离线状态。
 
 要查看一个周期的完整领导者日程，请使用以下命令：
 
@@ -27,7 +27,7 @@ solana-validator --help
 solana leader-schedule
 ```
 
-根据当前时段和领导者日程，您可以计算出您的验证器不预期产生区块的开放时间窗口。
+根据当前时段和领导者日程，您可以计算出验证器预计不会产生区块的开放时间窗口。。
 
 假设您已准备好重启，您可以使用 `solana-validator exit` 命令。当达到适当的空闲时间窗口时，该命令会退出您的验证器进程。假设您为验证器进程实现了 systemd，验证器在退出后应该会自行重启。有关详细信息，请参见以下帮助命令：
 
@@ -40,16 +40,13 @@ solana-validator exit --help
 升级[Solana命令行界面软件](https://docs.solanalabs.com/cli/install)有多种方法。作为运维人员，您需要经常进行升级，因此熟悉这个过程非常重要。
 
 
-> **注意** 在下载或从源代码构建最新版本时，
-> 验证器节点无需离线。
-> 以下所有方法都可以在验证器进程重新启动之前完成。
+> **注意** 在下载或从源代码构建最新版本时，验证器节点无需离线。以下所有方法都可以在验证器进程重新启动之前完成。
 
 ### 从源代码构建
 
 最佳实践是从源代码构建您的Solana二进制文件。如果您从源代码构建，您可以确保在创建二进制文件之前代码没有被篡改。您还可能能够针对您的特定硬件优化您的`solana-validator`二进制文件。
 
-如果您在验证器机器（或具有相同CPU的机器）上从源代码构建，您可以使用 `-march` 标志针对您的特定架构。请参阅以下文档以获取更多信息。
-[从源代码构建的说明](https://docs.solanalabs.com/cli/install#build-from-source).
+如果您在验证器机器（或具有相同CPU的机器）上从源代码构建，您可以使用 `-march` 标志针对您的特定架构。请参阅以下文档以获取更多信息：[从源代码构建的说明](https://docs.solanalabs.com/cli/install#build-from-source)。
 
 ### solana-install
 
@@ -63,8 +60,7 @@ solana-install init 1.14.17
 
 这个命令会下载`1.14.17`版本的可执行文件，并将其安装到`.local`目录中。您也可以查看`solana-install --help`以获取更多选项。
 
-> **注意** 这个命令只有在您已经安装了 Solana CLI 的情况下才有效。
-> 如果您还没有安装CLI，请参考[安装 Solana CLI 工具](https://docs.solanalabs.com/cli/install)。
+> **注意** 这个命令只有在您已经安装了 Solana CLI 的情况下才有效。如果您还没有安装CLI，请参考[安装 Solana CLI 工具](https://docs.solanalabs.com/cli/install)。
 
 ### 重启
 
@@ -88,13 +84,13 @@ grep -B1 'Starting validator with' <path/to/logfile>
 --no-snapshot-fetch
 ```
 
-如果您在 `solana-validator` 命令中使用了这个标志，请确保在您的验证器启动后运行 `solana catchup <pubkey>`，以确保验证器在合理的时间内追赶上来。如果经过一段时间后（可能是几个小时），看起来您的验证器继续落后，那么您可能需要下载一个新的快照。
+如果您在 `solana-validator` 命令中使用了这个标志，请确保在您的验证器启动后运行 `solana catchup <pubkey>`，以确保验证器在合理的时间内追赶上来。如果经过一段时间后（可能是几个小时），您的验证器仍然落后，那么您可能需要下载一个新的快照。
 
 ### 下载快照
 
 如果您是第一次启动验证器，或者您的验证器在重启后落后得太远，那么您可能需要下载快照。
 
-要下载快照，您必须**不要**使用 `--no-snapshot-fetch` 标志。
+要下载快照，您切记**不要**使用 `--no-snapshot-fetch` 标志。
 不使用该标志，您的验证器将自动从您使用 `--known-validator` 标志指定的已知验证器下载快照。
 
 如果其中一个已知验证器下载速度很慢，您可以尝试向您的验证器添加 `--minimal-snapshot-download-speed` 标志。如果初始下载速度低于您设置的阈值，此标志将切换到另一个已知验证器。
@@ -133,8 +129,7 @@ wget --trust-server-names http://139.178.68.207:80/incremental-snapshot.tar.bz2
 solana balance validator-keypair.json
 ```
 
-> **注意** `solana-watchtower` 可以监控验证器身份账户的最低余额。
-> 有关详细信息，请参见[监控最佳实践](https://docs.solanalabs.com/operations/best-practices/monitoring)。
+> **注意** `solana-watchtower` 可以监控验证器身份账户的最低余额。有关详细信息，请参见[监控最佳实践](https://docs.solanalabs.com/operations/best-practices/monitoring)。
 
 ## 从投票账户中提取资金
 
@@ -153,5 +148,4 @@ solana withdraw-from-vote-account \
 要获取有关该命令的更多信息，请使用
 `solana withdraw-from-vote-account --help`。
 
-有关不同密钥对和其他相关操作的更详细说明，请参阅
-[投票账户管理](https://docs.solanalabs.com/operations/guides/vote-accounts)。
+有关不同密钥对和其他相关操作的更详细说明，请参阅[投票账户管理](https://docs.solanalabs.com/operations/guides/vote-accounts)。
