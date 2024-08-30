@@ -1,6 +1,6 @@
 # Solana的Rust客户端库
 
-Solana的Rust包已经发布到[crates.io](https://crates.io/search?q=solana-)，并且可以在[docs.rs](https://solana.com/docs/clients/rust#rust-crates)上以`solana-`前缀找到。
+Solana的Rust包已经发布到[crates.io](https://crates.io/search?q=solana-)，并且可以在[docs.rs](https://docs.rs/releases/search?query=solana-)上以`solana-`前缀找到。
 
 ::: tip HELLO WORLD：开始SOLANA开发
 
