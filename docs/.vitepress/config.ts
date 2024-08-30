@@ -77,6 +77,11 @@ function nav(): DefaultTheme.NavItem[] {
       link: "/Hackathon/01.md",
       activeMatch: "/Hackathon",
     },
+    {
+      text: "加入Solar社区",
+      link: "/Solar/01.md",
+      activeMatch: "/Solar",
+    },
   ];
 }
 
