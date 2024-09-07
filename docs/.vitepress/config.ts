@@ -78,12 +78,17 @@ function nav(): DefaultTheme.NavItem[] {
         {
           text: "介绍",
           link: "/Hackathon/01.md",
-          activeMatch: "/Hackathon",
+          activeMatch: "/Hackathon/01",
         },
         {
           text: "资源",
           link: "/Hackathon/res.md",
-          activeMatch: "/Hackathon",
+          activeMatch: "/Hackathon/res",
+        },
+        {
+          text: "FAQ",
+          link: "/Hackathon/faq.md",
+          activeMatch: "/Hackathon/faq",
         },
       ]
     },
