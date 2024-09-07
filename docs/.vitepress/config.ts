@@ -74,8 +74,18 @@ function nav(): DefaultTheme.NavItem[] {
     },
     {
       text: "Solana黑客松",
-      link: "/Hackathon/01.md",
-      activeMatch: "/Hackathon",
+      items:[
+        {
+          text: "介绍",
+          link: "/Hackathon/01.md",
+          activeMatch: "/Hackathon",
+        },
+        {
+          text: "资源",
+          link: "/Hackathon/res.md",
+          activeMatch: "/Hackathon",
+        },
+      ]
     },
     {
       text: "加入Solar社区",
