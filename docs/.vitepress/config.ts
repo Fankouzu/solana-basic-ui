@@ -86,6 +86,16 @@ function nav(): DefaultTheme.NavItem[] {
           activeMatch: "/Hackathon/res",
         },
         {
+          text: "Solar华语特别赛道",
+          link: "/Hackathon/SolarMCM.md",
+          activeMatch: "/Hackathon/SolarMCM",
+        },
+        {
+          text: "Solar潜在的机会",
+          link: "/Hackathon/SolarChance.md",
+          activeMatch: "/Hackathon/SolarChance",
+        },
+        {
           text: "FAQ",
           link: "/Hackathon/faq.md",
           activeMatch: "/Hackathon/faq",
