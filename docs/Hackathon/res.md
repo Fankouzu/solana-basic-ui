@@ -1,8 +1,8 @@
-# 黑客马拉松开发者资源
+# 黑客松开发者资源
 
 ![BuildWithSolar](/BuildWithSolar.jpg)
 
-## 赞助资源
+## 赞助商资源
 
 ### Sphere
 
@@ -13,7 +13,7 @@ Sphere是Solana上的稳定币支付协议,专注于新兴市场、B2B跨境支�
 
 ### MetaDAO
 
-MetaDAO是一个允许世界决策由市场做出的协议。为了实现这一目标,MetaDAO构建了第一个用于创建和交易决策市场的平台。它类似于Polymarket,但针对决策市场。
+MetaDAO 是一个协议,它使世界的决策由市场做出。为了实现这一目标,MetaDAO 建立了创建和交易决策市场的首个平台。它就像 Polymarket,但针对决策市场。
 
 - [了解更多](https://metadao.com)
 - [文档](https://docs.metadao.com)
@@ -51,7 +51,7 @@ Solana Mobile是Saga手机和SMS(Solana Mobile Stack)的创造者。以下是旨
 
 ### Dialect
 
-Dialect正在构建一个用于blinks、actions、消息传递等的协议和开发者堆栈。
+Dialect正在构建一个用于blinks、actions、消息传递等的底层协议和开发者堆栈。
 
 - [文档](https://docs.dialect.to)
 - [Discord](https://discord.gg/dialect)
@@ -64,7 +64,7 @@ MagicBlock是一个用于完全链上游戏和应用程序的高性能引擎。M
 - [文档](https://docs.magicblock.gg)
 - [入门](https://docs.magicblock.gg/getting-started)
 
-## 正式开始
+## 入门资源
 
 ### 官方资源
 
@@ -86,19 +86,19 @@ MagicBlock是一个用于完全链上游戏和应用程序的高性能引擎。M
 - [Solana Playground](https://beta.solpg.io/)：Solana程序Web IDE
 - [Solana Stack Exchange](https://solana.stackexchange.com/)：提出技术问题或搜索以前回答的关于Solana开发的问题的完美场所
 
-### 指南和教程
+## 指南和教程
 
 - [Anchor简介](https://solana.com/developers/guides/getstarted/intro-to-anchor)：开始使用Anchor的指南
 - [如何创建CRUD dApp](https://solana.com/developers/guides/getstarted/intro-to-anchor)：学习如何创建和部署基本链上CRUD dApp的Solana程序和UI
 - [将Solana钱包适配器添加到Next.js](https://solana.com/developers/guides/wallets/add-solana-wallet-adapter-to-nextjs)：学习如何将Solana钱包适配器添加到Next.js应用程序
 - [官方指南](https://solana.com/developers/guides/wallets/add-solana-wallet-adapter-to-nextjs)：来自主Solana网站的各种指南和教程
 
-### 视频学习内容
+## 视频学习内容
 
 - [SolAndy](https://www.youtube.com/solandy)：每周制作的各种Solana开发者内容
 - [Solana Bootcamp](https://www.youtube.com/watch?v=0P8JeL3TURU&list=PLilwLeBwGuK6NsYMPP_BlVkeQgff0NwvU)：一个令人难以置信的7小时视频播放列表,快速了解Solana开发。适合任何想直接深入的人。
 
-### 自学课程
+## 自学课程
 
 - [THE Solana Course](https://solana.com/developers/courses)：全面、综合、中级的自学课程,涵盖Solana的所有内容
 - [Freecodecamp](https://web3.freecodecamp.org/solana)：Freecodecamp上的完全交互式Solana课程,直接在Visual Studio Code IDE中教授
@@ -107,7 +107,7 @@ MagicBlock是一个用于完全链上游戏和应用程序的高性能引擎。M
 - [Ideasoft Rust/Solana高级](https://careerbooster.io/courses/rust-solana-advance-development-course)：为完成Ideasoft Rust/Solana初学者课程的人提供的高级课程
 - [Rareskills ETH到Solana](https://www.rareskills.io/solana-tutorial)：专为以太坊开发人员学习Solana而设计的课程
 
-### 工具
+## 工具
 -  [Solana Playground](https://beta.solpg.io/)
 - [npx create-solana-dapp@latest](https://github.com/solana-developers/create-solana-dapp)
 
@@ -179,7 +179,7 @@ MagicBlock是一个用于完全链上游戏和应用程序的高性能引擎。M
 
 
 
-### 开源参考
+## 开源参考
 
 - [Solana Open-Source Software](https://github.com/StockpileLabs/awesome-solana-oss)
 - [Solana Program Examples](https://github.com/solana-developers/program-examples)
