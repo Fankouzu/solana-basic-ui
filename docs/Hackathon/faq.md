@@ -1,5 +1,7 @@
 # Colosseum黑客马拉松常见问题
 
+![BuildWithSolar](/BuildWithSolar.jpg)
+
 ## Colosseum黑客马拉松是什么？
 
 Colosseum黑客马拉松是旨在发展Solana创业生态系统的全球在线竞赛。如果您正在考虑创建一个加密货币创业公司，我们的黑客马拉松为您提供了展示您的建设能力的绝佳机会，同时与其他精英建设者竞争。
