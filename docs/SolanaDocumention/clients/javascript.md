@@ -23,13 +23,13 @@ Solana-Web3.js 库旨在提供对 Solana 的全面支持。该库是基于 [Sola
 #### yarn 
 
 ```shell
-yarn add @solana/web3.js
+yarn add @solana/web3.js@1
 ```
 
 #### npm 
 
 ```shell
-npm install --save @solana/web3.js
+npm install --save @solana/web3.js@1
 ```
 
 #### Bundle 
