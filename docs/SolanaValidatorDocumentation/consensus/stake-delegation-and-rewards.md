@@ -1,6 +1,6 @@
 # 质押委托及奖励
 
-质押者通过帮助验证账本而获得奖励。他们通过将自己的持币委托给验证节点完成上述操作。这些验证节点负责重新播放账本并将投票发送到每个节点的投票账户，持币者可以将自己的持币委托给这些投票账户。当遇到分叉时，集群的剩余部分会使用基于质押权重的投票来选择一个区块。验证者和质押者都需要经济激励来履行他们的职责。验证者需要补偿其硬件成本，而质押者需要补偿其持币可能被罚没的风险。相关经济学原理在[质押奖励](https://docs.solanalabs.com/implemented-proposals/staking-rewards)部分描述。本章节则描述实现的底层机制。
+质押者通过帮助验证账本而获得奖励。他们通过将自己的持币委托给验证节点完成上述操作。这些验证节点负责重放账本并将投票发送到每个节点的投票账户，持币者可以将自己的持币委托给这些投票账户。当遇到分叉时，集群的剩余部分会使用基于质押权重的投票来选择一个区块。验证者和质押者都需要经济激励来履行他们的职责。验证者需要补偿其硬件成本，而质押者需要补偿其持币可能被罚没的风险。相关经济学原理在[质押奖励](https://docs.solanalabs.com/implemented-proposals/staking-rewards)部分描述。本章节则描述实现的底层机制。
 
 ## 基本设计
 
@@ -69,7 +69,7 @@ StakeStateV2::Initialized, StakeStateV2::Stake, 和 StakeStateV2::RewardsPool.
 StakeStateV2::Stake 是**质押者**当前的委托偏好，包含以下状态信息：
 
 - `Account::lamports` - 可用于质押的 lamports。
-- `stake` - 用于生成奖励的质押金额（受热身和冷却期影响），始终小于等于 Account::lamports。
+- `stake` - 用于生成奖励的质押金额（受预热和冷却期影响），始终小于等于 Account::lamports。
 - `voter_pubkey` - Lamports 被委托的 VoteState 实例的公钥。
 - `credits_observed` - 在程序生命周期内累计领取的总奖励。
 - `activated` - 该质押被激活/委托的纪元。在预热期结束后，完整的质押金额将被计入。
