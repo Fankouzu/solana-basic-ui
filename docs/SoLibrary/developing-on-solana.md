@@ -358,7 +358,7 @@ it("Can create a message", async () => {
 开发者还可以将 Solana Explorer 配置为连接本地账本。导航到 Solana Explorer。在导航栏中，点击显示当前集群状态的绿色按钮：
 ![](https://8bit-1.gitbook.io/~gitbook/image?url=https%3A%2F%2Fmedia.dev.to%2Fcdn-cgi%2Fimage%2Fwidth%3D800%252Cheight%3D%252Cfit%3Dscale-down%252Cgravity%3Dauto%252Cformat%3Dauto%2Fhttps%253A%252F%252Fdev-to-uploads.s3.amazonaws.com%252Fuploads%252Farticles%252Fnlr8hf6g1i66wj3o6t8h.png&width=300&dpr=4&quality=100&sign=7ceb8046&sv=1)
 
-这将打开一个侧边栏，允许您选择一个集群。点击 “Custom RPC URL”（自定义 RPC URL）。此时应该自动填充为 http://localhost:8899。如果没有，请手动填写该地址，使 Explorer 指向您的本地主机的 8899 端口：
+这将打开一个侧边栏，允许您选择一个集群。点击 “Custom RPC URL”（自定义 RPC URL）。此时应该自动填充为 `http://localhost:8899`。如果没有，请手动填写该地址，使 Explorer 指向您的本地主机的 8899 端口：
 
 ![](https://media.dev.to/cdn-cgi/image/width=800%2Cheight=%2Cfit=scale-down%2Cgravity=auto%2Cformat=auto/https%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fuploads%2Farticles%2F3soid7kljeemxvdysg1a.png)
 
